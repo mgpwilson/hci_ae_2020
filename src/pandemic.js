@@ -22,6 +22,7 @@ export class Pandemic {
         this.probInfectFromExpose = probInfectFromExpose;
         this.popSize = popSize;
         this.hospitalCapacity = hospitalCapacity;
+        this.avgLengthOfInfection = 14;
 
         this.handWashing = 1;
         this.socialDistancing = 1;
@@ -42,6 +43,17 @@ export class Pandemic {
         //let p = 1 - (N_d / this.popSize);
          */
         return (((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose())) ** dayNum) * this.casesOnDay0);
+    }
+
+    getRemovedByDay(dayNum) {
+        if(dayNum < this.avgLengthOfInfection) {
+            dayNum = 0
+        }
+        let sum_removed = 0;
+        for(let i=0; i<dayNum-this.avgLengthOfInfection; i++){
+            sum_removed += this.getCasesByDay(i);
+        }
+        return sum_removed;
     }
 
     getAdjustedInfectedAvgExposures(){
