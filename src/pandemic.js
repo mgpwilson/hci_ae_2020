@@ -92,9 +92,10 @@ export class Pandemic {
     }
 
     tempDemo() {
-        let s = "";
+        let s = [];
         for(let i=0; i<25; i++){
-            s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({dayNum: i, cases: Math.round(this.getCasesByDay(i))})
         }
         return s;
     }
