@@ -90,6 +90,14 @@ export class Pandemic {
             this.masks = 1;
         }
     }
+
+    tempDemo() {
+        let s = "";
+        for(let i=0; i<25; i++){
+            s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+        }
+        return s;
+    }
 }
 
 
