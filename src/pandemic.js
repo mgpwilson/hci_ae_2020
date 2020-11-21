@@ -7,7 +7,7 @@
 // see graphic for how lockdown cuts infection rate
 
 
-class Pandemic {
+export class Pandemic {
     FACTORS = {
         HANDWASHING: 1 - 0.05,
         SOCIAL_DISTANCING: .5,
@@ -67,28 +67,24 @@ class Pandemic {
         return dayNum;
     }
 
-    setHandWashing(choice){
-        /*
-        choice should be a true/false value
-         */
-        if(choice){
+    toggleHandWashing(){
+        if (this.handWashing === 1){
             this.handWashing = this.FACTORS.HANDWASHING;
         } else {
             this.handWashing = 1;
         }
     }
 
-    setSocialDistancing(choice){
-        // choice should be a T/F value
-        if(choice){
+    toggleSocialDistancing(){
+        if(this.socialDistancing === 1){
             this.socialDistancing = this.FACTORS.SOCIAL_DISTANCING;
         } else {
             this.socialDistancing = 1;
         }
     }
 
-    setMasks(choice) {
-        if(choice){
+    toggleMasks() {
+        if(this.masks === 1){
             this.masks = this.FACTORS.MASKS;
         } else {
             this.masks = 1;
