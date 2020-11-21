@@ -56,6 +56,10 @@ export class Pandemic {
         return sum_removed;
     }
 
+    getSusceptibleByDay(dayNum){
+        return this.popSize - this.getCasesByDay(dayNum) - this.getRemovedByDay(dayNum);
+    }
+
     getAdjustedInfectedAvgExposures(){
         return this.infectedAvgExposures * this.socialDistancing;
     }
