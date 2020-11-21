@@ -1,0 +1,100 @@
+// make function for expo growth
+
+// https://www.bbc.com/news/health-52473523
+// The r number would be 3 if we took no action
+// want it below 1 ideally
+// covid tends to be between 1.1 and 1.3
+// see graphic for how lockdown cuts infection rate
+
+
+class Pandemic {
+    FACTORS = {
+        HANDWASHING: 1 - 0.05,
+        SOCIAL_DISTANCING: .5,
+        MASKS: 1 - 0.05,
+    };
+
+    constructor(casesOnDay0, infectedAvgExposures, probInfectFromExpose, popSize, hospitalCapacity) {
+        this.casesOnDay0 = casesOnDay0;
+        // avg num ppl someone infected is exposed to per day
+        this.infectedAvgExposures = infectedAvgExposures;
+        // probability of each exposure becoming an infection
+        this.probInfectFromExpose = probInfectFromExpose;
+        this.popSize = popSize;
+        this.hospitalCapacity = hospitalCapacity;
+
+        this.handWashing = 1;
+        this.socialDistancing = 1;
+        this.masks = 1;
+    }
+
+    getCasesByDay(dayNum) {
+        /*
+        dayNum = Number of days since day 0 in the model
+         */
+        /*
+        N_d = num of cases on a given day
+        N_0 = num of cases on day 0
+        N_d = (1 + E * p)^d * N_0
+        // TODO Growth Factor = change in N_d / change in N_d-1
+        // TODO refactor to include logistic growth curve
+        p = 1 - (Nd / P)
+        //let p = 1 - (N_d / this.popSize);
+         */
+        return (((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose())) ** dayNum) * this.casesOnDay0);
+    }
+
+    getAdjustedInfectedAvgExposures(){
+        return this.infectedAvgExposures * this.socialDistancing;
+    }
+
+    getAdjustedProbInfectFromExpose() {
+        return this.probInfectFromExpose * this.handWashing * this.masks;
+    }
+
+    getRValue() {
+        return this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose();
+    }
+
+    getDaysUntilHospitalCapacity(fullness){
+        // fullness should be decimal between 0 & 1
+        let target = this.hospitalCapacity * fullness;
+        // TODO redo this in cleverer way when less tired
+        let dayNum = 0;
+        while(this.getCasesByDay(dayNum) < target) {
+            dayNum += 1;
+        }
+        return dayNum;
+    }
+
+    setHandWashing(choice){
+        /*
+        choice should be a true/false value
+         */
+        if(choice){
+            this.handWashing = this.FACTORS.HANDWASHING;
+        } else {
+            this.handWashing = 1;
+        }
+    }
+
+    setSocialDistancing(choice){
+        // choice should be a T/F value
+        if(choice){
+            this.socialDistancing = this.FACTORS.SOCIAL_DISTANCING;
+        } else {
+            this.socialDistancing = 1;
+        }
+    }
+
+    setMasks(choice) {
+        if(choice){
+            this.masks = this.FACTORS.MASKS;
+        } else {
+            this.masks = 1;
+        }
+    }
+}
+
+
+
