@@ -4,10 +4,10 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
-
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -69,6 +69,9 @@ const App = () => {
             <FormControlLabel control={<Checkbox />} label="Three" />
             <FormControlLabel control={<Checkbox />} label="Four" />
           </FormGroup>
+          <Button title='Recalculate' variant='contained' color='primary'>
+            Recalculate
+          </Button>
         </Grid>
 
         <Grid item xs={8} className={classes.column}>
@@ -79,11 +82,14 @@ const App = () => {
           >
             Visualisation and Graphing
           </Typography>
-          <img
+          {/*<img
             src="https://i.redd.it/ylu4wlgozgt51.jpg"
             alt=""
             className={classes.image}
-          />
+          />*/}
+          <div id='pandemicTempDemo'>
+            <PandemicTempDemo dailyCases={covid.tempDemo()}></PandemicTempDemo>
+          </div>
         </Grid>
 
         <Grid item xs={2} className={classes.column}>
@@ -105,5 +111,15 @@ const App = () => {
     </>
   );
 };
+
+const PandemicTempDemo = (props) => {
+  const dailyCases = props.dailyCases;
+  const listItems = dailyCases.map((day) =>
+    <li key={day.dayNum.toString()}>Day {day.dayNum.toString()}: {day.cases.toString()} cases</li>
+  );
+  return (
+      <ul style={{'listStyleType': 'none', 'paddingLeft': 30, 'textAlign': 'left'}}>{listItems}</ul>
+  );
+}
 
 export default App;
