@@ -115,6 +115,15 @@ export class Pandemic {
         }
         return s;
     }
+
+    seriesCasesByDay() {
+        let s = [];
+        for(let i=0; i<25; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getCasesByDay(i))})
+        }
+        return s;
+    }
 }
 
 

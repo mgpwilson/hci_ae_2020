@@ -6,6 +6,7 @@ import {
   Checkbox,
   Button,
 } from "@material-ui/core";
+import Visualisations from './Visualisations'
 import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
 
@@ -28,12 +29,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const App = () => {
   const classes = useStyles();
 
   // TODO these parameters should be adjustable by user somehow in the future
   var covid = new Pandemic(1000, 10, .11, 1000000, 500000);
-
   return (
     <>
       <Typography variant="h5" component="h1" className={classes.title}>
@@ -50,7 +51,7 @@ const App = () => {
             Preventative Measures
           </Typography>
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={() => {
+            <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
               covid.toggleHandWashing();
               console.log(covid.handWashing);
             }}/>
@@ -61,6 +62,7 @@ const App = () => {
             <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
               covid.toggleMasks();
               console.log(covid.masks);
+
             }}/>
             <FormControlLabel control={<Checkbox />} label="Foo" />
             <FormControlLabel control={<Checkbox />} label="Bar" />
@@ -88,6 +90,7 @@ const App = () => {
             className={classes.image}
           />*/}
           <div id='pandemicTempDemo'>
+            <Visualisations pandemicState={covid}/>
             <PandemicTempDemo dailyCases={covid.tempDemo()}></PandemicTempDemo>
           </div>
         </Grid>
