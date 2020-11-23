@@ -6,6 +6,7 @@ class Visualisations extends Component {
     constructor(props) {
         super(props)
         this.pandemicState = this.props.pandemicState;
+        this.days = 90
     }
 
     render() {
