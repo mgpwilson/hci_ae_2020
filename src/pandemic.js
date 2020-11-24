@@ -10,9 +10,25 @@
 export class Pandemic {
     FACTORS = {
         HANDWASHING: 1 - 0.05,
-        SOCIAL_DISTANCING: .5,
-        MASKS: 1 - 0.05,
+        SOCIAL_DISTANCING: .6,
+        MASKS: 1 - 0.1,
     };
+
+    /*constructor(props) {
+        super(props);
+        this.casesOnDay0 = props.casesOnDay0;
+        // avg num ppl someone infected is exposed to per day
+        this.infectedAvgExposures = props.infectedAvgExposures;
+        // probability of each exposure becoming an infection
+        this.probInfectFromExpose = props.probInfectFromExpose;
+        this.popSize = props.popSize;
+        this.hospitalCapacity = props.hospitalCapacity;
+        this.avgLengthOfInfection = 14;
+
+        this.handWashing = 1;
+        this.socialDistancing = 1;
+        this.masks = 1;
+    }*/
 
     constructor(casesOnDay0, infectedAvgExposures, probInfectFromExpose, popSize, hospitalCapacity) {
         this.casesOnDay0 = casesOnDay0;
@@ -42,10 +58,18 @@ export class Pandemic {
         p = 1 - (Nd / P)
         //let p = 1 - (N_d / this.popSize);
          */
+        if(dayNum < 0) dayNum = 0;
         return (((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose())) ** dayNum) * this.casesOnDay0);
     }
 
-    getRemovedByDay(dayNum) {
+    getDeathsByDay(dayNum) {
+        // TODO handle if daynum is less than 14
+        let c = this.getCasesByDay(dayNum - 14) * 0.01;
+        console.log(c)
+    }
+
+    getRecoveredByDay(dayNum) {
+        // Unlike other methods, this method gives a total including previous days because immunity lasts
         if(dayNum < this.avgLengthOfInfection) {
             dayNum = 0
         }
@@ -57,7 +81,7 @@ export class Pandemic {
     }
 
     getSusceptibleByDay(dayNum){
-        return this.popSize - this.getCasesByDay(dayNum) - this.getRemovedByDay(dayNum);
+        return this.popSize - this.getCasesByDay(dayNum) - this.getRecoveredByDay(dayNum);
     }
 
     getAdjustedInfectedAvgExposures(){
