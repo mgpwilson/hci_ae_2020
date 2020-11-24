@@ -35,8 +35,8 @@ const App = () => {
 
   // TODO these parameters should be adjustable by user somehow in the future
   var covid = new Pandemic(1000, 10, .11, 1000000, 500000);
-  var covid1 = new Pandemic(1000, 10, .11, 1000000, 500000);
-  var days = 0;
+  var covid2 = new Pandemic(1000, 10, .11, 1000000, 500000);
+  var days = 90;
   return (
     <>
       <Typography variant="h5" component="h1" className={classes.title}>
@@ -92,8 +92,7 @@ const App = () => {
             className={classes.image}
           />*/}
           <div id='pandemicTempDemo'>
-            <Visualisations pandemicState={covid}/>
-            <PandemicTempDemo dailyCases={covid.tempDemo()}></PandemicTempDemo>
+            <Visualisations pandemicState={covid} pandemicSate2={covid2} days={days}/>
           </div>
         </Grid>
 

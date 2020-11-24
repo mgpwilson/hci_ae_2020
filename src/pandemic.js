@@ -118,12 +118,32 @@ export class Pandemic {
 
     seriesCasesByDay() {
         let s = [];
-        for(let i=0; i<25; i++){
+        for(let i=0; i<40; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.getCasesByDay(i))})
         }
         return s;
     }
+
+    seriesRemovedByDay() {
+        let s = [];
+        for(let i=0; i<40; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getRemovedByDay(i))})
+        }
+        return s;
+    }
+
+    seriesSusceptibleByDay() {
+        let s = [];
+        for(let i=0; i<40; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getSusceptibleByDay(i))})
+        }
+        return s;
+    }
+
+    
 }
 
 
