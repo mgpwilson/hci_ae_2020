@@ -116,10 +116,12 @@ class App extends React.Component {
                 <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
                   this.covid.toggleSocialDistancing();
                   console.log(this.covid.socialDistancing);
+                  this.toggleFactor('socialDistancing', 'covid1');
                 }}/>
                 <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
                   this.covid.toggleMasks();
                   console.log(this.covid.masks);
+                  this.toggleFactor('masks', 'covid1');
 
                 }}/>
                 <FormControlLabel control={<Checkbox />} label="Foo" />
