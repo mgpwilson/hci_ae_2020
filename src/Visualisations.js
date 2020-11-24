@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { XYPlot, LineSeries, VerticalBarSeries, XAxis, YAxis, DiscreteColorLegend } from 'react-vis';
+import { XYPlot, LineSeries, VerticalBarSeries, XAxis, YAxis, DiscreteColorLegend, LabelSeries } from 'react-vis';
 import './pandemic'
 import 'react-vis/dist/style.css';
 class Visualisations extends Component {
@@ -8,7 +8,7 @@ class Visualisations extends Component {
         super(props)
         this.pandemicState = this.props.pandemicState;
         this.pandemicState2 = this.props.pandemicState2;
-        this.days = this.props.days;
+        this.days = 5;
     }
 
     render() {
@@ -20,8 +20,16 @@ class Visualisations extends Component {
         console.log(removed);
         console.log(cases)
         var scale = cases.length;
+        var daysSinceSlider = scale - this.days
+        var barCases = Object.values(cases)[daysSinceSlider]
+        //var barDeaths = Object.values(deaths)[daysSinceSlider]
+        var barData = []
+        barData.push({x:"cases", y: Object.values(barCases)[1]})
+        barData.push({x:"deaths", y:10000000000000})
+        console.log(barData)
         return (
-            <div>
+            <div style={{alignItems: "center", display:"flex"}}>
+                <div style={{width:"auto"}}>
                 <h3>SIR Graph: Covid Simulation 1</h3>
                 <XYPlot name={"SIR GRAPH 1"} height={200} width={400} xDomain={[0, scale]} stackBy={'x'} style={{
                     display: "block",
@@ -42,6 +50,13 @@ class Visualisations extends Component {
                     <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
                     <XAxis />
                 </XYPlot>
+                </div>
+                <div style={{width: "auto"}}>
+                    <XYPlot height={400} width={200} xType={"ordinal"}>
+                        <VerticalBarSeries data={barData}/>
+                        <XAxis />
+                    </XYPlot>
+                </div>
             </div>
         );
     }
