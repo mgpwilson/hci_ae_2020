@@ -57,14 +57,18 @@ class App extends React.Component {
     this.classes = styles;
     this.state = {
       covid1: {
-        handWashing: 1,
-        socialDistancing: 1,
-        masks: 1
+        factors: {
+          handWashing: 1,
+          socialDistancing: 1,
+          masks: 1
+        },
       },
       covid2: {
-        handWashing: 1,
-        socialDistancing: 1,
-        masks: 1
+        factors: {
+          handWashing: 1,
+          socialDistancing: 1,
+          masks: 1
+        }
       }
     }
     this.FACTORS = {
@@ -81,13 +85,12 @@ class App extends React.Component {
 
   toggleFactor(factor, pandemic){
     let newVal = {... this.state[pandemic]};
-    let key = pandemic;
-    if(newVal[factor] === 1){
-      newVal[factor] = this.FACTORS[factor.toUpperCase()];
+    if(newVal.factors[factor] === 1){
+      newVal.factors[factor] = this.FACTORS[factor.toUpperCase()];
     } else {
-      newVal[factor] = 1
+      newVal.factors[factor] = 1
     }
-    this.setState({key : newVal});
+    this.setState({[pandemic] : newVal});
   }
 
   render() {
