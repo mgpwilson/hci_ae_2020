@@ -5,10 +5,13 @@ import {
   FormControlLabel,
   Checkbox,
   Button,
+    withStyles
 } from "@material-ui/core";
 import Visualisations from './Visualisations'
 import { makeStyles } from "@material-ui/core/styles";
-import { Pandemic } from "./pandemic";
+import {Pandemic, PandemicModel, PandemicStatefulDemo} from "./pandemic";
+import * as React from "react";
+import PandemicSlider from "./PandemicSlider";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -29,10 +32,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// can't use useStyles in class components, feel free to take this out
+const styles = makeStyles((theme) => ({
+  title: {
+    textAlign: "center",
+    padding: theme.spacing(3),
+  },
+  content: {
+    padding: theme.spacing(3),
+  },
+  column: {
+    textAlign: "center",
+  },
+  columnTitle: {
+    paddingBottom: theme.spacing(3),
+  },
+  image: {
+    maxWidth: "75%",
+  },
+}));
 
-<<<<<<< HEAD
-const App = () => {
-=======
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.classes = styles;
+
     // TODO these parameters should be adjustable by user somehow in the future
     this.covid = new Pandemic(1000, 10, .11, 1000000, 500000);
     this.covid1 = new Pandemic(1000, 10, .11, 1000000, 500000);
@@ -95,31 +120,70 @@ const App = () => {
               <Typography
                   variant="h6"
                   component="h2"
-                  className={this.classes.columnTitle}
+                  className={this.classes.rowTitle}
               >
                 Preventative Measures
               </Typography>
-              <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
-                  this.toggleFactor('handWashing', 'covid1');
-                }}/>
-                <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
-                  this.toggleFactor('socialDistancing', 'covid1');
-                }}/>
-                <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
-                  this.toggleFactor('masks', 'covid1');
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.rowTitle}
+                >
+                  Model 1
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
+                    this.toggleFactor('handWashing', 'covid1');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
+                    this.toggleFactor('socialDistancing', 'covid1');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
+                    this.toggleFactor('masks', 'covid1');
 
-                }}/>
-                <FormControlLabel control={<Checkbox />} label="Foo" />
-                <FormControlLabel control={<Checkbox />} label="Bar" />
-                <FormControlLabel control={<Checkbox />} label="One" />
-                <FormControlLabel control={<Checkbox />} label="Two" />
-                <FormControlLabel control={<Checkbox />} label="Three" />
-                <FormControlLabel control={<Checkbox />} label="Four" />
-              </FormGroup>
-              <Button title='Recalculate' variant='contained' color='primary'>
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Foo" />
+                  <FormControlLabel control={<Checkbox />} label="Bar" />
+                  <FormControlLabel control={<Checkbox />} label="One" />
+                  <FormControlLabel control={<Checkbox />} label="Two" />
+                  <FormControlLabel control={<Checkbox />} label="Three" />
+                  <FormControlLabel control={<Checkbox />} label="Four" />
+                </FormGroup>
+                {/*<Button title='Recalculate' variant='contained' color='primary'>
                 Recalculate
-              </Button>
+              </Button>*/}
+              </Grid>
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.rowTitle}
+                >
+                  Model 2
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
+                    this.toggleFactor('handWashing', 'covid2');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
+                    this.toggleFactor('socialDistancing', 'covid2');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
+                    this.toggleFactor('masks', 'covid2');
+
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Foo" />
+                  <FormControlLabel control={<Checkbox />} label="Bar" />
+                  <FormControlLabel control={<Checkbox />} label="One" />
+                  <FormControlLabel control={<Checkbox />} label="Two" />
+                  <FormControlLabel control={<Checkbox />} label="Three" />
+                  <FormControlLabel control={<Checkbox />} label="Four" />
+                </FormGroup>
+                {/*<Button title='Recalculate' variant='contained' color='primary'>
+                Recalculate
+              </Button>*/}
+              </Grid>
             </Grid>
 
             <Grid item xs={8} className={this.classes.column}>
@@ -135,10 +199,34 @@ const App = () => {
                 alt=""
                 className={classes.image}
               />*/}
-              <div id='pandemicTempDemo'>
-                <Visualisations pandemicState={this.state.covid1.pandemic}/>
-                <PandemicTempDemo dailyCases={this.state.covid1.pandemic.tempDemo()}></PandemicTempDemo>
-              </div>
+
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.columnTitle}
+                >
+                  Model 1
+                </Typography>
+                <div id='pandemicTempDemo'>
+                  <Visualisations pandemicState={this.state.covid1.pandemic}/>
+                  <PandemicSlider pandemicState={this.state.covid1.pandemic}/>
+                  <PandemicTempDemo dailyCases={this.state.covid1.pandemic.tempDemo()}></PandemicTempDemo>
+                </div>
+              </Grid>
+
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.columnTitle}
+                >
+                  Model 2
+                </Typography>
+                <div id='pandemicTempDemo'>
+                  <Visualisations pandemicState={this.state.covid2.pandemic}/>
+                </div>
+              </Grid>
             </Grid>
 
             <Grid item xs={2} className={this.classes.column}>
@@ -166,7 +254,6 @@ const App = () => {
 
 
 const OldApp = () => {
->>>>>>> parent of 06a88dd... Example of two temp demos updating added
   const classes = useStyles();
 
   // TODO these parameters should be adjustable by user somehow in the future
@@ -261,5 +348,9 @@ const PandemicTempDemo = (props) => {
       <ul style={{'listStyleType': 'none', 'paddingLeft': 30, 'textAlign': 'left'}}>{listItems}</ul>
   );
 }
+
+/*App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};*/
 
 export default App;
