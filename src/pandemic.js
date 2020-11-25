@@ -1,5 +1,3 @@
-// make function for expo growth
-
 // https://www.bbc.com/news/health-52473523
 // The r number would be 3 if we took no action
 // want it below 1 ideally
@@ -8,10 +6,11 @@
 
 
 export class Pandemic {
+    // TODO remove these or keep them in App?
     FACTORS = {
         HANDWASHING: 1 - 0.05,
-        SOCIAL_DISTANCING: .5,
-        MASKS: 1 - 0.05,
+        SOCIAL_DISTANCING: .6,
+        MASKS: 1 - 0.1,
     };
 
     constructor(casesOnDay0, infectedAvgExposures, probInfectFromExpose, popSize, hospitalCapacity) {
@@ -24,9 +23,15 @@ export class Pandemic {
         this.hospitalCapacity = hospitalCapacity;
         this.avgLengthOfInfection = 14;
 
-        this.handWashing = 1;
+        this.factors = {
+            handWashing: 1,
+            socialDistancing: 1,
+            masks: 1,
+        };
+
+        /*this.handWashing = 1;
         this.socialDistancing = 1;
-        this.masks = 1;
+        this.masks = 1;*/
     }
 
     getCasesByDay(dayNum) {
@@ -42,10 +47,18 @@ export class Pandemic {
         p = 1 - (Nd / P)
         //let p = 1 - (N_d / this.popSize);
          */
+        if(dayNum < 0) dayNum = 0;
         return (((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose())) ** dayNum) * this.casesOnDay0);
     }
 
-    getRemovedByDay(dayNum) {
+    getDeathsByDay(dayNum) {
+        // TODO handle if daynum is less than 14
+        let c = this.getCasesByDay(dayNum - 14) * 0.01;
+        console.log(c)
+    }
+
+    getRecoveredByDay(dayNum) {
+        // Unlike other methods, this method gives a total including previous days because immunity lasts
         if(dayNum < this.avgLengthOfInfection) {
             dayNum = 0
         }
@@ -57,15 +70,15 @@ export class Pandemic {
     }
 
     getSusceptibleByDay(dayNum){
-        return this.popSize - this.getCasesByDay(dayNum) - this.getRemovedByDay(dayNum);
+        return this.popSize - this.getCasesByDay(dayNum) - this.getRecoveredByDay(dayNum);
     }
 
     getAdjustedInfectedAvgExposures(){
-        return this.infectedAvgExposures * this.socialDistancing;
+        return this.infectedAvgExposures * this.factors.socialDistancing;
     }
 
     getAdjustedProbInfectFromExpose() {
-        return this.probInfectFromExpose * this.handWashing * this.masks;
+        return this.probInfectFromExpose * this.factors.handWashing * this.factors.masks;
     }
 
     getRValue() {
@@ -83,28 +96,9 @@ export class Pandemic {
         return dayNum;
     }
 
-    toggleHandWashing(){
-        if (this.handWashing === 1){
-            this.handWashing = this.FACTORS.HANDWASHING;
-        } else {
-            this.handWashing = 1;
-        }
-    }
-
-    toggleSocialDistancing(){
-        if(this.socialDistancing === 1){
-            this.socialDistancing = this.FACTORS.SOCIAL_DISTANCING;
-        } else {
-            this.socialDistancing = 1;
-        }
-    }
-
-    toggleMasks() {
-        if(this.masks === 1){
-            this.masks = this.FACTORS.MASKS;
-        } else {
-            this.masks = 1;
-        }
+    updateFactors(factors) {
+        this.factors = factors;
+        console.log(this.factors);
     }
 
     tempDemo() {
