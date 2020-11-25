@@ -119,11 +119,11 @@ export class Pandemic {
         return s;
     }
 
-    seriesRemovedByDay() {
+    seriesRecoveredByDay() {
         let s = [];
         for(let i=0; i<40; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: Math.round(this.getRemovedByDay(i))})
+            s.push({x: i, y: Math.round(this.getRecoveredByDay(i))})
         }
         return s;
     }

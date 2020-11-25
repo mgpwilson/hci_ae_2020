@@ -12,7 +12,7 @@ class Visualisations extends Component {
     }
 
     render() {
-        var removed = this.pandemicState.seriesRemovedByDay()
+        var removed = this.pandemicState.seriesRecoveredByDay()
         var cases = this.pandemicState.seriesCasesByDay()
         var susceptible = this.pandemicState.seriesSusceptibleByDay()
         const legendItems = ["Removed", "Cases", "Susceptible"]
