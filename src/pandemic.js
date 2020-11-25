@@ -136,7 +136,14 @@ export class Pandemic {
         }
         return s;
     }
-
+    seriesDeathsByDay() {
+        let s = [];
+        for(let i=0; i<40; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getDeathsByDay(i))})
+        }
+        return s;
+    }
     
 }
 

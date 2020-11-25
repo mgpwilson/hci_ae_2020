@@ -8,24 +8,26 @@ class Visualisations extends Component {
         super(props)
         this.pandemicState = this.props.pandemicState;
         this.pandemicState2 = this.props.pandemicState2;
-        this.days = 5;
+        this.days = 20;
     }
 
     render() {
         var removed = this.pandemicState.seriesRecoveredByDay()
         var cases = this.pandemicState.seriesCasesByDay()
         var susceptible = this.pandemicState.seriesSusceptibleByDay()
+        var deaths = this.pandemicState.seriesDeathsByDay()
         const legendItems = ["Removed", "Cases", "Susceptible"]
         const legendColours = ["red", "blue", "green"]
         console.log(removed);
         console.log(cases)
+        console.log(deaths)
         var scale = cases.length;
-        var daysSinceSlider = scale - this.days
-        var barCases = Object.values(cases)[daysSinceSlider]
+        var barCases = Object.values(cases)[this.days]
+        var barDeaths = Object.values(deaths)[this.days]
         //var barDeaths = Object.values(deaths)[daysSinceSlider]
         var barData = []
         barData.push({x:"cases", y: Object.values(barCases)[1]})
-        barData.push({x:"deaths", y:10000000000000})
+        barData.push({x:"deaths", y: Object.values(barDeaths)[1]})
         console.log(barData)
         return (
             <div style={{alignItems: "center", display:"flex"}}>
