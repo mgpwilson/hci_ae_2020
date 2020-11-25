@@ -35,7 +35,7 @@ const App = () => {
   const classes = useStyles();
 
   const [covid1, setCovid1] = useState({
-    pandemic: new Pandemic(1000, 10, 0.11, 1000000, 500000),
+    pandemic: new Pandemic(1, 10, 0.11, 1000000, 500000),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -43,7 +43,7 @@ const App = () => {
     },
   });
   const [covid2, setCovid2] = useState({
-    pandemic: new Pandemic(1000, 10, 0.11, 1000000, 500000),
+    pandemic: new Pandemic(1, 10, 0.11, 1000000, 500000),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -57,7 +57,7 @@ const App = () => {
     MASKS: 1 - 0.1,
   };
   const MODEL_DEFAULTS = {
-    casesOnDay0: 1000,
+    casesOnDay0: 1,
     infectedAvgExposures: 10,
     probInfectFromExpose: 0.11,
     popSize: 1000000,
