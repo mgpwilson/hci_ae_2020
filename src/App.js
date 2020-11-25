@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// can't use useStyles in class components, feel free to take this out
 const styles = makeStyles((theme) => ({
   title: {
     textAlign: "center",
@@ -92,14 +93,6 @@ class App extends React.Component {
     };
 
     this.days = 0;
-    /*this.covid3 = <PandemicModel
-        casesOnDay0={1000} infectedAvgExposures={10} probInfectFromExpose={.11} popSize={1000000}
-        hospitalCapacity={500000} avgLengthOfInfection={14} factors={this.state.covid1.factors}
-    />;*/
-    this._covid3 = React.createRef();
-    this.covid3 = <PandemicModel
-                    id='covid3' ref={this._covid3}
-                    environment={this.MODEL_DEFAULTS} factors={this.state.covid1}/>;
   }
 
   toggleFactor(factor, pandemic){
@@ -117,11 +110,6 @@ class App extends React.Component {
     const { classes } = this.props;
     return (
         <>
-          {/*<div>
-            <PandemicModel
-                id='covid3' ref={this._covid3}
-                environment={this.MODEL_DEFAULTS} factors={this.state.covid1}/>
-          </div>*/}
           <Typography variant="h5" component="h1" className={this.classes.title}>
             COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
           </Typography>
@@ -172,8 +160,8 @@ class App extends React.Component {
                 className={classes.image}
               />*/}
               <div id='pandemicTempDemo'>
-                <Visualisations pandemicState={this.covid}/>
-                <PandemicTempDemo dailyCases={this.covid.tempDemo()}></PandemicTempDemo>
+                <Visualisations pandemicState={this.state.covid1.pandemic}/>
+                <PandemicTempDemo dailyCases={this.state.covid1.pandemic.tempDemo()}></PandemicTempDemo>
               </div>
             </Grid>
 
@@ -303,4 +291,4 @@ const PandemicTempDemo = (props) => {
   classes: PropTypes.object.isRequired,
 };*/
 
-export default withStyles(styles)(App);
+export default App;
