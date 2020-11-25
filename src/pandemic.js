@@ -52,9 +52,8 @@ export class Pandemic {
     }
 
     getDeathsByDay(dayNum) {
-        // TODO handle if daynum is less than 14
         let c = this.getCasesByDay(dayNum - 14) * 0.01;
-        console.log(c)
+        return c;
     }
 
     getRecoveredByDay(dayNum) {
