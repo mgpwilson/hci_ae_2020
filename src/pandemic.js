@@ -1,4 +1,5 @@
-// make function for expo growth
+import * as React from "react";
+
 
 // https://www.bbc.com/news/health-52473523
 // The r number would be 3 if we took no action
@@ -7,41 +8,44 @@
 // see graphic for how lockdown cuts infection rate
 
 
-/*export class PandemicModel extends React.Component {
+// TODO remove this this is annoying
+export class PandemicModel extends React.Component {
     // TODO remove these or keep them in App?
-    FACTORS = {
+    /*FACTORS = {
         HANDWASHING: 1 - 0.05,
         SOCIAL_DISTANCING: .6,
         MASKS: 1 - 0.1,
-    };
+    };*/
 
     constructor(props) {
         super(props);
-        this.casesOnDay0 = props.casesOnDay0;
+        this.casesOnDay0 = props.environment.casesOnDay0;
         // avg num ppl someone infected is exposed to per day
-        this.infectedAvgExposures = props.infectedAvgExposures;
+        this.infectedAvgExposures = props.environment.infectedAvgExposures;
         // probability of each exposure becoming an infection
-        this.probInfectFromExpose = props.probInfectFromExpose;
-        this.popSize = props.popSize;
-        this.hospitalCapacity = props.hospitalCapacity;
-        this.avgLengthOfInfection = 14;
+        this.probInfectFromExpose = props.environment.probInfectFromExpose;
+        this.popSize = props.environment.popSize;
+        this.hospitalCapacity = props.environment.hospitalCapacity;
+        this.avgLengthOfInfection = props.environment.avgLengthOfInfection;
 
-        /!*
+        /*
         App passes down state of model factors as dict from state
         For structure, see App.state.pandemic_name.factors
-         *!/
-        this.factors = props.factors;
+         */
+        this.state = {
+            factors: props.factors,
+        }
 
-        /!*this.handWashing = props.handWashing;
+        /*this.handWashing = props.handWashing;
         this.socialDistancing = props.socialDistancing;
-        this.masks = 1;*!/
+        this.masks = 1;*/
     }
 
     getCasesByDay(dayNum) {
-        /!*
+        /*
         dayNum = Number of days since day 0 in the model
-         *!/
-        /!*
+         */
+        /*
         N_d = num of cases on a given day
         N_0 = num of cases on day 0
         N_d = (1 + E * p)^d * N_0
@@ -49,7 +53,7 @@
         // TODO refactor to include logistic growth curve
         p = 1 - (Nd / P)
         //let p = 1 - (N_d / this.popSize);
-         *!/
+         */
         if(dayNum < 0) dayNum = 0;
         return (((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose())) ** dayNum) * this.casesOnDay0);
     }
@@ -77,11 +81,11 @@
     }
 
     getAdjustedInfectedAvgExposures(){
-        return this.infectedAvgExposures * this.socialDistancing;
+        return this.infectedAvgExposures * this.state.factors.socialDistancing;
     }
 
     getAdjustedProbInfectFromExpose() {
-        return this.probInfectFromExpose * this.handWashing * this.masks;
+        return this.probInfectFromExpose * this.state.factors.handWashing * this.state.factors.masks;
     }
 
     getRValue() {
@@ -99,7 +103,7 @@
         return dayNum;
     }
 
-    toggleHandWashing(){
+    /*toggleHandWashing(){
         if (this.handWashing === 1){
             this.handWashing = this.FACTORS.HANDWASHING;
         } else {
@@ -121,12 +125,13 @@
         } else {
             this.masks = 1;
         }
-    }
+    }*/
 
     tempDemo() {
         let s = [];
         for(let i=0; i<25; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            //console.log(typeof({dayNum: i, cases: this.getCasesByDay(i)}.cases));
             s.push({dayNum: i, cases: Math.round(this.getCasesByDay(i))})
         }
         return s;
@@ -136,11 +141,22 @@
         let s = [];
         for(let i=0; i<25; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: Math.round(this.getCasesByDay(i))})
+            /*let c = this.getCasesByDay(i);
+            console.log(i, c, Math.round(c));
+            let d = {dayNum: i, cases: Math.round(c)};
+            console.log(d);
+            s.push(d);*/
+            //s.push({x: i, y: Math.round(this.getCasesByDay(i))})
         }
         return s;
     }
-}*/
+
+    render() {
+        return(
+            <div></div>
+        );
+    }
+}
 
 
 export class Pandemic {
@@ -177,6 +193,12 @@ export class Pandemic {
         this.hospitalCapacity = hospitalCapacity;
         this.avgLengthOfInfection = 14;
 
+        this.factors = {
+            handWashing: 1,
+            socialDistancing: 1,
+            masks: 1,
+        };
+
         this.handWashing = 1;
         this.socialDistancing = 1;
         this.masks = 1;
@@ -222,11 +244,11 @@ export class Pandemic {
     }
 
     getAdjustedInfectedAvgExposures(){
-        return this.infectedAvgExposures * this.socialDistancing;
+        return this.infectedAvgExposures * this.factors.socialDistancing;
     }
 
     getAdjustedProbInfectFromExpose() {
-        return this.probInfectFromExpose * this.handWashing * this.masks;
+        return this.probInfectFromExpose * this.factors.handWashing * this.factors.masks;
     }
 
     getRValue() {
@@ -244,28 +266,9 @@ export class Pandemic {
         return dayNum;
     }
 
-    toggleHandWashing(){
-        if (this.handWashing === 1){
-            this.handWashing = this.FACTORS.HANDWASHING;
-        } else {
-            this.handWashing = 1;
-        }
-    }
-
-    toggleSocialDistancing(){
-        if(this.socialDistancing === 1){
-            this.socialDistancing = this.FACTORS.SOCIAL_DISTANCING;
-        } else {
-            this.socialDistancing = 1;
-        }
-    }
-
-    toggleMasks() {
-        if(this.masks === 1){
-            this.masks = this.FACTORS.MASKS;
-        } else {
-            this.masks = 1;
-        }
+    updateFactors(factors) {
+        this.factors = factors;
+        console.log(this.factors);
     }
 
     tempDemo() {

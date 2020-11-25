@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import Visualisations from './Visualisations'
 import { makeStyles } from "@material-ui/core/styles";
-import { Pandemic } from "./pandemic";
+import {Pandemic, PandemicModel, PandemicStatefulDemo} from "./pandemic";
 import * as React from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,8 +55,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.classes = styles;
+
+    // TODO these parameters should be adjustable by user somehow in the future
+    this.covid = new Pandemic(1000, 10, .11, 1000000, 500000);
+    this.covid1 = new Pandemic(1000, 10, .11, 1000000, 500000);
     this.state = {
       covid1: {
+        pandemic: this.covid,
         factors: {
           handWashing: 1,
           socialDistancing: 1,
@@ -64,6 +69,7 @@ class App extends React.Component {
         },
       },
       covid2: {
+        pandemic: this.covid1,
         factors: {
           handWashing: 1,
           socialDistancing: 1,
@@ -73,14 +79,27 @@ class App extends React.Component {
     }
     this.FACTORS = {
       HANDWASHING: 1 - 0.05,
-      SOCIAL_DISTANCING: .6,
+      SOCIALDISTANCING: .6,
       MASKS: 1 - 0.1,
     };
+    this.MODEL_DEFAULTS = {
+      casesOnDay0: 1000,
+      infectedAvgExposures: 10,
+      probInfectFromExpose: .11,
+      popSize: 1000000,
+      hospitalCapacity: 500000,
+      avgLengthOfInfection: 14,
+    };
 
-    // TODO these parameters should be adjustable by user somehow in the future
-    this.covid = new Pandemic(1000, 10, .11, 1000000, 500000);
-    this.covid1 = new Pandemic(1000, 10, .11, 1000000, 500000);
     this.days = 0;
+    /*this.covid3 = <PandemicModel
+        casesOnDay0={1000} infectedAvgExposures={10} probInfectFromExpose={.11} popSize={1000000}
+        hospitalCapacity={500000} avgLengthOfInfection={14} factors={this.state.covid1.factors}
+    />;*/
+    this._covid3 = React.createRef();
+    this.covid3 = <PandemicModel
+                    id='covid3' ref={this._covid3}
+                    environment={this.MODEL_DEFAULTS} factors={this.state.covid1}/>;
   }
 
   toggleFactor(factor, pandemic){
@@ -91,12 +110,18 @@ class App extends React.Component {
       newVal.factors[factor] = 1
     }
     this.setState({[pandemic] : newVal});
+    this.state[pandemic].pandemic.updateFactors(this.state[pandemic].factors);
   }
 
   render() {
     const { classes } = this.props;
     return (
         <>
+          {/*<div>
+            <PandemicModel
+                id='covid3' ref={this._covid3}
+                environment={this.MODEL_DEFAULTS} factors={this.state.covid1}/>
+          </div>*/}
           <Typography variant="h5" component="h1" className={this.classes.title}>
             COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
           </Typography>
@@ -112,18 +137,12 @@ class App extends React.Component {
               </Typography>
               <FormGroup>
                 <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
-                  this.covid.toggleHandWashing();
-                  console.log(this.covid.handWashing);
                   this.toggleFactor('handWashing', 'covid1');
                 }}/>
                 <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
-                  this.covid.toggleSocialDistancing();
-                  console.log(this.covid.socialDistancing);
                   this.toggleFactor('socialDistancing', 'covid1');
                 }}/>
                 <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
-                  this.covid.toggleMasks();
-                  console.log(this.covid.masks);
                   this.toggleFactor('masks', 'covid1');
 
                 }}/>
