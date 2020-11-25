@@ -5,6 +5,11 @@
 // see graphic for how lockdown cuts infection rate
 
 
+// TODO inflection point
+// TODO fix state not updating
+// TODO susceptible goes negative
+// TODO
+
 export class Pandemic {
     // TODO remove these or keep them in App?
     FACTORS = {
@@ -52,7 +57,7 @@ export class Pandemic {
     }
 
     getDeathsByDay(dayNum) {
-        let c = this.getCasesByDay(dayNum - 14) * 0.01;
+        let c = this.getCasesByDay(dayNum - 14) * 0.04;
         return c;
     }
 
