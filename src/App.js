@@ -119,31 +119,70 @@ class App extends React.Component {
               <Typography
                   variant="h6"
                   component="h2"
-                  className={this.classes.columnTitle}
+                  className={this.classes.rowTitle}
               >
                 Preventative Measures
               </Typography>
-              <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
-                  this.toggleFactor('handWashing', 'covid1');
-                }}/>
-                <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
-                  this.toggleFactor('socialDistancing', 'covid1');
-                }}/>
-                <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
-                  this.toggleFactor('masks', 'covid1');
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.rowTitle}
+                >
+                  Model 1
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
+                    this.toggleFactor('handWashing', 'covid1');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
+                    this.toggleFactor('socialDistancing', 'covid1');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
+                    this.toggleFactor('masks', 'covid1');
 
-                }}/>
-                <FormControlLabel control={<Checkbox />} label="Foo" />
-                <FormControlLabel control={<Checkbox />} label="Bar" />
-                <FormControlLabel control={<Checkbox />} label="One" />
-                <FormControlLabel control={<Checkbox />} label="Two" />
-                <FormControlLabel control={<Checkbox />} label="Three" />
-                <FormControlLabel control={<Checkbox />} label="Four" />
-              </FormGroup>
-              <Button title='Recalculate' variant='contained' color='primary'>
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Foo" />
+                  <FormControlLabel control={<Checkbox />} label="Bar" />
+                  <FormControlLabel control={<Checkbox />} label="One" />
+                  <FormControlLabel control={<Checkbox />} label="Two" />
+                  <FormControlLabel control={<Checkbox />} label="Three" />
+                  <FormControlLabel control={<Checkbox />} label="Four" />
+                </FormGroup>
+                {/*<Button title='Recalculate' variant='contained' color='primary'>
                 Recalculate
-              </Button>
+              </Button>*/}
+              </Grid>
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.rowTitle}
+                >
+                  Model 2
+                </Typography>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox />} label="Hand Washing" onChange={(event) => {
+                    this.toggleFactor('handWashing', 'covid2');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Social Distancing" onChange={() => {
+                    this.toggleFactor('socialDistancing', 'covid2');
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Masks" onChange={() => {
+                    this.toggleFactor('masks', 'covid2');
+
+                  }}/>
+                  <FormControlLabel control={<Checkbox />} label="Foo" />
+                  <FormControlLabel control={<Checkbox />} label="Bar" />
+                  <FormControlLabel control={<Checkbox />} label="One" />
+                  <FormControlLabel control={<Checkbox />} label="Two" />
+                  <FormControlLabel control={<Checkbox />} label="Three" />
+                  <FormControlLabel control={<Checkbox />} label="Four" />
+                </FormGroup>
+                {/*<Button title='Recalculate' variant='contained' color='primary'>
+                Recalculate
+              </Button>*/}
+              </Grid>
             </Grid>
 
             <Grid item xs={8} className={this.classes.column}>
@@ -159,10 +198,34 @@ class App extends React.Component {
                 alt=""
                 className={classes.image}
               />*/}
-              <div id='pandemicTempDemo'>
-                <Visualisations pandemicState={this.state.covid1.pandemic}/>
-                <PandemicTempDemo dailyCases={this.state.covid1.pandemic.tempDemo()}></PandemicTempDemo>
-              </div>
+
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.columnTitle}
+                >
+                  Model 1
+                </Typography>
+                <div id='pandemicTempDemo'>
+                  <Visualisations pandemicState={this.state.covid1.pandemic}/>
+                  <PandemicTempDemo dailyCases={this.state.covid1.pandemic.tempDemo()}></PandemicTempDemo>
+                </div>
+              </Grid>
+
+              <Grid item className={this.classes.row}>
+                <Typography
+                    variant="h6"
+                    component="h2"
+                    className={this.classes.columnTitle}
+                >
+                  Model 2
+                </Typography>
+                <div id='pandemicTempDemo'>
+                  <Visualisations pandemicState={this.state.covid2.pandemic}/>
+                  <PandemicTempDemo dailyCases={this.state.covid2.pandemic.tempDemo()}></PandemicTempDemo>
+                </div>
+              </Grid>
             </Grid>
 
             <Grid item xs={2} className={this.classes.column}>
