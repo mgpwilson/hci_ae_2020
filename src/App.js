@@ -11,6 +11,7 @@ import Visualisations from './Visualisations'
 import { makeStyles } from "@material-ui/core/styles";
 import {Pandemic, PandemicModel, PandemicStatefulDemo} from "./pandemic";
 import * as React from "react";
+import PandemicSlider from "./PandemicSlider";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -209,6 +210,7 @@ class App extends React.Component {
                 </Typography>
                 <div id='pandemicTempDemo'>
                   <Visualisations pandemicState={this.state.covid1.pandemic}/>
+                  <PandemicSlider pandemicState={this.state.covid1.pandemic}/>
                   <PandemicTempDemo dailyCases={this.state.covid1.pandemic.tempDemo()}></PandemicTempDemo>
                 </div>
               </Grid>
@@ -223,7 +225,6 @@ class App extends React.Component {
                 </Typography>
                 <div id='pandemicTempDemo'>
                   <Visualisations pandemicState={this.state.covid2.pandemic}/>
-                  <PandemicTempDemo dailyCases={this.state.covid2.pandemic.tempDemo()}></PandemicTempDemo>
                 </div>
               </Grid>
             </Grid>
