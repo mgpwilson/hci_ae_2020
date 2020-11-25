@@ -13,22 +13,6 @@ export class Pandemic {
         MASKS: 1 - 0.1,
     };
 
-    /*constructor(props) {
-        super(props);
-        this.casesOnDay0 = props.casesOnDay0;
-        // avg num ppl someone infected is exposed to per day
-        this.infectedAvgExposures = props.infectedAvgExposures;
-        // probability of each exposure becoming an infection
-        this.probInfectFromExpose = props.probInfectFromExpose;
-        this.popSize = props.popSize;
-        this.hospitalCapacity = props.hospitalCapacity;
-        this.avgLengthOfInfection = 14;
-
-        this.handWashing = 1;
-        this.socialDistancing = 1;
-        this.masks = 1;
-    }*/
-
     constructor(casesOnDay0, infectedAvgExposures, probInfectFromExpose, popSize, hospitalCapacity) {
         this.casesOnDay0 = casesOnDay0;
         // avg num ppl someone infected is exposed to per day
@@ -45,9 +29,9 @@ export class Pandemic {
             masks: 1,
         };
 
-        this.handWashing = 1;
+        /*this.handWashing = 1;
         this.socialDistancing = 1;
-        this.masks = 1;
+        this.masks = 1;*/
     }
 
     getCasesByDay(dayNum) {
