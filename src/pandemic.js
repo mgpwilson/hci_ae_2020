@@ -86,13 +86,13 @@ export class Pandemic {
         dayNum = Number of days since day 0 in the model
          */
         if(dayNum < 0) dayNum = 0;
-        let L = this.getCasesProportionalToPopulationByDay(dayNum);
+        /*let L = this.getCasesProportionalToPopulationByDay(dayNum);
         console.log("Day", dayNum,
             " = E:", Math.round(this.getExponentialCasesByDay(dayNum)),
             " L:", Math.round(L),
             " R:", this.getRValue());
-        return L;
-        //return this.getCasesProportionalToPopulationByDay(dayNum);
+        return L;*/
+        return this.getCasesProportionalToPopulationByDay(dayNum);
     }
 
     getDeathsByDay(dayNum) {
