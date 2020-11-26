@@ -8,7 +8,10 @@
 // TODO inflection point
 // TODO fix state not updating
 // TODO susceptible goes negative
-// TODO
+// TODO integrate in the new factors
+
+// TODO uncomment debugging code in Vis
+// TODO change legend label in Vis
 
 export class Pandemic {
     // TODO remove these or keep them in App?
@@ -39,7 +42,7 @@ export class Pandemic {
         this.masks = 1;*/
     }
 
-    getCasesByDay(dayNum) {
+    getExponentialCasesByDay(dayNum) {
         /*
         dayNum = Number of days since day 0 in the model
          */
@@ -56,6 +59,64 @@ export class Pandemic {
         return (((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose())) ** dayNum) * this.casesOnDay0);
     }
 
+    getCasesProportionalToPopulationByDay(dayNum){
+        /*if(dayNum < 0) dayNum = 0;
+            return this.casesOnDay0;
+        let N_d = this.getCasesProportionalToPopulationByDay(dayNum - 1);
+        if (N_d > this.popSize) N_d = this.popSize;
+        //let popSusceptibilityCorrectionFactor = 1 - (N_d / this.popSize); // can this go negative? if larger than population possibly
+        //let N_D = this.getAdjustedProbInfectFromExpose() * popSusceptibilityCorrectionFactor * N_d;
+        let currentPopulationSusceptibility = (1 - (N_d / this.popSize));
+        console.log(dayNum, currentPopulationSusceptibility);
+        //let N_D = ((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose()))**dayNum) * this.casesOnDay0;
+
+        let thetaN_D = currentPopulationSusceptibility * this.getExponentialCasesByDay(dayNum - 1);
+
+        return N_d + thetaN_D;*/
+        /*
+        P(t) = (K * P_0 * e^rt) / (K + P_0^(e^(rt-1)
+        where
+        P_0 = population at time 0
+        K = final population/ carrying capacity
+        r = inital growth rate
+        t = dayNum
+        https://www.intmath.com/blog/environment/h1n1-and-the-logistic-equation-3498
+         */
+
+        let P_0 = this.casesOnDay0;
+        let K = this.popSize;
+        let r = 1 + this.getRValue();
+        let t = dayNum;
+
+        let numerator = K * P_0 * Math.exp(r*t);
+        let denominator = K + (P_0 * (Math.exp(r*t) - 1));
+        return numerator / denominator;
+
+        /*let k = this.getRValue() / 10;
+        let L = this.popSize;
+        let t0 = this.casesOnDay0;
+
+        let num = L;
+        let denom = 1 + Math.exp(k * -1 * (dayNum - this.casesOnDay0));
+
+        return num / denom;*/
+
+
+    }
+
+    getCasesByDay(dayNum) {
+        /*
+        dayNum = Number of days since day 0 in the model
+         */
+        if(dayNum < 0) dayNum = 0;
+        /*let L = this.getCasesProportionalToPopulationByDay(dayNum);
+        console.log("Day", dayNum,
+            " = E:", Math.round(this.getExponentialCasesByDay(dayNum)),
+            " L:", Math.round(L));
+        return L;*/
+        return this.getCasesProportionalToPopulationByDay(dayNum);
+    }
+
     getDeathsByDay(dayNum) {
         let c = this.getCasesByDay(dayNum - 14) * 0.04;
         return c;
@@ -63,9 +124,9 @@ export class Pandemic {
 
     getRecoveredByDay(dayNum) {
         // Unlike other methods, this method gives a total including previous days because immunity lasts
-        if(dayNum < this.avgLengthOfInfection) {
+        /*if(dayNum < this.avgLengthOfInfection) {
             dayNum = 0
-        }
+        }*/
         let sum_removed = 0;
         for(let i=0; i<dayNum-this.avgLengthOfInfection; i++){
             sum_removed += this.getCasesByDay(i);
