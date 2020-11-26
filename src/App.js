@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import Visualisations from "./Visualisations";
 import { makeStyles } from "@material-ui/core/styles";
-import { Pandemic, PandemicModel, PandemicStatefulDemo } from "./pandemic";
+import { Pandemic } from "./pandemic";
 import PandemicSlider from "./PandemicSlider";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,8 +34,23 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
   const classes = useStyles();
 
+  const FACTORS = {
+    HANDWASHING: 1 - 0.05,
+    SOCIALDISTANCING: 0.6,
+    MASKS: 1 - 0.1,
+  };
+  const MODEL_DEFAULTS = {
+    casesOnDay0: 1000,
+    infectedAvgExposures: 12,
+    probInfectFromExpose: 0.2,
+    popSize: 5463300, // actual population
+    // popSize: 1000000,
+    hospitalCapacity: 500000,
+    avgLengthOfInfection: 14,
+  };
+
   const [covid1, setCovid1] = useState({
-    pandemic: new Pandemic(1, 10, 0.11, 1000000, 500000),
+    pandemic: new Pandemic(MODEL_DEFAULTS.casesOnDay0, MODEL_DEFAULTS.infectedAvgExposures, MODEL_DEFAULTS.probInfectFromExpose, MODEL_DEFAULTS.popSize, MODEL_DEFAULTS.hospitalCapacity),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -43,7 +58,7 @@ const App = () => {
     },
   });
   const [covid2, setCovid2] = useState({
-    pandemic: new Pandemic(1, 10, 0.11, 1000000, 500000),
+    pandemic: new Pandemic(MODEL_DEFAULTS.casesOnDay0, MODEL_DEFAULTS.infectedAvgExposures, MODEL_DEFAULTS.probInfectFromExpose, MODEL_DEFAULTS.popSize, MODEL_DEFAULTS.hospitalCapacity),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -51,19 +66,6 @@ const App = () => {
     },
   });
 
-  const FACTORS = {
-    HANDWASHING: 1 - 0.05,
-    SOCIALDISTANCING: 0.6,
-    MASKS: 1 - 0.1,
-  };
-  const MODEL_DEFAULTS = {
-    casesOnDay0: 1,
-    infectedAvgExposures: 10,
-    probInfectFromExpose: 0.11,
-    popSize: 1000000,
-    hospitalCapacity: 500000,
-    avgLengthOfInfection: 14,
-  };
   const days = 0;
 
   const toggleFactor = (factor, covidState, setCovidState) => {
@@ -75,8 +77,8 @@ const App = () => {
       newState.factors[factor] = 1;
     }
 
+    setCovidState({pandemic: newState.pandemic, factors: newState.factors});
     newState.pandemic.updateFactors(newState.factors);
-    setCovidState(newState);
   };
 
   return (
