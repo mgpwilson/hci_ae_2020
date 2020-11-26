@@ -102,14 +102,12 @@ export class Pandemic {
 
     getRecoveredByDay(dayNum) {
         // Unlike other methods, this method gives a total including previous days because immunity lasts
-        /*if(dayNum < this.avgLengthOfInfection) {
-            dayNum = 0
-        }*/
-        let sum_removed = 0;
+        let sumRecovered = 0;
         for(let i=0; i<dayNum-this.avgLengthOfInfection; i++){
-            sum_removed += this.getCasesByDay(i);
+            sumRecovered += this.getCasesByDay(i);
+            if (sumRecovered > this.popSize) return this.popSize;
         }
-        return sum_removed;
+        return sumRecovered;
     }
 
     getSusceptibleByDay(dayNum){
