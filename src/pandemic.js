@@ -11,7 +11,13 @@
 // TODO integrate in the new factors
 
 // TODO uncomment debugging code in Vis
-// TODO change legend label in Vis
+// TODO fix problem where if pandemic is not growing rapidly you can't see anything but susceptible
+// TODO make it very obvious to users that lines level off at the top bc of population size
+//      maybe line or box around graph ending there
+// TODO could legend be inside of graph?
+// TODO bar graph definitely has to be as a proportion of population
+//      getDeathProportionalToPopulation(dayNum) & getCasesProportionalToPopulation(dayNum)
+// TODO I think that each Visualization is producing two graphs which is problematic
 
 export class Pandemic {
     // TODO remove these or keep them in App?
@@ -60,7 +66,7 @@ export class Pandemic {
         return ((this.getRValue() ** dayNum) * this.casesOnDay0);
     }
 
-    getCasesProportionalToPopulationByDay(dayNum){
+    getCasesProportionalToPopulationByDay(dayNum) {
         /*
         P(t) = (K * P_0 * e^rt) / (K + P_0^(e^(rt-1)
         where
@@ -96,8 +102,29 @@ export class Pandemic {
     }
 
     getDeathsByDay(dayNum) {
-        let c = this.getCasesByDay(dayNum - 14) * 0.04;
-        return c;
+        let sumDead = 0;
+        for(let i=0; i<dayNum; i++){
+            // TODO add some sort of factor increasing the deaths as the hospital capacity increases
+            let cases = this.getCasesByDay(i);
+            let deathRate = 0.04; // avg case:death rate in scotland
+            let capacity = cases / this.hospitalCapacity;
+            if (capacity > 0.9) {
+                if (capacity > 0.95) {
+                    if (capacity > 1) {
+                        deathRate = 0.07;
+                        sumDead += (cases - this.hospitalCapacity) * 0.12;
+                        cases = this.hospitalCapacity;
+                    } else {
+                        deathRate = 0.06;
+                    }
+                } else {
+                    deathRate = 0.05;
+                }
+            }
+            sumDead += cases * deathRate;
+            if (sumDead > this.popSize) return this.popSize;
+        }
+        return sumDead;
     }
 
     getRecoveredByDay(dayNum) {
@@ -110,13 +137,13 @@ export class Pandemic {
         return sumRecovered;
     }
 
-    getSusceptibleByDay(dayNum){
+    getSusceptibleByDay(dayNum) {
         let susceptible = this.popSize - this.getCasesByDay(dayNum) - this.getRecoveredByDay(dayNum);
         if (susceptible < 0) return 0;
         else return susceptible;
     }
 
-    getAdjustedInfectedAvgExposures(){
+    getAdjustedInfectedAvgExposures() {
         return this.infectedAvgExposures * this.factors.socialDistancing;
     }
 
@@ -128,7 +155,7 @@ export class Pandemic {
         return this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose();
     }
 
-    getDaysUntilHospitalCapacity(fullness){
+    getDaysUntilHospitalCapacity(fullness) {
         // fullness should be decimal between 0 & 1
         let target = this.hospitalCapacity * fullness;
         // TODO redo this in cleverer way when less tired
@@ -137,6 +164,19 @@ export class Pandemic {
             dayNum += 1;
         }
         return dayNum;
+    }
+
+    getDeathProportionalToPopulation(dayNum) {
+        return this.getDeathsByDay(dayNum) / this.popSize;
+    }
+
+    getCasesProportionalToPopulation(dayNum) {
+        let sumInfected = 0;
+        for(let i=0; i<=dayNum; i++){
+            sumInfected += this.getCasesByDay(i);
+            if (sumInfected > this.popSize) return this.popSize;
+        }
+        return sumInfected / this.popSize;
     }
 
     updateFactors(factors) {
@@ -181,7 +221,7 @@ export class Pandemic {
     }
     seriesDeathsByDay() {
         let s = [];
-        for(let i=0; i<40; i++){
+        for(let i=0; i<40; i++) {
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.getDeathsByDay(i))})
         }
