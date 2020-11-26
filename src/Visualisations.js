@@ -16,7 +16,7 @@ class Visualisations extends Component {
         var cases = this.pandemicState.seriesCasesByDay()
         var susceptible = this.pandemicState.seriesSusceptibleByDay()
         var deaths = this.pandemicState.seriesDeathsByDay()
-        const legendItems = ["Removed", "Cases", "Susceptible"]
+        const legendItems = ["Recovered", "Infected", "Susceptible"]
         const legendColours = ["red", "blue", "green"]
         console.log(removed);
         console.log(cases)
