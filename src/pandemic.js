@@ -60,19 +60,6 @@ export class Pandemic {
     }
 
     getCasesProportionalToPopulationByDay(dayNum){
-        /*if(dayNum < 0) dayNum = 0;
-            return this.casesOnDay0;
-        let N_d = this.getCasesProportionalToPopulationByDay(dayNum - 1);
-        if (N_d > this.popSize) N_d = this.popSize;
-        //let popSusceptibilityCorrectionFactor = 1 - (N_d / this.popSize); // can this go negative? if larger than population possibly
-        //let N_D = this.getAdjustedProbInfectFromExpose() * popSusceptibilityCorrectionFactor * N_d;
-        let currentPopulationSusceptibility = (1 - (N_d / this.popSize));
-        console.log(dayNum, currentPopulationSusceptibility);
-        //let N_D = ((1 + (this.getAdjustedInfectedAvgExposures() * this.getAdjustedProbInfectFromExpose()))**dayNum) * this.casesOnDay0;
-
-        let thetaN_D = currentPopulationSusceptibility * this.getExponentialCasesByDay(dayNum - 1);
-
-        return N_d + thetaN_D;*/
         /*
         P(t) = (K * P_0 * e^rt) / (K + P_0^(e^(rt-1)
         where
@@ -91,17 +78,6 @@ export class Pandemic {
         let numerator = K * P_0 * Math.exp(r*t);
         let denominator = K + (P_0 * (Math.exp(r*t) - 1));
         return numerator / denominator;
-
-        /*let k = this.getRValue() / 10;
-        let L = this.popSize;
-        let t0 = this.casesOnDay0;
-
-        let num = L;
-        let denom = 1 + Math.exp(k * -1 * (dayNum - this.casesOnDay0));
-
-        return num / denom;*/
-
-
     }
 
     getCasesByDay(dayNum) {
