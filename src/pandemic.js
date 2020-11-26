@@ -111,7 +111,9 @@ export class Pandemic {
     }
 
     getSusceptibleByDay(dayNum){
-        return this.popSize - this.getCasesByDay(dayNum) - this.getRecoveredByDay(dayNum);
+        let susceptible = this.popSize - this.getCasesByDay(dayNum) - this.getRecoveredByDay(dayNum);
+        if (susceptible < 0) return 0;
+        else return susceptible;
     }
 
     getAdjustedInfectedAvgExposures(){
