@@ -16,8 +16,8 @@ class Visualisations extends Component {
         var cases = this.pandemicState.seriesCasesByDay()
         var susceptible = this.pandemicState.seriesSusceptibleByDay()
         var deaths = this.pandemicState.seriesDeathsByDay()
-        const legendItems = ["Recovered", "Infected", "Susceptible"]
-        const legendColours = ["red", "blue", "green"]
+        const legendItems = ["Recovered", "Infected", "Susceptible", "Dead"]
+        const legendColours = ["green", "red", "blue", "purple"]
         console.log(removed);
         console.log(cases)
         console.log(deaths);
@@ -38,17 +38,19 @@ class Visualisations extends Component {
                     margin: "inherit",
                     width: "400px"
                 }}>
-                    <LineSeries data={removed} strokeWidth={1} color={"red"} />
-                    <LineSeries data={cases} strokeWidth={1} color={"blue"} />
-                    <LineSeries data={susceptible} strokeWidth={1} color={"green"} />
+                    <LineSeries data={removed} strokeWidth={1} color={"green"} />
+                    <LineSeries data={cases} strokeWidth={1} color={"red"} />
+                    <LineSeries data={susceptible} strokeWidth={1} color={"blue"} />
+                    <LineSeries data={deaths} strokeWidth={1} color={"purple"} />
                     <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
                     <XAxis />
                 </XYPlot>
                 <h3 style={{ marginTop: "80px" }}>SIR Graph: Covid Simulation 2</h3>
                 <XYPlot name={"SIR GRAPH 2"} height={200} width={400} xDomain={[0, scale]} stackBy={'x'}>
-                    <LineSeries data={removed} strokeWidth={1} color={"red"} />
-                    <LineSeries data={cases} strokeWidth={1} color={"blue"} />
-                    <LineSeries data={susceptible} strokeWidth={1} color={"green"} />
+                    <LineSeries data={removed} strokeWidth={1} color={"green"} />
+                    <LineSeries data={cases} strokeWidth={1} color={"red"} />
+                    <LineSeries data={susceptible} strokeWidth={1} color={"blue"} />
+                    <LineSeries data={deaths} strokeWidth={1} color={"purple"} />
                     <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
                     <XAxis />
                 </XYPlot>
