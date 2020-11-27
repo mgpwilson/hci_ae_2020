@@ -45,6 +45,7 @@ export class Pandemic {
         this.hospitalCapacity = hospitalCapacity;
         this.avgLengthOfInfection = 14;
         this.hospitalizationRate = 0.075;
+        this.avgDeathRate = 0.04; // avg case:death rate in scotland when hospitals aren't overwhelmed
 
         this.factors = {
             handWashing: 1,
@@ -119,26 +120,34 @@ export class Pandemic {
         for(let i=0; i<dayNum; i++){
             // TODO add some sort of factor increasing the deaths as the hospital capacity increases
             let cases = this.getCasesByDay(i);
-            let deathRate = 0.04; // avg case:death rate in scotland
-            let capacity = cases / this.hospitalCapacity;
-            if (capacity > 0.9) {
-                if (capacity > 0.95) {
-                    if (capacity > 1) {
-                        deathRate = 0.07;
-                        sumDead += (cases - this.hospitalCapacity) * 0.12;
-                        cases = this.hospitalCapacity;
-                    } else {
-                        deathRate = 0.06;
-                    }
-                } else {
-                    deathRate = 0.05;
-                }
+            let capacity = this.getHospitalCapacityByDay(dayNum);
+            let deathRate = this.getDeathRateByHospitalCapacity(capacity);
+            if (capacity > 1) {
+                sumDead += (cases - this.hospitalCapacity) * 0.12;
+                cases = this.hospitalCapacity;
             }
-            sumDead += cases * deathRate;
+            else {
+                sumDead += cases * deathRate;
+            }
             if (sumDead > this.popSize) return this.popSize;
         }
-
         return sumDead;
+    }
+
+    getDeathRateByHospitalCapacity(capacity) {
+        let deathRate = this.avgDeathRate;
+        if (capacity > 0.9) {
+            if (capacity > 0.95) {
+                if (capacity > 1) {
+                    deathRate = 0.07;
+                } else {
+                    deathRate = 0.06;
+                }
+            } else {
+                deathRate = 0.05;
+            }
+        }
+        return deathRate;
     }
 
     getRecoveredByDay(dayNum) {
@@ -188,7 +197,7 @@ export class Pandemic {
             if (recentInfections > this.popSize) recentInfections = this.popSize;
         }
 
-        let capacity = (recentInfections - this.getRecoveredByDay(dayNum)) * this.hospitalizationRate / this.hospitalCapacity;
+        let capacity = (recentInfections) * this.hospitalizationRate / this.hospitalCapacity;
         console.log(dayNum, " : ", recentInfections, this.getRecoveredByDay(dayNum), capacity);
         return capacity;
     }
