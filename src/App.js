@@ -121,6 +121,7 @@ const App = () => {
               className={classes.rowTitle}
             >
               Model 1
+              {covid1.pandemic.getDaysUntilHospitalCapacity(.5)}
             </Typography>
             <FormGroup>
               <FormControlLabel

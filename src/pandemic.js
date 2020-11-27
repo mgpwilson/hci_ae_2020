@@ -181,11 +181,11 @@ export class Pandemic {
 
     getDaysUntilHospitalCapacity(fullness) {
         // fullness should be decimal between 0 & 1
-        let target = this.hospitalCapacity * fullness;
-        // TODO redo this in cleverer way when less tired
         let dayNum = 0;
-        while(this.getCasesByDay(dayNum) < target) {
-            dayNum += 1;
+        let cap = this.getHospitalCapacityByDay(dayNum);
+        while(cap < fullness) {
+            dayNum +=1;
+            cap = this.getHospitalCapacityByDay(dayNum);
         }
         return dayNum;
     }
@@ -193,11 +193,11 @@ export class Pandemic {
     getHospitalCapacityByDay(dayNum) {
         let recentInfections = 0;
         for(let i=dayNum - this.avgLengthOfInfection; i<dayNum; i++){
-            recentInfections += this.getCasesByDay(i);
+            recentInfections += this.getCasesByDay(i) * this.hospitalizationRate;
             if (recentInfections > this.popSize) recentInfections = this.popSize;
         }
 
-        let capacity = (recentInfections) * this.hospitalizationRate / this.hospitalCapacity;
+        let capacity = (recentInfections) / this.hospitalCapacity;
         console.log(dayNum, " : ", recentInfections, this.getRecoveredByDay(dayNum), capacity);
         return capacity;
     }
