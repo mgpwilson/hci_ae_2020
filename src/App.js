@@ -38,6 +38,9 @@ const App = () => {
     HANDWASHING: 1 - 0.05,
     SOCIALDISTANCING: 0.6,
     MASKS: 1 - 0.1,
+    CLOSE_EDUCATION: 0.76,
+    PUBLIC_TRANSPORT_REDUCED: 0.9,
+    OUTDOOR_SOCIALISING: 0.8
   };
   const MODEL_DEFAULTS = {
     casesOnDay0: 1000,
