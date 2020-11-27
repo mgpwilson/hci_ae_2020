@@ -19,12 +19,20 @@
 //      getDeathProportionalToPopulation(dayNum) & getCasesProportionalToPopulation(dayNum)
 // TODO I think that each Visualization is producing two graphs which is problematic
 
+
+// TODO add recovered to days until hospital
+// TODO fix bug on death rate for just handwashing?? is this a bug?
+
 export class Pandemic {
     // TODO remove these or keep them in App?
     FACTORS = {
         HANDWASHING: 1 - 0.05,
-        SOCIAL_DISTANCING: .6,
+        SOCIALDISTANCING: 0.85,
         MASKS: 1 - 0.1,
+        CLOSE_EDUCATION: 0.76,
+        PUBLIC_TRANSPORT_REDUCED: 0.9,
+        OUTDOOR_SOCIALISING: 0.8,
+        AVOID_GROUPS: 0.6,
     };
 
     constructor(casesOnDay0, infectedAvgExposures, probInfectFromExpose, popSize, hospitalCapacity) {
@@ -41,6 +49,10 @@ export class Pandemic {
             handWashing: 1,
             socialDistancing: 1,
             masks: 1,
+            close_education: 1,
+            public_transport_reduced: 1,
+            outdoor_socialising: 1,
+            avoid_groups: 1,
         };
 
         /*this.handWashing = 1;
@@ -144,11 +156,12 @@ export class Pandemic {
     }
 
     getAdjustedInfectedAvgExposures() {
-        return this.infectedAvgExposures * this.factors.socialDistancing;
+        return this.infectedAvgExposures * this.factors.socialDistancing * this.factors.close_education
+            * this.factors.public_transport_reduced * this.factors.avoid_groups;
     }
 
     getAdjustedProbInfectFromExpose() {
-        return this.probInfectFromExpose * this.factors.handWashing * this.factors.masks;
+        return this.probInfectFromExpose * this.factors.handWashing * this.factors.masks * this.factors.outdoor_socialising;
     }
 
     getRValue() {

@@ -35,13 +35,24 @@ const App = () => {
   const classes = useStyles();
 
   const FACTORS = {
-    HANDWASHING: 1 - 0.05,
-    SOCIALDISTANCING: 0.6,
-    MASKS: 1 - 0.1,
+    // avg num ppl someone infected is exposed to per day
+    SOCIALDISTANCING: 0.85,
     CLOSE_EDUCATION: 0.76,
     PUBLIC_TRANSPORT_REDUCED: 0.9,
-    OUTDOOR_SOCIALISING: 0.8
+    AVOID_GROUPS: 0.6,
+    // probability of each exposure becoming an infection
+    HANDWASHING: 1 - 0.05,
+    MASKS: 1 - 0.2,
+    OUTDOOR_SOCIALISING: 0.8,
   };
+
+  // FACTORS I COULD ADD:
+  /*
+  - Working from home
+  - Avoiding groups of 6+ ppl
+  - Visiting public places less
+  */
+
   const MODEL_DEFAULTS = {
     casesOnDay0: 1000,
     infectedAvgExposures: 12,
@@ -58,6 +69,10 @@ const App = () => {
       handWashing: 1,
       socialDistancing: 1,
       masks: 1,
+      close_education: 1,
+      public_transport_reduced: 1,
+      outdoor_socialising: 1,
+      avoid_groups: 1,
     },
   });
   const [covid2, setCovid2] = useState({
@@ -66,6 +81,10 @@ const App = () => {
       handWashing: 1,
       socialDistancing: 1,
       masks: 1,
+      close_education: 1,
+      public_transport_reduced: 1,
+      outdoor_socialising: 1,
+      avoid_groups: 1,
     },
   });
 
@@ -106,31 +125,53 @@ const App = () => {
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox />}
-                label="Hand Washing"
+                label="Increase handwashing 4x"
                 onChange={(event) => {
                   toggleFactor("handWashing", covid1, setCovid1);
                 }}
               />
               <FormControlLabel
                 control={<Checkbox />}
-                label="Social Distancing"
+                label="Maintain 2m distance"
                 onChange={() => {
                   toggleFactor("socialDistancing", covid1, setCovid1);
                 }}
               />
               <FormControlLabel
+                  control={<Checkbox />}
+                  label="Avoid groups of 6+ people"
+                  onChange={() => {
+                    toggleFactor("avoid_groups", covid1, setCovid1);
+                  }}
+              />
+              <FormControlLabel
                 control={<Checkbox />}
-                label="Masks"
+                label="Wear masks"
                 onChange={() => {
                   toggleFactor("masks", covid1, setCovid1);
                 }}
               />
-              <FormControlLabel control={<Checkbox />} label="Foo" />
-              <FormControlLabel control={<Checkbox />} label="Bar" />
-              <FormControlLabel control={<Checkbox />} label="One" />
-              <FormControlLabel control={<Checkbox />} label="Two" />
-              <FormControlLabel control={<Checkbox />} label="Three" />
-              <FormControlLabel control={<Checkbox />} label="Four" />
+              <FormControlLabel
+                  control={<Checkbox />}
+                  label="Close in-person education"
+                  onChange={() => {
+                    toggleFactor("close_education", covid1, setCovid1);
+                  }}
+              />
+              <FormControlLabel
+                  control={<Checkbox />}
+                  label="Decrease public transport use by 50%"
+                  onChange={() => {
+                    toggleFactor("public_transport_reduced", covid1, setCovid1);
+                  }}
+              />
+              <FormControlLabel
+                  control={<Checkbox />}
+                  label="Socialise outdoors"
+                  onChange={() => {
+                    toggleFactor("outdoor_socialising", covid1, setCovid1);
+                  }}
+              />
             </FormGroup>
             {/*<Button title='Recalculate' variant='contained' color='primary'>
                 Recalculate
