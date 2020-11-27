@@ -13,7 +13,7 @@ const PreventativeMeasures = (props) => {
   };
 
   const toggleFactor = (factor, covidState, setCovidState) => {
-    let newState = covidState;
+    const newState = covidState;
 
     if (newState.factors[factor] === 1) {
       newState.factors[factor] = FACTORS[factor.toUpperCase()];
@@ -46,6 +46,27 @@ const PreventativeMeasures = (props) => {
         label="Masks"
         onChange={() => {
           toggleFactor("masks", covidState, setCovidState);
+        }}
+      />
+      <FormControlLabel
+        control={<Checkbox />}
+        label="Close Education"
+        onChange={() => {
+          toggleFactor("close_education", covidState, setCovidState);
+        }}
+      />
+      <FormControlLabel
+        control={<Checkbox />}
+        label="Public Transport Reduced"
+        onChange={() => {
+          toggleFactor("public_transport_reduced", covidState, setCovidState);
+        }}
+      />
+      <FormControlLabel
+        control={<Checkbox />}
+        label="Outdoor Socialising"
+        onChange={() => {
+          toggleFactor("outdoor_socialising", covidState, setCovidState);
         }}
       />
     </FormGroup>

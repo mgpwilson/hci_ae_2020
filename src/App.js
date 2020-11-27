@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Grid,
-  Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-} from "@material-ui/core";
+import { CssBaseline, Grid, Typography } from "@material-ui/core";
 import Visualisations from "./Visualisations";
 import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
@@ -77,6 +71,7 @@ const App = () => {
 
   return (
     <>
+      <CssBaseline />
       <Typography variant="h5" component="h1" className={classes.title}>
         COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
       </Typography>
@@ -166,34 +161,46 @@ const App = () => {
             Context and Factualisation
           </Typography>
 
-          <Typography variant="h6" component="h2" className={classes.rowTitle}>
-            Model 1
-          </Typography>
-          <ContextFactualisation covidState={covid1} />
+          <div>
+            <Typography
+              variant="h6"
+              component="h2"
+              className={classes.rowTitle}
+            >
+              Model 1
+            </Typography>
+            <ContextFactualisation covidState={covid1} />
+          </div>
 
-          <Typography variant="h6" component="h2" className={classes.rowTitle}>
-            Model 2
-          </Typography>
-          <ContextFactualisation covidState={covid2} />
+          <div>
+            <Typography
+              variant="h6"
+              component="h2"
+              className={classes.rowTitle}
+            >
+              Model 2
+            </Typography>
+            <ContextFactualisation covidState={covid2} />
+          </div>
         </Grid>
       </Grid>
     </>
   );
 };
 
-const PandemicTempDemo = (props) => {
-  const dailyCases = props.dailyCases;
-  const listItems = dailyCases.map((day) => (
-    <li key={day.dayNum.toString()}>
-      Day {day.dayNum.toString()}: {day.cases.toString()} cases
-    </li>
-  ));
-  return (
-    <ul style={{ listStyleType: "none", paddingLeft: 30, textAlign: "left" }}>
-      {listItems}
-    </ul>
-  );
-};
+// const PandemicTempDemo = (props) => {
+//   const dailyCases = props.dailyCases;
+//   const listItems = dailyCases.map((day) => (
+//     <li key={day.dayNum.toString()}>
+//       Day {day.dayNum.toString()}: {day.cases.toString()} cases
+//     </li>
+//   ));
+//   return (
+//     <ul style={{ listStyleType: "none", paddingLeft: 30, textAlign: "left" }}>
+//       {listItems}
+//     </ul>
+//   );
+// };
 
 /*App.propTypes = {
   classes: PropTypes.object.isRequired,
