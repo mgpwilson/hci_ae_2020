@@ -44,6 +44,7 @@ export class Pandemic {
         this.popSize = popSize;
         this.hospitalCapacity = hospitalCapacity;
         this.avgLengthOfInfection = 14;
+        this.hospitalizationRate = 0.075;
 
         this.factors = {
             handWashing: 1,
@@ -136,6 +137,7 @@ export class Pandemic {
             sumDead += cases * deathRate;
             if (sumDead > this.popSize) return this.popSize;
         }
+
         return sumDead;
     }
 
@@ -177,6 +179,18 @@ export class Pandemic {
             dayNum += 1;
         }
         return dayNum;
+    }
+
+    getHospitalCapacityByDay(dayNum) {
+        let recentInfections = 0;
+        for(let i=dayNum - this.avgLengthOfInfection; i<dayNum; i++){
+            recentInfections += this.getCasesByDay(i);
+            if (recentInfections > this.popSize) recentInfections = this.popSize;
+        }
+
+        let capacity = (recentInfections - this.getRecoveredByDay(dayNum)) * this.hospitalizationRate / this.hospitalCapacity;
+        console.log(dayNum, " : ", recentInfections, this.getRecoveredByDay(dayNum), capacity);
+        return capacity;
     }
 
     getDeathProportionalToPopulation(dayNum) {
