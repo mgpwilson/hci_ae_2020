@@ -22,6 +22,12 @@
 
 // TODO add recovered to days until hospital
 // TODO fix bug on death rate for just handwashing?? is this a bug?
+// TODO make sure that all 4 lines are correct
+/*
+S = pop - infected - recovered - dead
+R = recent cases - deaths
+D = cases * death rate
+ */
 
 export class Pandemic {
     // TODO remove these or keep them in App?
@@ -117,18 +123,12 @@ export class Pandemic {
 
     getDeathsByDay(dayNum) {
         let sumDead = 0;
-        for(let i=0; i<dayNum; i++){
+        for(let i=0; i<dayNum - 14; i++){
             // TODO add some sort of factor increasing the deaths as the hospital capacity increases
             let cases = this.getCasesByDay(i);
-            let capacity = this.getHospitalCapacityByDay(dayNum);
+            let capacity = this.getHospitalCapacityByDay(i);
             let deathRate = this.getDeathRateByHospitalCapacity(capacity);
-            if (capacity > 1) {
-                sumDead += (cases - this.hospitalCapacity) * 0.12;
-                cases = this.hospitalCapacity;
-            }
-            else {
-                sumDead += cases * deathRate;
-            }
+            sumDead += cases * deathRate;
             if (sumDead > this.popSize) return this.popSize;
         }
         return sumDead;
@@ -139,7 +139,7 @@ export class Pandemic {
         if (capacity > 0.9) {
             if (capacity > 0.95) {
                 if (capacity > 1) {
-                    deathRate = 0.07;
+                    deathRate = 0.12;
                 } else {
                     deathRate = 0.06;
                 }
@@ -198,7 +198,7 @@ export class Pandemic {
         }
 
         let capacity = (recentInfections) / this.hospitalCapacity;
-        console.log(dayNum, " : ", recentInfections, this.getRecoveredByDay(dayNum), capacity);
+        console.log(dayNum, " : ", recentInfections, this.getRecoveredByDay(dayNum), this.getDeathRateByHospitalCapacity(capacity), capacity);
         return capacity;
     }
 

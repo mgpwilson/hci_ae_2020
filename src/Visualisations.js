@@ -20,7 +20,7 @@ class Visualisations extends Component {
         const legendColours = ["green", "red", "blue", "purple"]
         console.log(removed);
         console.log(cases)
-        console.log(deaths);
+        console.log("Deaths", deaths);
         var scale = cases.length;
         var barCases = Object.values(cases)[this.days]
         var barDeaths = Object.values(deaths)[this.days]
