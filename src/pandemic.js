@@ -195,7 +195,7 @@ export class Pandemic {
 
     seriesCasesByDay() {
         let s = [];
-        for(let i=0; i<40; i++){
+        for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.getCasesByDay(i))})
         }
@@ -204,7 +204,7 @@ export class Pandemic {
 
     seriesRecoveredByDay() {
         let s = [];
-        for(let i=0; i<40; i++){
+        for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.getRecoveredByDay(i))})
         }
@@ -213,7 +213,7 @@ export class Pandemic {
 
     seriesSusceptibleByDay() {
         let s = [];
-        for(let i=0; i<40; i++){
+        for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.getSusceptibleByDay(i))})
         }
@@ -221,7 +221,7 @@ export class Pandemic {
     }
     seriesDeathsByDay() {
         let s = [];
-        for(let i=0; i<40; i++) {
+        for(let i=0; i<120; i++) {
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.getDeathsByDay(i))})
         }
