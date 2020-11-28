@@ -66,15 +66,15 @@ export class Pandemic {
             avoid_groups: 1,
         };
 
-        this.memoizedData = this.createModelCalculationsSnapshot();
-        this.cacheModelCalculations();
+        this.memoizedData = this.createModelSnapshot();
+        this.createModelCalculationsSnapshot();
 
         /*this.handWashing = 1;
         this.socialDistancing = 1;
         this.masks = 1;*/
     }
 
-    createModelCalculationsSnapshot() {
+    createModelSnapshot() {
         let ts = {
             cases: [],
             total_deaths: [],
@@ -85,9 +85,17 @@ export class Pandemic {
         return ts;
     }
 
-    cacheModelCalculations () {
+    createModelCalculationsSnapshot () {
         for (let i=0; i <= this.simulationLength; i++){
             this.memoizedData.total_deaths.push(this.getDeathsByDay(i));
+        }
+        console.log(this.memoizedData);
+    }
+
+    updateCachedCalculations() {
+        for (let i=0; i <= this.simulationLength; i++){
+            this.memoizedData.cases[i] = this.getCasesByDay(i);
+            this.memoizedData.total_deaths[i] = this.getDeathsByDay(i);
         }
         console.log(this.memoizedData);
     }
@@ -186,9 +194,13 @@ export class Pandemic {
     getRecoveredByDay(dayNum) {
         // Unlike other methods, this method gives a total including previous days because immunity lasts
         let sumRecovered = 0;
+        let dead = this.retrieveCachedCalculation(dayNum, 'total_deaths');
         for(let i=0; i<dayNum-this.avgLengthOfInfection; i++){
-            sumRecovered += this.retrieveCachedCalculation(i, 'cases');
-            if (sumRecovered > this.popSize) return this.popSize;
+            let cases = this.retrieveCachedCalculation(i, 'cases');
+            let capacity = this.getHospitalCapacityByDay(i);
+            let recoveryRate = 1 - this.getDeathRateByHospitalCapacity(capacity);
+            sumRecovered += cases * recoveryRate;
+            if (sumRecovered > this.popSize * 0.7) return this.popSize * recoveryRate - dead;
         }
         return sumRecovered;
     }
@@ -261,7 +273,8 @@ export class Pandemic {
 
     updateFactors(factors) {
         this.factors = factors;
-        console.log(this.factors);
+        this.updateCachedCalculations();
+        //console.log(this.factors);
     }
 
     tempDemo() {
