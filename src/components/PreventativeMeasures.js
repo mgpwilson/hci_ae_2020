@@ -1,4 +1,9 @@
-import { FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
+import {
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  FormLabel,
+} from "@material-ui/core";
 
 const PreventativeMeasures = (props) => {
   const { covidState, setCovidState } = props;
@@ -27,6 +32,7 @@ const PreventativeMeasures = (props) => {
 
   return (
     <FormGroup>
+      <FormLabel component="legend">Probability</FormLabel>
       <FormControlLabel
         control={<Checkbox />}
         label="Hand Washing"
@@ -48,6 +54,8 @@ const PreventativeMeasures = (props) => {
           toggleFactor("masks", covidState, setCovidState);
         }}
       />
+
+      <FormLabel component="legend">Infection</FormLabel>
       <FormControlLabel
         control={<Checkbox />}
         label="Close Education"
