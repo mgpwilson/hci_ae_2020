@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import {
-  Grid,
-  Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Button,
-} from "@material-ui/core";
+import { CssBaseline, Grid, Typography } from "@material-ui/core";
 import Visualisations from "./Visualisations";
 import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
-import PandemicSlider from "./PandemicSlider";
+import PreventativeMeasures from "./components/PreventativeMeasures";
+import ContextFactualisation from "./components/ContextFactualisation";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -34,14 +28,6 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
   const classes = useStyles();
 
-  const FACTORS = {
-    HANDWASHING: 1 - 0.05,
-    SOCIALDISTANCING: 0.6,
-    MASKS: 1 - 0.1,
-    CLOSE_EDUCATION: 0.76,
-    PUBLIC_TRANSPORT_REDUCED: 0.9,
-    OUTDOOR_SOCIALISING: 0.8
-  };
   const MODEL_DEFAULTS = {
     casesOnDay0: 1000,
     infectedAvgExposures: 12,
@@ -53,7 +39,13 @@ const App = () => {
   };
 
   const [covid1, setCovid1] = useState({
-    pandemic: new Pandemic(MODEL_DEFAULTS.casesOnDay0, MODEL_DEFAULTS.infectedAvgExposures, MODEL_DEFAULTS.probInfectFromExpose, MODEL_DEFAULTS.popSize, MODEL_DEFAULTS.hospitalCapacity),
+    pandemic: new Pandemic(
+      MODEL_DEFAULTS.casesOnDay0,
+      MODEL_DEFAULTS.infectedAvgExposures,
+      MODEL_DEFAULTS.probInfectFromExpose,
+      MODEL_DEFAULTS.popSize,
+      MODEL_DEFAULTS.hospitalCapacity
+    ),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -61,7 +53,13 @@ const App = () => {
     },
   });
   const [covid2, setCovid2] = useState({
-    pandemic: new Pandemic(MODEL_DEFAULTS.casesOnDay0, MODEL_DEFAULTS.infectedAvgExposures, MODEL_DEFAULTS.probInfectFromExpose, MODEL_DEFAULTS.popSize, MODEL_DEFAULTS.hospitalCapacity),
+    pandemic: new Pandemic(
+      MODEL_DEFAULTS.casesOnDay0,
+      MODEL_DEFAULTS.infectedAvgExposures,
+      MODEL_DEFAULTS.probInfectFromExpose,
+      MODEL_DEFAULTS.popSize,
+      MODEL_DEFAULTS.hospitalCapacity
+    ),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -71,31 +69,23 @@ const App = () => {
 
   const days = 0;
 
-  const toggleFactor = (factor, covidState, setCovidState) => {
-    let newState = covidState;
-
-    if (newState.factors[factor] === 1) {
-      newState.factors[factor] = FACTORS[factor.toUpperCase()];
-    } else {
-      newState.factors[factor] = 1;
-    }
-
-    setCovidState({pandemic: newState.pandemic, factors: newState.factors});
-    newState.pandemic.updateFactors(newState.factors);
-  };
-
   return (
     <>
+      <CssBaseline />
       <Typography variant="h5" component="h1" className={classes.title}>
         COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
       </Typography>
 
       <Grid container component="main" className={classes.content}>
         <Grid item xs={2} className={classes.column}>
-          <Typography variant="h6" component="h2" className={classes.rowTitle}>
+          <Typography
+            variant="h6"
+            component="h2"
+            className={classes.columnTitle}
+          >
             Preventative Measures
           </Typography>
-          <Grid item className={classes.row}>
+          <div>
             <Typography
               variant="h6"
               component="h2"
@@ -103,40 +93,12 @@ const App = () => {
             >
               Model 1
             </Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Hand Washing"
-                onChange={(event) => {
-                  toggleFactor("handWashing", covid1, setCovid1);
-                }}
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Social Distancing"
-                onChange={() => {
-                  toggleFactor("socialDistancing", covid1, setCovid1);
-                }}
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Masks"
-                onChange={() => {
-                  toggleFactor("masks", covid1, setCovid1);
-                }}
-              />
-              <FormControlLabel control={<Checkbox />} label="Foo" />
-              <FormControlLabel control={<Checkbox />} label="Bar" />
-              <FormControlLabel control={<Checkbox />} label="One" />
-              <FormControlLabel control={<Checkbox />} label="Two" />
-              <FormControlLabel control={<Checkbox />} label="Three" />
-              <FormControlLabel control={<Checkbox />} label="Four" />
-            </FormGroup>
-            {/*<Button title='Recalculate' variant='contained' color='primary'>
-                Recalculate
-              </Button>*/}
-          </Grid>
-          <Grid item className={classes.row}>
+            <PreventativeMeasures
+              covidState={covid1}
+              setCovidState={setCovid1}
+            />
+          </div>
+          <div>
             <Typography
               variant="h6"
               component="h2"
@@ -144,39 +106,11 @@ const App = () => {
             >
               Model 2
             </Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Hand Washing"
-                onChange={(event) => {
-                  toggleFactor("handWashing", covid2, setCovid2);
-                }}
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Social Distancing"
-                onChange={() => {
-                  toggleFactor("socialDistancing", covid2, setCovid2);
-                }}
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Masks"
-                onChange={() => {
-                  toggleFactor("masks", covid2, setCovid2);
-                }}
-              />
-              <FormControlLabel control={<Checkbox />} label="Foo" />
-              <FormControlLabel control={<Checkbox />} label="Bar" />
-              <FormControlLabel control={<Checkbox />} label="One" />
-              <FormControlLabel control={<Checkbox />} label="Two" />
-              <FormControlLabel control={<Checkbox />} label="Three" />
-              <FormControlLabel control={<Checkbox />} label="Four" />
-            </FormGroup>
-            {/*<Button title='Recalculate' variant='contained' color='primary'>
-                Recalculate
-              </Button>*/}
-          </Grid>
+            <PreventativeMeasures
+              covidState={covid2}
+              setCovidState={setCovid2}
+            />
+          </div>
         </Grid>
 
         <Grid item xs={8} className={classes.column}>
@@ -187,30 +121,24 @@ const App = () => {
           >
             Visualisation and Graphing
           </Typography>
-          {/*<img
-                src="https://i.redd.it/ylu4wlgozgt51.jpg"
-                alt=""
-                className={classes.image}
-              />*/}
-
-          <Grid item className={classes.row}>
-            <Typography
+          <div>
+            {/* <Typography
               variant="h6"
               component="h2"
               className={classes.columnTitle}
             >
               Model 1
-            </Typography>
+            </Typography> */}
             <div id="pandemicTempDemo">
               <Visualisations pandemicState={covid1.pandemic} />
-              <PandemicSlider pandemicState={covid1.pandemic} />
-              <PandemicTempDemo
+              {/* <PandemicSlider pandemicState={covid1.pandemic} /> */}
+              {/* <PandemicTempDemo
                 dailyCases={covid1.pandemic.tempDemo()}
-              ></PandemicTempDemo>
+              ></PandemicTempDemo> */}
             </div>
-          </Grid>
+          </div>
 
-          <Grid item className={classes.row}>
+          {/* <Grid item className={classes.row}>
             <Typography
               variant="h6"
               component="h2"
@@ -221,7 +149,7 @@ const App = () => {
             <div id="pandemicTempDemo">
               <Visualisations pandemicState={covid2.pandemic} />
             </div>
-          </Grid>
+          </Grid> */}
         </Grid>
 
         <Grid item xs={2} className={classes.column}>
@@ -232,31 +160,47 @@ const App = () => {
           >
             Context and Factualisation
           </Typography>
-          <Typography>
-            Lorem ipsum dolor sit amet et delectus accommodare his consul
-            copiosae legendos at vix ad putent delectus delicata usu. Vidit
-            dissentiet eos cu eum an brute copiosae hendrerit. Eos erant dolorum
-            an. Per facer affert ut. Mei iisque mentitum
-          </Typography>
+
+          <div>
+            <Typography
+              variant="h6"
+              component="h2"
+              className={classes.rowTitle}
+            >
+              Model 1
+            </Typography>
+            <ContextFactualisation covidState={covid1} />
+          </div>
+
+          <div>
+            <Typography
+              variant="h6"
+              component="h2"
+              className={classes.rowTitle}
+            >
+              Model 2
+            </Typography>
+            <ContextFactualisation covidState={covid2} />
+          </div>
         </Grid>
       </Grid>
     </>
   );
 };
 
-const PandemicTempDemo = (props) => {
-  const dailyCases = props.dailyCases;
-  const listItems = dailyCases.map((day) => (
-    <li key={day.dayNum.toString()}>
-      Day {day.dayNum.toString()}: {day.cases.toString()} cases
-    </li>
-  ));
-  return (
-    <ul style={{ listStyleType: "none", paddingLeft: 30, textAlign: "left" }}>
-      {listItems}
-    </ul>
-  );
-};
+// const PandemicTempDemo = (props) => {
+//   const dailyCases = props.dailyCases;
+//   const listItems = dailyCases.map((day) => (
+//     <li key={day.dayNum.toString()}>
+//       Day {day.dayNum.toString()}: {day.cases.toString()} cases
+//     </li>
+//   ));
+//   return (
+//     <ul style={{ listStyleType: "none", paddingLeft: 30, textAlign: "left" }}>
+//       {listItems}
+//     </ul>
+//   );
+// };
 
 /*App.propTypes = {
   classes: PropTypes.object.isRequired,
