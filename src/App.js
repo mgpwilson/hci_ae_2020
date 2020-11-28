@@ -1,27 +1,64 @@
 import React, { useState } from "react";
-import { CssBaseline, Grid, Typography } from "@material-ui/core";
+import {
+  AppBar,
+  colors,
+  CssBaseline,
+  Grid,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 import Visualisations from "./Visualisations";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
 import PreventativeMeasures from "./components/PreventativeMeasures";
 import ContextFactualisation from "./components/ContextFactualisation";
 
+const theme = createMuiTheme({
+  palette: {
+    // type: "dark",
+  },
+});
+
 const useStyles = makeStyles((theme) => ({
-  title: {
-    textAlign: "center",
-    padding: theme.spacing(3),
-  },
   content: {
-    padding: theme.spacing(3),
+    height: "calc(100vh - 48px)",
+    width: "calc(100vw - (100vw - 100%))",
   },
-  column: {
-    textAlign: "center",
+
+  sideBar: {
+    height: "100%",
+    padding: theme.spacing(1),
   },
-  columnTitle: {
-    paddingBottom: theme.spacing(3),
+  sideBarTitle: {
+    display: "grid",
+    placeItems: "center",
   },
-  image: {
-    maxWidth: "75%",
+  sideBarBoxOuter: {
+    height: `calc(50% - ${theme.spacing(2)}px)`,
+    padding: theme.spacing(1),
+  },
+  sideBarBoxInner: {
+    height: `calc(100% - ${theme.spacing(2)}px)`,
+    padding: theme.spacing(2),
+  },
+
+  graphsContainer: {
+    height: `calc(100vh - 48px - ${theme.spacing(4)}px)`,
+    padding: theme.spacing(1),
+  },
+  graphsBoxOuter: {
+    height: "50%",
+    width: "50%",
+    padding: theme.spacing(1),
+  },
+  graphsBoxInner: {
+    height: "100%",
+    padding: theme.spacing(2),
   },
 }));
 
@@ -33,7 +70,6 @@ const App = () => {
     infectedAvgExposures: 12,
     probInfectFromExpose: 0.2,
     popSize: 5463300, // actual population
-    // popSize: 1000000,
     hospitalCapacity: 500000,
     avgLengthOfInfection: 14,
   };
@@ -70,140 +106,91 @@ const App = () => {
   const days = 0;
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Typography variant="h5" component="h1" className={classes.title}>
-        COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
-      </Typography>
+      <AppBar elevation={0} position="static">
+        <Toolbar variant="dense">
+          <Typography
+            component="h1"
+            variant="h6"
+            style={{ flexGrow: 1 }}
+            align="center"
+          >
+            COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
       <Grid container component="main" className={classes.content}>
-        <Grid item xs={2} className={classes.column}>
-          <Typography
-            variant="h6"
-            component="h2"
-            className={classes.columnTitle}
-          >
-            Preventative Measures
-          </Typography>
-          <div>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.rowTitle}
-            >
+        {/* Preventative Measures */}
+        <Grid item xs={2} className={classes.sideBar}>
+          <div className={classes.sideBarTitle}>
+            <Typography component="h2">Preventative Measures</Typography>
+          </div>
+
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2">
               Model 1
             </Typography>
-            <PreventativeMeasures
-              covidState={covid1}
-              setCovidState={setCovid1}
-            />
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <PreventativeMeasures
+                covidState={covid1}
+                setCovidState={setCovid1}
+              />
+            </Paper>
           </div>
-          <div>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.rowTitle}
-            >
+
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2">
               Model 2
             </Typography>
-            <PreventativeMeasures
-              covidState={covid2}
-              setCovidState={setCovid2}
-            />
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <PreventativeMeasures
+                covidState={covid2}
+                setCovidState={setCovid2}
+              />
+            </Paper>
           </div>
         </Grid>
 
-        <Grid item xs={8} className={classes.column}>
-          <Typography
-            variant="h6"
-            component="h2"
-            className={classes.columnTitle}
-          >
-            Visualisation and Graphing
-          </Typography>
-          <div>
-            {/* <Typography
-              variant="h6"
-              component="h2"
-              className={classes.columnTitle}
-            >
-              Model 1
-            </Typography> */}
-            <div id="pandemicTempDemo">
-              <Visualisations pandemicState={covid1.pandemic} />
-              {/* <PandemicSlider pandemicState={covid1.pandemic} /> */}
-              {/* <PandemicTempDemo
-                dailyCases={covid1.pandemic.tempDemo()}
-              ></PandemicTempDemo> */}
-            </div>
+        {/* Visualation and Graphing */}
+        <Grid item xs={8} className={classes.graphsContainer}>
+          <div className={classes.sideBarTitle}>
+            <Typography component="h2">Visualisation and Graphing</Typography>
           </div>
 
-          {/* <Grid item className={classes.row}>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.columnTitle}
-            >
-              Model 2
-            </Typography>
-            <div id="pandemicTempDemo">
-              <Visualisations pandemicState={covid2.pandemic} />
-            </div>
-          </Grid> */}
+          <div className={classes.graphsBoxOuter}>
+            <Visualisations pandemicState={covid1.pandemic} />
+          </div>
         </Grid>
 
-        <Grid item xs={2} className={classes.column}>
-          <Typography
-            variant="h6"
-            component="h2"
-            className={classes.columnTitle}
-          >
-            Context and Factualisation
-          </Typography>
-
-          <div>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.rowTitle}
-            >
-              Model 1
-            </Typography>
-            <ContextFactualisation covidState={covid1} />
+        {/* Context and Factualisation */}
+        <Grid item xs={2} className={classes.sideBar}>
+          <div className={classes.sideBarTitle}>
+            <Typography component="h2">Context and Factualisation</Typography>
           </div>
 
-          <div>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.rowTitle}
-            >
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2">
+              Model 1
+            </Typography>
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <ContextFactualisation covidState={covid1} />
+            </Paper>
+          </div>
+
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2">
               Model 2
             </Typography>
-            <ContextFactualisation covidState={covid2} />
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <ContextFactualisation covidState={covid2} />
+            </Paper>
           </div>
         </Grid>
       </Grid>
-    </>
+    </ThemeProvider>
   );
 };
-
-// const PandemicTempDemo = (props) => {
-//   const dailyCases = props.dailyCases;
-//   const listItems = dailyCases.map((day) => (
-//     <li key={day.dayNum.toString()}>
-//       Day {day.dayNum.toString()}: {day.cases.toString()} cases
-//     </li>
-//   ));
-//   return (
-//     <ul style={{ listStyleType: "none", paddingLeft: 30, textAlign: "left" }}>
-//       {listItems}
-//     </ul>
-//   );
-// };
-
-/*App.propTypes = {
-  classes: PropTypes.object.isRequired,
-};*/
 
 export default App;
