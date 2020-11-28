@@ -41,8 +41,8 @@ const App = () => {
     PUBLIC_TRANSPORT_REDUCED: 0.9,
     AVOID_GROUPS: 0.6,
     // probability of each exposure becoming an infection
-    HANDWASHING: 1 - 0.05,
-    MASKS: 1 - 0.2,
+    HANDWASHING: 0.95,
+    MASKS: .8,
     OUTDOOR_SOCIALISING: 0.8,
   };
 
@@ -121,7 +121,6 @@ const App = () => {
               className={classes.rowTitle}
             >
               Model 1
-              {covid1.pandemic.getDaysUntilHospitalCapacity(.5)}
             </Typography>
             <FormGroup>
               <FormControlLabel

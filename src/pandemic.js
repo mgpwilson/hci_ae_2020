@@ -28,13 +28,15 @@ S = pop - infected - recovered - dead
 R = recent cases - deaths
 D = cases * death rate
  */
+// TODO switch bar graph
+// TODO fix graphics lag when select more than 4 choices
 
 export class Pandemic {
     // TODO remove these or keep them in App?
     FACTORS = {
-        HANDWASHING: 1 - 0.05,
+        HANDWASHING: 0.95,
         SOCIALDISTANCING: 0.85,
-        MASKS: 1 - 0.1,
+        MASKS: 0.9,
         CLOSE_EDUCATION: 0.76,
         PUBLIC_TRANSPORT_REDUCED: 0.9,
         OUTDOOR_SOCIALISING: 0.8,
@@ -52,6 +54,7 @@ export class Pandemic {
         this.avgLengthOfInfection = 14;
         this.hospitalizationRate = 0.075;
         this.avgDeathRate = 0.04; // avg case:death rate in scotland when hospitals aren't overwhelmed
+        this.simulationLength = 120 + this.avgLengthOfInfection; // avoid inefficiency by avoiding recalculating things more than once
 
         this.factors = {
             handWashing: 1,
@@ -63,9 +66,29 @@ export class Pandemic {
             avoid_groups: 1,
         };
 
+        this.memoizedData = this.efficiencyWrapper();
+
         /*this.handWashing = 1;
         this.socialDistancing = 1;
         this.masks = 1;*/
+    }
+
+    efficiencyWrapper () {
+        let ts = [];
+        for (let i=0; i <= this.simulationLength; i++){
+            ts.push({cases: this.getCasesByDay(i)});
+        }
+        console.log(ts);
+        return ts;
+    }
+
+    efficiencyExtractor(dayNum, key) {
+        if (dayNum <= this.simulationLength) {
+            return this.memoizedData[dayNum][key];
+        }
+        else {
+            if (key === 'cases') return this.getCasesByDay(dayNum);
+        }
     }
 
     getExponentialCasesByDay(dayNum) {
@@ -118,18 +141,17 @@ export class Pandemic {
             " L:", Math.round(L),
             " R:", this.getRValue());
         return L;*/
-        return this.getCasesProportionalToPopulationByDay(dayNum);
+        return Math.round(this.getCasesProportionalToPopulationByDay(dayNum));
     }
 
     getDeathsByDay(dayNum) {
         let sumDead = 0;
-        for(let i=0; i<dayNum - 14; i++){
-            // TODO add some sort of factor increasing the deaths as the hospital capacity increases
-            let cases = this.getCasesByDay(i);
+        for(let i=0; i<dayNum - this.avgLengthOfInfection; i++){
+            let cases = this.efficiencyExtractor(i, 'cases');
             let capacity = this.getHospitalCapacityByDay(i);
             let deathRate = this.getDeathRateByHospitalCapacity(capacity);
             sumDead += cases * deathRate;
-            if (sumDead > this.popSize) return this.popSize;
+            if (sumDead > this.popSize * 0.2) return this.popSize * 0.2;
         }
         return sumDead;
     }
@@ -154,14 +176,14 @@ export class Pandemic {
         // Unlike other methods, this method gives a total including previous days because immunity lasts
         let sumRecovered = 0;
         for(let i=0; i<dayNum-this.avgLengthOfInfection; i++){
-            sumRecovered += this.getCasesByDay(i);
+            sumRecovered += this.efficiencyExtractor(i, 'cases');
             if (sumRecovered > this.popSize) return this.popSize;
         }
         return sumRecovered;
     }
 
     getSusceptibleByDay(dayNum) {
-        let susceptible = this.popSize - this.getCasesByDay(dayNum) - this.getRecoveredByDay(dayNum);
+        let susceptible = this.popSize - this.efficiencyExtractor(dayNum, 'cases') - this.getRecoveredByDay(dayNum);
         if (susceptible < 0) return 0;
         else return susceptible;
     }
@@ -191,15 +213,25 @@ export class Pandemic {
     }
 
     getHospitalCapacityByDay(dayNum) {
-        let recentInfections = 0;
-        for(let i=dayNum - this.avgLengthOfInfection; i<dayNum; i++){
-            recentInfections += this.getCasesByDay(i) * this.hospitalizationRate;
-            if (recentInfections > this.popSize) recentInfections = this.popSize;
+        if (dayNum > this.simulationLength) {
+            let recentInfections = 0;
+            for(let i=dayNum - this.avgLengthOfInfection; i<dayNum; i++){
+                recentInfections += this.getCasesByDay(i) * this.hospitalizationRate;
+                if (recentInfections > this.popSize) recentInfections = this.hospitalCapacity;
+            }
+            let capacity = (recentInfections) / this.hospitalCapacity;
+            //console.log(dayNum, " : ", recentInfections, this.getRecoveredByDay(dayNum), this.getDeathRateByHospitalCapacity(capacity), capacity);
+            return capacity;
         }
-
-        let capacity = (recentInfections) / this.hospitalCapacity;
-        console.log(dayNum, " : ", recentInfections, this.getRecoveredByDay(dayNum), this.getDeathRateByHospitalCapacity(capacity), capacity);
-        return capacity;
+        else {
+            let recent = this.memoizedData.slice(dayNum - this.avgLengthOfInfection, dayNum);
+            let recentInfections = 0;
+            for (let i=0; i < recent.length; i++){
+                recentInfections += recent[i].cases * this.hospitalizationRate;
+                if (recentInfections > this.hospitalCapacity) recentInfections = this.hospitalCapacity;
+            }
+            return recentInfections / this.hospitalCapacity;
+        }
     }
 
     getDeathProportionalToPopulation(dayNum) {
@@ -209,7 +241,7 @@ export class Pandemic {
     getCasesProportionalToPopulation(dayNum) {
         let sumInfected = 0;
         for(let i=0; i<=dayNum; i++){
-            sumInfected += this.getCasesByDay(i);
+            sumInfected += this.efficiencyExtractor(i, 'cases');
             if (sumInfected > this.popSize) return this.popSize;
         }
         return sumInfected / this.popSize;
@@ -233,7 +265,7 @@ export class Pandemic {
         let s = [];
         for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: Math.round(this.getCasesByDay(i))})
+            s.push({x: i, y: Math.round(this.efficiencyExtractor(i, 'cases'))})
         }
         return s;
     }
@@ -263,7 +295,6 @@ export class Pandemic {
         }
         return s;
     }
-    
 }
 
 
