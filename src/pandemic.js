@@ -66,14 +66,14 @@ export class Pandemic {
             avoid_groups: 1,
         };
 
-        this.memoizedData = this.efficiencyWrapper();
+        this.memoizedData = this.cacheSnapshot();
 
         /*this.handWashing = 1;
         this.socialDistancing = 1;
         this.masks = 1;*/
     }
 
-    efficiencyWrapper () {
+    cacheSnapshot () {
         let ts = [];
         for (let i=0; i <= this.simulationLength; i++){
             ts.push({cases: this.getCasesByDay(i)});
@@ -82,7 +82,7 @@ export class Pandemic {
         return ts;
     }
 
-    efficiencyExtractor(dayNum, key) {
+    retrieveCachedCalculation(dayNum, key) {
         if (dayNum <= this.simulationLength) {
             return this.memoizedData[dayNum][key];
         }
@@ -147,7 +147,7 @@ export class Pandemic {
     getDeathsByDay(dayNum) {
         let sumDead = 0;
         for(let i=0; i<dayNum - this.avgLengthOfInfection; i++){
-            let cases = this.efficiencyExtractor(i, 'cases');
+            let cases = this.retrieveCachedCalculation(i, 'cases');
             let capacity = this.getHospitalCapacityByDay(i);
             let deathRate = this.getDeathRateByHospitalCapacity(capacity);
             sumDead += cases * deathRate;
@@ -176,14 +176,14 @@ export class Pandemic {
         // Unlike other methods, this method gives a total including previous days because immunity lasts
         let sumRecovered = 0;
         for(let i=0; i<dayNum-this.avgLengthOfInfection; i++){
-            sumRecovered += this.efficiencyExtractor(i, 'cases');
+            sumRecovered += this.retrieveCachedCalculation(i, 'cases');
             if (sumRecovered > this.popSize) return this.popSize;
         }
         return sumRecovered;
     }
 
     getSusceptibleByDay(dayNum) {
-        let susceptible = this.popSize - this.efficiencyExtractor(dayNum, 'cases') - this.getRecoveredByDay(dayNum);
+        let susceptible = this.popSize - this.retrieveCachedCalculation(dayNum, 'cases') - this.getRecoveredByDay(dayNum);
         if (susceptible < 0) return 0;
         else return susceptible;
     }
@@ -241,7 +241,7 @@ export class Pandemic {
     getCasesProportionalToPopulation(dayNum) {
         let sumInfected = 0;
         for(let i=0; i<=dayNum; i++){
-            sumInfected += this.efficiencyExtractor(i, 'cases');
+            sumInfected += this.retrieveCachedCalculation(i, 'cases');
             if (sumInfected > this.popSize) return this.popSize;
         }
         return sumInfected / this.popSize;
@@ -265,7 +265,7 @@ export class Pandemic {
         let s = [];
         for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: Math.round(this.efficiencyExtractor(i, 'cases'))})
+            s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'cases'))})
         }
         return s;
     }
