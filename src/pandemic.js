@@ -66,28 +66,39 @@ export class Pandemic {
             avoid_groups: 1,
         };
 
-        this.memoizedData = this.cacheSnapshot();
+        this.memoizedData = this.createModelCalculationsSnapshot();
+        this.cacheModelCalculations();
 
         /*this.handWashing = 1;
         this.socialDistancing = 1;
         this.masks = 1;*/
     }
 
-    cacheSnapshot () {
-        let ts = [];
+    createModelCalculationsSnapshot() {
+        let ts = {
+            cases: [],
+            total_deaths: [],
+        };
         for (let i=0; i <= this.simulationLength; i++){
-            ts.push({cases: this.getCasesByDay(i)});
+            ts.cases.push(this.getCasesByDay(i));
         }
-        console.log(ts);
         return ts;
+    }
+
+    cacheModelCalculations () {
+        for (let i=0; i <= this.simulationLength; i++){
+            this.memoizedData.total_deaths.push(this.getDeathsByDay(i));
+        }
+        console.log(this.memoizedData);
     }
 
     retrieveCachedCalculation(dayNum, key) {
         if (dayNum <= this.simulationLength) {
-            return this.memoizedData[dayNum][key];
+            return this.memoizedData[key][dayNum];
         }
         else {
             if (key === 'cases') return this.getCasesByDay(dayNum);
+            if (key == 'total_deaths') return this.getDeathsByDay(dayNum);
         }
     }
 
@@ -224,10 +235,11 @@ export class Pandemic {
             return capacity;
         }
         else {
-            let recent = this.memoizedData.slice(dayNum - this.avgLengthOfInfection, dayNum);
+            let recent = this.memoizedData.cases.slice(dayNum - this.avgLengthOfInfection, dayNum);
             let recentInfections = 0;
+            // TODO https://www.tutorialrepublic.com/faq/how-to-find-the-sum-of-an-array-of-numbers-in-javascript.php
             for (let i=0; i < recent.length; i++){
-                recentInfections += recent[i].cases * this.hospitalizationRate;
+                recentInfections += recent[i] * this.hospitalizationRate;
                 if (recentInfections > this.hospitalCapacity) recentInfections = this.hospitalCapacity;
             }
             return recentInfections / this.hospitalCapacity;
@@ -235,7 +247,7 @@ export class Pandemic {
     }
 
     getDeathProportionalToPopulation(dayNum) {
-        return this.getDeathsByDay(dayNum) / this.popSize;
+        return this.retrieveCachedCalculation(dayNum, 'total_deaths') / this.popSize;
     }
 
     getCasesProportionalToPopulation(dayNum) {
@@ -291,7 +303,7 @@ export class Pandemic {
         let s = [];
         for(let i=0; i<120; i++) {
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: Math.round(this.getDeathsByDay(i))})
+            s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'total_deaths'))})
         }
         return s;
     }
