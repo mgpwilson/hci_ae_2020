@@ -32,6 +32,8 @@ D = cases * death rate
 // TODO fix graphics lag when select more than 4 choices
 // TODO fix bug where bar charts grow in wrong direction
 // TODO remove avoid groups??
+// TODO fix labels on section checkboxes
+// TODO switch social distancing
 
 export class Pandemic {
     // TODO remove these or keep them in App?
@@ -105,7 +107,7 @@ export class Pandemic {
             this.memoizedData.susceptible[i] = this.getSusceptibleByDay(i);
         }
         console.log(this.memoizedData);
-        console.log(this.getRValue());
+        console.log("Updated:", this.getRValue());
     }
 
     retrieveCachedCalculation(dayNum, key) {
@@ -176,7 +178,9 @@ export class Pandemic {
             " L:", Math.round(L),
             " R:", this.getRValue());
         return L;*/
-        return Math.round(this.getCasesProportionalToPopulationByDay(dayNum));
+        let cases = Math.round(this.getCasesProportionalToPopulationByDay(dayNum));
+        if (cases > 0) return cases;
+        else return 0;
     }
 
     getDeathsByDay(dayNum) {
@@ -227,7 +231,7 @@ export class Pandemic {
             let sumRecovered = 0;
             // once someone dies they can't come back alive again
             let dead = this.retrieveCachedCalculation(dayNum, 'total_deaths');
-            let willDie = this.retrieveCachedCalculation(dayNum + this.avgLengthOfInfection, 'total_deaths');
+            let willDie = this.retrieveCachedCalculation(this.simulationLength, 'total_deaths');
             let d = dayNum - this.avgLengthOfInfection;
             if (d > 0) {
                 sumRecovered = this.retrieveCachedCalculation(d - 1, 'total_recovered');
@@ -235,8 +239,8 @@ export class Pandemic {
                 let capacity = this.getHospitalCapacityByDay(d);
                 let recoveryRate = 1 - this.getDeathRateByHospitalCapacity(capacity);
                 sumRecovered += cases * recoveryRate;
-                if (sumRecovered > this.popSize - willDie) return this.popSize - willDie;
             }
+            if (sumRecovered > this.popSize - willDie) return this.popSize - willDie;
             sumRecovered -= dead;
             if (sumRecovered < 0) return 0;
             else return sumRecovered;
