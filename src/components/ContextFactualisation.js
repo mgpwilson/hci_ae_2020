@@ -1,7 +1,7 @@
 import { List, ListItem, Typography } from "@material-ui/core";
 
 const ContextFactualisation = (props) => {
-  const { covidState } = props;
+  const { pandemic } = props;
 
   return (
     <>
@@ -10,7 +10,7 @@ const ContextFactualisation = (props) => {
         <ListItem>
           <Typography>
             Hospital beds would be full in{" "}
-            {covidState.pandemic.getDaysUntilHospitalCapacity(1)} days.
+            {pandemic.getDaysUntilHospitalCapacity(1)} days.
           </Typography>
         </ListItem>
       </List>

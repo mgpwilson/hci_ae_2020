@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 });
 
 const PreventativeMeasures = (props) => {
-  const { covidState, setCovidState } = props;
+  const { pandemic, setPandemic, factors, setFactors } = props;
   const classes = useStyles();
 
   const FACTORS = {
@@ -26,21 +26,23 @@ const PreventativeMeasures = (props) => {
     PUBLIC_TRANSPORT_REDUCED: 0.9,
     // probability of each exposure becoming an infection
     HANDWASHING: 0.95,
-    MASKS: .8,
+    MASKS: 0.8,
     OUTDOOR_SOCIALISING: 0.8,
-  }
+  };
 
-  const toggleFactor = (factor, covidState, setCovidState) => {
-    const newState = covidState;
+  const toggleFactor = (factor) => {
+    const newPandemic = pandemic;
+    const newFactors = factors;
 
-    if (newState.factors[factor] === 1) {
-      newState.factors[factor] = FACTORS[factor.toUpperCase()];
+    if (newFactors[factor] === 1) {
+      newFactors[factor] = FACTORS[factor.toUpperCase()];
     } else {
-      newState.factors[factor] = 1;
+      newFactors[factor] = 1;
     }
 
-    newState.pandemic.updateFactors(newState.factors);
-    setCovidState({ pandemic: newState.pandemic, factors: newState.factors });
+    newPandemic.updateFactors(newFactors);
+    setPandemic(newPandemic);
+    setFactors(newFactors);
   };
 
   return (
@@ -55,7 +57,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("handWashing", covidState, setCovidState);
+          toggleFactor("handWashing");
         }}
       />
       <FormControlLabel
@@ -67,7 +69,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("socialDistancing", covidState, setCovidState);
+          toggleFactor("socialDistancing");
         }}
       />
       <FormControlLabel
@@ -79,7 +81,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("masks", covidState, setCovidState);
+          toggleFactor("masks");
         }}
       />
 
@@ -93,7 +95,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("close_education", covidState, setCovidState);
+          toggleFactor("close_education");
         }}
       />
       <FormControlLabel
@@ -105,7 +107,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("public_transport_reduced", covidState, setCovidState);
+          toggleFactor("public_transport_reduced");
         }}
       />
       <FormControlLabel
@@ -117,7 +119,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("outdoor_socialising", covidState, setCovidState);
+          toggleFactor("outdoor_socialising");
         }}
       />
     </FormGroup>

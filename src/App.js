@@ -68,7 +68,7 @@ const App = () => {
     PUBLIC_TRANSPORT_REDUCED: 0.9,
     // probability of each exposure becoming an infection
     HANDWASHING: 0.95,
-    MASKS: .8,
+    MASKS: 0.8,
     OUTDOOR_SOCIALISING: 0.8,
   };
 
@@ -89,39 +89,40 @@ const App = () => {
     avgLengthOfInfection: 14,
   };
 
-  const [covid1, setCovid1] = useState({
-    pandemic: new Pandemic(
+  const [pandemic1, setPandemic1] = useState(
+    new Pandemic(
       MODEL_DEFAULTS.casesOnDay0,
       MODEL_DEFAULTS.infectedAvgExposures,
       MODEL_DEFAULTS.probInfectFromExpose,
       MODEL_DEFAULTS.popSize,
       MODEL_DEFAULTS.hospitalCapacity
-    ),
-    factors: {
-      handWashing: 1,
-      socialDistancing: 1,
-      masks: 1,
-      close_education: 1,
-      public_transport_reduced: 1,
-      outdoor_socialising: 1,
-    },
+    )
+  );
+  const [factors1, setFactors1] = useState({
+    handWashing: 1,
+    socialDistancing: 1,
+    masks: 1,
+    close_education: 1,
+    public_transport_reduced: 1,
+    outdoor_socialising: 1,
   });
-  const [covid2, setCovid2] = useState({
-    pandemic: new Pandemic(
+
+  const [pandemic2, setPandemic2] = useState(
+    new Pandemic(
       MODEL_DEFAULTS.casesOnDay0,
       MODEL_DEFAULTS.infectedAvgExposures,
       MODEL_DEFAULTS.probInfectFromExpose,
       MODEL_DEFAULTS.popSize,
       MODEL_DEFAULTS.hospitalCapacity
-    ),
-    factors: {
-      handWashing: 1,
-      socialDistancing: 1,
-      masks: 1,
-      close_education: 1,
-      public_transport_reduced: 1,
-      outdoor_socialising: 1,
-    },
+    )
+  );
+  const [factors2, setFactors2] = useState({
+    handWashing: 1,
+    socialDistancing: 1,
+    masks: 1,
+    close_education: 1,
+    public_transport_reduced: 1,
+    outdoor_socialising: 1,
   });
 
   return (
@@ -155,8 +156,10 @@ const App = () => {
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
               <PreventativeMeasures
-                covidState={covid1}
-                setCovidState={setCovid1}
+                pandemic={pandemic1}
+                setPandemic={setPandemic1}
+                factors={factors1}
+                setFactors={setFactors1}
               />
             </Paper>
           </div>
@@ -167,8 +170,10 @@ const App = () => {
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
               <PreventativeMeasures
-                covidState={covid2}
-                setCovidState={setCovid2}
+                pandemic={pandemic2}
+                setPandemic={setPandemic2}
+                factors={factors2}
+                setFactors={setFactors2}
               />
             </Paper>
           </div>
@@ -184,8 +189,8 @@ const App = () => {
 
           <div className={classes.graphsBoxOuter}>
             <Visualisations
-              pandemicState={covid1.pandemic}
-              pandemicState2={covid2.pandemic}
+              pandemicState={pandemic1}
+              pandemicState2={pandemic2}
             />
           </div>
         </Grid>
@@ -203,7 +208,7 @@ const App = () => {
               Model 1
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
-              <ContextFactualisation covidState={covid1} />
+              <ContextFactualisation pandemic={pandemic1} />
             </Paper>
           </div>
 
@@ -212,7 +217,7 @@ const App = () => {
               Model 2
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
-              <ContextFactualisation covidState={covid2} />
+              <ContextFactualisation pandemic={pandemic2} />
             </Paper>
           </div>
         </Grid>
