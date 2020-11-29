@@ -74,18 +74,10 @@ class Visualisations extends Component {
             <div style={{ alignItems: "center", display: "flex" }}>
                 <div style={{ width: "auto" }}>
                     <h3>SIR Graph: Covid Simulation 1</h3>
-                    {/*<XYPlot type={"log"} name={"SIR GRAPH 1"} height={200} width={400} stackBy={'x'} style={{
-                        display: "block",
-                        margin: "inherit",
-                        //margin: "2em",
-                        paddingLeft: "2em",
-                        width: "400px"
-                    }}>*/}
                     <XYPlot type={"log"} xDomain={[0,120]} yDomain={[0, this.pandemicState.popSize]} margin={{left: 65}}
                             name={"SIR GRAPH 1"} height={200} width={400} stackBy={'x'} style={{
                         display: "block",
                         margin: "inherit",
-                        //margin: "2em",
                         paddingLeft: "1em",
                         width: "400px"
                     }}>
