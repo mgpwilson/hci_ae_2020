@@ -4,7 +4,6 @@ import {
   CssBaseline,
   Grid,
   Paper,
-  Slider,
   Toolbar,
   Typography,
 } from "@material-ui/core";
@@ -13,8 +12,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
 import PreventativeMeasures from "./components/PreventativeMeasures";
 import ContextFactualisation from "./components/ContextFactualisation";
-import LineGraph from "./components/LineGraph";
-import Info from "./components/Info";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -50,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   graphsBoxOuter: {
-    height: "50%",
-    width: "50%",
+    height: "100%",
+    width: "100%",
     padding: theme.spacing(1),
   },
   sliderContainer: {
@@ -85,6 +82,9 @@ const App = () => {
       handWashing: 1,
       socialDistancing: 1,
       masks: 1,
+      closeEducation: 0.74,
+      restrictPublicTransport: 0.1,
+      outdoorSocialisingOnly: 0.2,
     },
   });
   const [covid2, setCovid2] = useState({
@@ -99,10 +99,11 @@ const App = () => {
       handWashing: 1,
       socialDistancing: 1,
       masks: 1,
+      closeEducation: 0.74,
+      restrictPublicTransport: 0.1,
+      outdoorSocialisingOnly: 0.2,
     },
   });
-
-  const [days, setDays] = useState(41);
 
   return (
     <>
@@ -162,19 +163,12 @@ const App = () => {
             </Typography>
           </div>
 
-          <LineGraph pandemic={covid1} days={days} />
-          <div className={classes.sliderContainer}>
-            <Slider
-              onChangeCommitted={(e, newVal) => setDays(newVal)}
-              defaultValue={41}
-              min={21}
-              max={121}
-              valueLabelDisplay="auto"
-              valueLabelFormat={(x) => x - 1}
+          <div className={classes.graphsBoxOuter}>
+            <Visualisations
+              pandemicState={covid1.pandemic}
+              pandemicState2={covid2.pandemic}
             />
           </div>
-          <LineGraph pandemic={covid2} days={days} />
-          {/* <Visualisations pandemicState={covid1.pandemic} /> */}
         </Grid>
 
         {/* Context and Factualisation */}

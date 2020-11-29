@@ -11,7 +11,6 @@ import {
     constructor(props) {
         super(props)
         this.pandemicState = this.props.pandemicState;
-        this.state = {text:" "};
         this.marks = [
           {
             value:0,
@@ -65,7 +64,6 @@ import {
                   justify = 'center'
                   alignItems= 'center'
                     >
-                <Typography >{this.state.text}</Typography>
                 <Slider
               min={0}
               max={90}
@@ -73,8 +71,7 @@ import {
               marks={this.marks}
               step={1}
               onChange={(event,value) => {
-                const cases = Math.round(this.pandemicState.getCasesByDay(value))
-                this.setState({text: "Day " + value + " : " + cases + " cases"})
+                this.props.handleDays(value)
               }}
             />
             </Grid>
