@@ -42,7 +42,6 @@ export class Pandemic {
         CLOSE_EDUCATION: 0.76,
         PUBLIC_TRANSPORT_REDUCED: 0.9,
         OUTDOOR_SOCIALISING: 0.8,
-        AVOID_GROUPS: 0.6,
     };
 
     constructor(casesOnDay0, infectedAvgExposures, probInfectFromExpose, popSize, hospitalCapacity) {
@@ -65,7 +64,6 @@ export class Pandemic {
             close_education: 1,
             public_transport_reduced: 1,
             outdoor_socialising: 1,
-            avoid_groups: 1,
         };
 
         this.memoizedData = this.createModelSnapshot();
@@ -96,6 +94,7 @@ export class Pandemic {
             this.memoizedData.susceptible.push(this.getSusceptibleByDay(i));
         }
         console.log(this.memoizedData);
+        console.log(this.getRValue());
     }
 
     updateCachedCalculations() {
@@ -106,6 +105,7 @@ export class Pandemic {
             this.memoizedData.susceptible[i] = this.getSusceptibleByDay(i);
         }
         console.log(this.memoizedData);
+        console.log(this.getRValue());
     }
 
     retrieveCachedCalculation(dayNum, key) {
