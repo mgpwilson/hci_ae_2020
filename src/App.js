@@ -1,33 +1,60 @@
 import React, { useState } from "react";
 import {
+  AppBar,
+  CssBaseline,
   Grid,
+  Paper,
+  Toolbar,
   Typography,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  Button,
 } from "@material-ui/core";
 import Visualisations from "./Visualisations";
 import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
-import PandemicSlider from "./PandemicSlider";
+import PreventativeMeasures from "./components/PreventativeMeasures";
+import ContextFactualisation from "./components/ContextFactualisation";
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    textAlign: "center",
-    padding: theme.spacing(3),
-  },
   content: {
-    padding: theme.spacing(3),
+    height: "calc(100vh - 48px)",
+    width: "calc(100vw - (100vw - 100%))",
+    overflowX: "hidden",
+    overflowY: "hidden",
   },
-  column: {
-    textAlign: "center",
+
+  centerTitle: {
+    display: "grid",
+    placeItems: "center",
   },
-  columnTitle: {
-    paddingBottom: theme.spacing(3),
+  title: {
+    display: "flex",
   },
-  image: {
-    maxWidth: "75%",
+
+  sideBar: {
+    height: "100%",
+    padding: theme.spacing(1),
+  },
+  sideBarBoxOuter: {
+    height: `calc(50% - ${theme.spacing(2)}px)`,
+    padding: theme.spacing(1),
+  },
+  sideBarBoxInner: {
+    height: `calc(100% - ${theme.spacing(2)}px)`,
+    padding: theme.spacing(2),
+  },
+
+  graphsContainer: {
+    height: `calc(100vh - 48px - ${theme.spacing(4)}px)`,
+    padding: theme.spacing(1),
+  },
+  graphsBoxOuter: {
+    height: "100%",
+    width: "100%",
+    padding: theme.spacing(1),
+  },
+  sliderContainer: {
+    width: "50%",
+    paddingLeft: "70px",
+    paddingRight: "10px",
   },
 }));
 
@@ -55,8 +82,8 @@ const App = () => {
 
   const MODEL_DEFAULTS = {
     casesOnDay0: 1000,
-    infectedAvgExposures: 12,
-    probInfectFromExpose: 0.2,
+    infectedAvgExposures: 10,
+    probInfectFromExpose: 0.11,
     popSize: 5463300, // actual population
     // popSize: 1000000,
     hospitalCapacity: 500000,
@@ -64,7 +91,13 @@ const App = () => {
   };
 
   const [covid1, setCovid1] = useState({
-    pandemic: new Pandemic(MODEL_DEFAULTS.casesOnDay0, MODEL_DEFAULTS.infectedAvgExposures, MODEL_DEFAULTS.probInfectFromExpose, MODEL_DEFAULTS.popSize, MODEL_DEFAULTS.hospitalCapacity),
+    pandemic: new Pandemic(
+      MODEL_DEFAULTS.casesOnDay0,
+      MODEL_DEFAULTS.infectedAvgExposures,
+      MODEL_DEFAULTS.probInfectFromExpose,
+      MODEL_DEFAULTS.popSize,
+      MODEL_DEFAULTS.hospitalCapacity
+    ),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -76,7 +109,13 @@ const App = () => {
     },
   });
   const [covid2, setCovid2] = useState({
-    pandemic: new Pandemic(MODEL_DEFAULTS.casesOnDay0, MODEL_DEFAULTS.infectedAvgExposures, MODEL_DEFAULTS.probInfectFromExpose, MODEL_DEFAULTS.popSize, MODEL_DEFAULTS.hospitalCapacity),
+    pandemic: new Pandemic(
+      MODEL_DEFAULTS.casesOnDay0,
+      MODEL_DEFAULTS.infectedAvgExposures,
+      MODEL_DEFAULTS.probInfectFromExpose,
+      MODEL_DEFAULTS.popSize,
+      MODEL_DEFAULTS.hospitalCapacity
+    ),
     factors: {
       handWashing: 1,
       socialDistancing: 1,
@@ -88,219 +127,101 @@ const App = () => {
     },
   });
 
-  const days = 0;
-
-  const toggleFactor = (factor, covidState, setCovidState) => {
-    let newState = covidState;
-
-    if (newState.factors[factor] === 1) {
-      newState.factors[factor] = FACTORS[factor.toUpperCase()];
-    } else {
-      newState.factors[factor] = 1;
-    }
-
-    setCovidState({pandemic: newState.pandemic, factors: newState.factors});
-    newState.pandemic.updateFactors(newState.factors);
-  };
-
   return (
     <>
-      <Typography variant="h5" component="h1" className={classes.title}>
-        COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
-      </Typography>
+      <CssBaseline />
+      <AppBar elevation={0} position="static">
+        <Toolbar variant="dense">
+          <Typography
+            component="h1"
+            variant="h6"
+            style={{ flexGrow: 1 }}
+            align="center"
+          >
+            COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
       <Grid container component="main" className={classes.content}>
-        <Grid item xs={2} className={classes.column}>
-          <Typography variant="h6" component="h2" className={classes.rowTitle}>
-            Preventative Measures
-          </Typography>
-          <Grid item className={classes.row}>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.rowTitle}
-            >
+        {/* Preventative Measures */}
+        <Grid item xs={2} className={classes.sideBar}>
+          <div className={classes.centerTitle}>
+            <Typography component="h2" variant="subtitle1">
+              Preventative Measures
+            </Typography>
+          </div>
+
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 1
             </Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Increase handwashing 4x"
-                onChange={(event) => {
-                  toggleFactor("handWashing", covid1, setCovid1);
-                }}
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <PreventativeMeasures
+                covidState={covid1}
+                setCovidState={setCovid1}
               />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Maintain 2m distance"
-                onChange={() => {
-                  toggleFactor("socialDistancing", covid1, setCovid1);
-                }}
-              />
-              <FormControlLabel
-                  control={<Checkbox />}
-                  label="Avoid groups of 6+ people"
-                  onChange={() => {
-                    toggleFactor("avoid_groups", covid1, setCovid1);
-                  }}
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Wear masks"
-                onChange={() => {
-                  toggleFactor("masks", covid1, setCovid1);
-                }}
-              />
-              <FormControlLabel
-                  control={<Checkbox />}
-                  label="Close in-person education"
-                  onChange={() => {
-                    toggleFactor("close_education", covid1, setCovid1);
-                  }}
-              />
-              <FormControlLabel
-                  control={<Checkbox />}
-                  label="Decrease public transport use by 50%"
-                  onChange={() => {
-                    toggleFactor("public_transport_reduced", covid1, setCovid1);
-                  }}
-              />
-              <FormControlLabel
-                  control={<Checkbox />}
-                  label="Socialise outdoors"
-                  onChange={() => {
-                    toggleFactor("outdoor_socialising", covid1, setCovid1);
-                  }}
-              />
-            </FormGroup>
-            {/*<Button title='Recalculate' variant='contained' color='primary'>
-                Recalculate
-              </Button>*/}
-          </Grid>
-          <Grid item className={classes.row}>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.rowTitle}
-            >
+            </Paper>
+          </div>
+
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 2
             </Typography>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Hand Washing"
-                onChange={(event) => {
-                  toggleFactor("handWashing", covid2, setCovid2);
-                }}
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <PreventativeMeasures
+                covidState={covid2}
+                setCovidState={setCovid2}
               />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Social Distancing"
-                onChange={() => {
-                  toggleFactor("socialDistancing", covid2, setCovid2);
-                }}
-              />
-              <FormControlLabel
-                control={<Checkbox />}
-                label="Masks"
-                onChange={() => {
-                  toggleFactor("masks", covid2, setCovid2);
-                }}
-              />
-              <FormControlLabel control={<Checkbox />} label="Foo" />
-              <FormControlLabel control={<Checkbox />} label="Bar" />
-              <FormControlLabel control={<Checkbox />} label="One" />
-              <FormControlLabel control={<Checkbox />} label="Two" />
-              <FormControlLabel control={<Checkbox />} label="Three" />
-              <FormControlLabel control={<Checkbox />} label="Four" />
-            </FormGroup>
-            {/*<Button title='Recalculate' variant='contained' color='primary'>
-                Recalculate
-              </Button>*/}
-          </Grid>
+            </Paper>
+          </div>
         </Grid>
 
-        <Grid item xs={8} className={classes.column}>
-          <Typography
-            variant="h6"
-            component="h2"
-            className={classes.columnTitle}
-          >
-            Visualisation and Graphing
-          </Typography>
-          {/*<img
-                src="https://i.redd.it/ylu4wlgozgt51.jpg"
-                alt=""
-                className={classes.image}
-              />*/}
+        {/* Visualation and Graphing */}
+        <Grid item xs={8} className={classes.graphsContainer}>
+          <div className={classes.centerTitle}>
+            <Typography component="h2" variant="subtitle1">
+              Visualisation and Graphing
+            </Typography>
+          </div>
 
-          <Grid item className={classes.row}>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.columnTitle}
-            >
+          <div className={classes.graphsBoxOuter}>
+            <Visualisations
+              pandemicState={covid1.pandemic}
+              pandemicState2={covid2.pandemic}
+            />
+          </div>
+        </Grid>
+
+        {/* Context and Factualisation */}
+        <Grid item xs={2} className={classes.sideBar}>
+          <div className={classes.centerTitle}>
+            <Typography component="h2" variant="subtitle1">
+              Context and Factualisation
+            </Typography>
+          </div>
+
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 1
             </Typography>
-            <div id="pandemicTempDemo">
-              <Visualisations pandemicState={covid1.pandemic} />
-              <PandemicSlider pandemicState={covid1.pandemic} />
-              <PandemicTempDemo
-                dailyCases={covid1.pandemic.tempDemo()}
-              ></PandemicTempDemo>
-            </div>
-          </Grid>
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <ContextFactualisation covidState={covid1} />
+            </Paper>
+          </div>
 
-          <Grid item className={classes.row}>
-            <Typography
-              variant="h6"
-              component="h2"
-              className={classes.columnTitle}
-            >
+          <div className={classes.sideBarBoxOuter}>
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 2
             </Typography>
-            <div id="pandemicTempDemo">
-              <Visualisations pandemicState={covid2.pandemic} />
-            </div>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={2} className={classes.column}>
-          <Typography
-            variant="h6"
-            component="h2"
-            className={classes.columnTitle}
-          >
-            Context and Factualisation
-          </Typography>
-          <Typography>
-            Lorem ipsum dolor sit amet et delectus accommodare his consul
-            copiosae legendos at vix ad putent delectus delicata usu. Vidit
-            dissentiet eos cu eum an brute copiosae hendrerit. Eos erant dolorum
-            an. Per facer affert ut. Mei iisque mentitum
-          </Typography>
+            <Paper variant="outlined" className={classes.sideBarBoxInner}>
+              <ContextFactualisation covidState={covid2} />
+            </Paper>
+          </div>
         </Grid>
       </Grid>
     </>
   );
 };
-
-const PandemicTempDemo = (props) => {
-  const dailyCases = props.dailyCases;
-  const listItems = dailyCases.map((day) => (
-    <li key={day.dayNum.toString()}>
-      Day {day.dayNum.toString()}: {day.cases.toString()} cases
-    </li>
-  ));
-  return (
-    <ul style={{ listStyleType: "none", paddingLeft: 30, textAlign: "left" }}>
-      {listItems}
-    </ul>
-  );
-};
-
-/*App.propTypes = {
-  classes: PropTypes.object.isRequired,
-};*/
 
 export default App;

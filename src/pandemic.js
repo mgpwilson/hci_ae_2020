@@ -30,6 +30,8 @@ D = cases * death rate
  */
 // TODO switch bar graph
 // TODO fix graphics lag when select more than 4 choices
+// TODO fix bug where bar charts grow in wrong direction
+// TODO remove avoid groups??
 
 export class Pandemic {
     // TODO remove these or keep them in App?
@@ -78,6 +80,8 @@ export class Pandemic {
         let ts = {
             cases: [],
             total_deaths: [],
+            total_recovered: [],
+            susceptible: [],
         };
         for (let i=0; i <= this.simulationLength; i++){
             ts.cases.push(this.getCasesByDay(i));
@@ -88,6 +92,8 @@ export class Pandemic {
     createModelCalculationsSnapshot () {
         for (let i=0; i <= this.simulationLength; i++){
             this.memoizedData.total_deaths.push(this.getDeathsByDay(i));
+            this.memoizedData.total_recovered.push(this.getRecoveredByDay(i));
+            this.memoizedData.susceptible.push(this.getSusceptibleByDay(i));
         }
         console.log(this.memoizedData);
     }
@@ -96,6 +102,8 @@ export class Pandemic {
         for (let i=0; i <= this.simulationLength; i++){
             this.memoizedData.cases[i] = this.getCasesByDay(i);
             this.memoizedData.total_deaths[i] = this.getDeathsByDay(i);
+            this.memoizedData.total_recovered[i] = this.getRecoveredByDay(i);
+            this.memoizedData.susceptible[i] = this.getSusceptibleByDay(i);
         }
         console.log(this.memoizedData);
     }
@@ -106,8 +114,16 @@ export class Pandemic {
         }
         else {
             if (key === 'cases') return this.getCasesByDay(dayNum);
-            if (key == 'total_deaths') return this.getDeathsByDay(dayNum);
+            if (key === 'total_deaths') return this.getDeathsByDay(dayNum);
+            if (key === 'total_recovered') return this.getCasesByDay(dayNum);
+            if (key === 'susceptible') return this.getDeathsByDay(dayNum);
         }
+    }
+
+    updateFactors(factors) {
+        this.factors = factors;
+        this.updateCachedCalculations();
+        console.log(this.factors);
     }
 
     getExponentialCasesByDay(dayNum) {
@@ -156,7 +172,7 @@ export class Pandemic {
         if(dayNum < 0) dayNum = 0;
         /*let L = this.getCasesProportionalToPopulationByDay(dayNum);
         console.log("Day", dayNum,
-            " = E:", Math.round(this.getExponentialCasesByDay(dayNum)),
+            " = E:", MathMath.round(this.getSusceptibleByDay(i)).round(this.getExponentialCasesByDay(dayNum)),
             " L:", Math.round(L),
             " R:", this.getRValue());
         return L;*/
@@ -205,12 +221,12 @@ export class Pandemic {
             if (sumRecovered > this.popSize - willDie) return this.popSize - willDie;
         }
         sumRecovered -= dead;
-        if (sumRecovered < 0) return 1;
+        if (sumRecovered < 0) return 0;
         else return sumRecovered;
     }
 
     getSusceptibleByDay(dayNum) {
-        let susceptible = this.popSize - this.retrieveCachedCalculation(dayNum, 'cases') - this.getRecoveredByDay(dayNum);
+        let susceptible = this.popSize - this.retrieveCachedCalculation(dayNum, 'cases') - this.retrieveCachedCalculation(dayNum, 'total_recovered') - this.retrieveCachedCalculation(dayNum, 'total_deaths');
         if (susceptible < 0) return 0;
         else return susceptible;
     }
@@ -275,12 +291,6 @@ export class Pandemic {
         return sumInfected / this.popSize;
     }
 
-    updateFactors(factors) {
-        this.factors = factors;
-        this.updateCachedCalculations();
-        //console.log(this.factors);
-    }
-
     tempDemo() {
         let s = [];
         for(let i=0; i<25; i++){
@@ -303,7 +313,7 @@ export class Pandemic {
         let s = [];
         for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: Math.round(this.getRecoveredByDay(i))})
+            s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'total_recovered'))})
         }
         return s;
     }
@@ -312,7 +322,7 @@ export class Pandemic {
         let s = [];
         for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: Math.round(this.getSusceptibleByDay(i))})
+            s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'susceptible'))})
         }
         return s;
     }
@@ -324,6 +334,25 @@ export class Pandemic {
         }
         return s;
     }
+
+    seriesDeathsByPopByDay() {
+        let s = [];
+        for(let i=0; i<120; i++) {
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getDeathProportionalToPopulation(i))})
+        }
+        return s;
+    }
+
+    seriesCasesByPopByDay() {
+        let s = [];
+        for(let i=0; i<120; i++) {
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getCasesProportionalToPopulation(i))})
+        }
+        return s;
+    }
+
 }
 
 
