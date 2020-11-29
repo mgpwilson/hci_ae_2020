@@ -3,10 +3,21 @@ import {
   FormControlLabel,
   Checkbox,
   FormLabel,
+  makeStyles,
+  Typography,
 } from "@material-ui/core";
+import Info from "./Info";
+
+const useStyles = makeStyles({
+  checkboxLabel: {
+    display: "flex",
+    alignItems: "center",
+  },
+});
 
 const PreventativeMeasures = (props) => {
   const { covidState, setCovidState } = props;
+  const classes = useStyles();
 
   const FACTORS = {
     HANDWASHING: 1 - 0.05,
@@ -35,21 +46,36 @@ const PreventativeMeasures = (props) => {
       <FormLabel component="legend">Probability</FormLabel>
       <FormControlLabel
         control={<Checkbox />}
-        label="Hand Washing"
-        onChange={(event) => {
+        label={
+          <div className={classes.checkboxLabel}>
+            <Typography variant="body2">Hand Washing</Typography>{" "}
+            <Info infoString="Everyone washes their hands regularly." />
+          </div>
+        }
+        onChange={() => {
           toggleFactor("handWashing", covidState, setCovidState);
         }}
       />
       <FormControlLabel
         control={<Checkbox />}
-        label="Social Distancing"
+        label={
+          <div className={classes.checkboxLabel}>
+            <Typography variant="body2">Social Distancing</Typography>{" "}
+            <Info infoString="Everyone maintains 2 metre social distancing." />
+          </div>
+        }
         onChange={() => {
           toggleFactor("socialDistancing", covidState, setCovidState);
         }}
       />
       <FormControlLabel
         control={<Checkbox />}
-        label="Masks"
+        label={
+          <div className={classes.checkboxLabel}>
+            <Typography variant="body2">Masks</Typography>{" "}
+            <Info infoString="Everyone wears a mask and wears it correctly." />
+          </div>
+        }
         onChange={() => {
           toggleFactor("masks", covidState, setCovidState);
         }}
@@ -58,21 +84,36 @@ const PreventativeMeasures = (props) => {
       <FormLabel component="legend">Infection</FormLabel>
       <FormControlLabel
         control={<Checkbox />}
-        label="Close Education"
+        label={
+          <div className={classes.checkboxLabel}>
+            <Typography variant="body2">Close Education</Typography>{" "}
+            <Info infoString="All primary and secondary education is closed." />
+          </div>
+        }
         onChange={() => {
           toggleFactor("close_education", covidState, setCovidState);
         }}
       />
       <FormControlLabel
         control={<Checkbox />}
-        label="Public Transport Reduced"
+        label={
+          <div className={classes.checkboxLabel}>
+            <Typography variant="body2">Reduced Public Transport</Typography>{" "}
+            <Info infoString="Public trasport capacity is restricted." />
+          </div>
+        }
         onChange={() => {
           toggleFactor("public_transport_reduced", covidState, setCovidState);
         }}
       />
       <FormControlLabel
         control={<Checkbox />}
-        label="Outdoor Socialising"
+        label={
+          <div className={classes.checkboxLabel}>
+            <Typography variant="body2">Outdoors Only Socialising</Typography>{" "}
+            <Info infoString="Socialising between people is restricted to being outdoors only." />
+          </div>
+        }
         onChange={() => {
           toggleFactor("outdoor_socialising", covidState, setCovidState);
         }}
