@@ -227,6 +227,24 @@ export class Pandemic {
         }
         return s;
     }
+
+    seriesDeathsByPopByDay() {
+        let s = [];
+        for(let i=0; i<120; i++) {
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getDeathProportionalToPopulation(i))})
+        }
+        return s;
+    }
+
+    seriesCasesByPopByDay() {
+        let s = [];
+        for(let i=0; i<120; i++) {
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: Math.round(this.getCasesProportionalToPopulation(i))})
+        }
+        return s;
+    }
     
 }
 

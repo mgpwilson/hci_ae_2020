@@ -61,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
 }));
-
 const App = () => {
   const classes = useStyles();
 
@@ -86,6 +85,9 @@ const App = () => {
       handWashing: 1,
       socialDistancing: 1,
       masks: 1,
+      closeEducation:0.74, 
+      restrictPublicTransport:0.1,
+      outdoorSocialisingOnly:0.2,
     },
   });
   const [covid2, setCovid2] = useState({
@@ -100,11 +102,20 @@ const App = () => {
       handWashing: 1,
       socialDistancing: 1,
       masks: 1,
+      closeEducation:0.74, 
+      restrictPublicTransport:0.1,
+      outdoorSocialisingOnly:0.2,
     },
   });
 
   const days = 0;
 
+  var state = {
+    cases:1,
+    recovered:1,
+    deaths: 1,
+    suscpetible: 1
+  }
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -160,7 +171,7 @@ const App = () => {
           </div>
 
           <div className={classes.graphsBoxOuter}>
-            <Visualisations pandemicState={covid1.pandemic} />
+            <Visualisations pandemicState={covid1.pandemic} pandemicState2 ={covid2.pandemic}/>
           </div>
         </Grid>
 

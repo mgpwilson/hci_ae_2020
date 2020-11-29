@@ -2,62 +2,99 @@ import React, { Component } from 'react';
 import { XYPlot, LineSeries, VerticalBarSeries, XAxis, YAxis, DiscreteColorLegend, LabelSeries } from 'react-vis';
 import './pandemic'
 import 'react-vis/dist/style.css';
+import PandemicSlider from './PandemicSlider';
 class Visualisations extends Component {
 
     constructor(props) {
         super(props)
         this.pandemicState = this.props.pandemicState;
         this.pandemicState2 = this.props.pandemicState2;
-        this.days = 20;
+        this.state = {
+            days: 0
+        }
+    }
+
+    setDays = (val) => {
+        this.setState({
+            days: val
+        })
     }
 
     render() {
-        var removed = this.pandemicState.seriesRecoveredByDay()
-        var cases = this.pandemicState.seriesCasesByDay()
-        var susceptible = this.pandemicState.seriesSusceptibleByDay()
-        var deaths = this.pandemicState.seriesDeathsByDay()
+        //Set Up Graphing Data
+        var graph1Data = {
+            "removed": this.pandemicState.seriesRecoveredByDay(),
+            "cases": this.pandemicState.seriesCasesByDay(),
+            "susceptible": this.pandemicState.seriesSusceptibleByDay(),
+            "deaths": this.pandemicState.seriesDeathsByDay(),
+        }
+        var graph2Data = {
+            "removed": this.pandemicState2.seriesRecoveredByDay(),
+            "cases": this.pandemicState2.seriesCasesByDay(),
+            "susceptible": this.pandemicState2.seriesSusceptibleByDay(),
+            "deaths": this.pandemicState2.seriesDeathsByDay(),
+        }
+
+        var days = this.state.days;
+        var proportionalCases1 = this.pandemicState.getCasesProportionalToPopulation(days)
+        var proportionalCases2 = this.pandemicState2.getCasesProportionalToPopulation(days)
+
+        var proportionalDeaths1 = this.pandemicState.getDeathProportionalToPopulation(days)
+        var proportionalDeaths2 = this.pandemicState2.getDeathProportionalToPopulation(days)
+
+        var barData = []
+
+        barData.push({ x: "1: Cases", y: proportionalCases1 })
+        barData.push({ x: "1: Deaths", y: proportionalDeaths1 })
+        barData.push({ x: "2: Cases", y: proportionalCases2 })
+        barData.push({ x: "2: Deaths", y: proportionalDeaths2 })
+
+        var lineDataAtPointX = {
+            cases1: this.pandemicState.getCasesByDay(days),
+            deaths1: this.pandemicState.getDeathByDay(days),
+            recovered1: this.pandemicState.getRecoveredByDay(days),
+            infected1: this.pandemicState.getSusceptibleByDay(days),
+            cases2: this.pandemicState2.getCasesByDay(days),
+            deaths2: this.pandemicState2.getDeathByDay(days),
+            recovered2: this.pandemicState2.getRecoveredByDay(days),
+            infected2: this.pandemicState2.getSusceptibleByDay(days)
+        }
+
         const legendItems = ["Recovered", "Infected", "Susceptible", "Dead"]
         const legendColours = ["green", "red", "blue", "purple"]
-        console.log(removed);
-        console.log(cases)
-        console.log(deaths);
-        var scale = cases.length;
-        var barCases = Object.values(cases)[this.days]
-        var barDeaths = Object.values(deaths)[this.days]
-        //var barDeaths = Object.values(deaths)[daysSinceSlider]
-        var barData = []
-        barData.push({x:"cases", y: Object.values(barCases)[1]})
-        barData.push({x:"deaths", y: Object.values(barDeaths)[1]})
-        console.log(barData)
+
         return (
-            <div style={{alignItems: "center", display:"flex"}}>
-                <div style={{width:"auto"}}>
-                <h3>SIR Graph: Covid Simulation 1</h3>
-                <XYPlot name={"SIR GRAPH 1"} height={200} width={400} xDomain={[0, scale]} stackBy={'x'} style={{
-                    display: "block",
-                    margin: "inherit",
-                    width: "400px"
-                }}>
-                    <LineSeries data={removed} strokeWidth={1} color={"green"} />
-                    <LineSeries data={cases} strokeWidth={1} color={"red"} />
-                    <LineSeries data={susceptible} strokeWidth={1} color={"blue"} />
-                    <LineSeries data={deaths} strokeWidth={1} color={"purple"} />
-                    <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
-                    <XAxis />
-                </XYPlot>
-                <h3 style={{ marginTop: "80px" }}>SIR Graph: Covid Simulation 2</h3>
-                <XYPlot name={"SIR GRAPH 2"} height={200} width={400} xDomain={[0, scale]} stackBy={'x'}>
-                    <LineSeries data={removed} strokeWidth={1} color={"green"} />
-                    <LineSeries data={cases} strokeWidth={1} color={"red"} />
-                    <LineSeries data={susceptible} strokeWidth={1} color={"blue"} />
-                    <LineSeries data={deaths} strokeWidth={1} color={"purple"} />
-                    <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
-                    <XAxis />
-                </XYPlot>
+            <div style={{ alignItems: "center", display: "flex" }}>
+                <div style={{ width: "auto" }}>
+                    <h3>SIR Graph: Covid Simulation 1</h3>
+                    <XYPlot type={"log"} name={"SIR GRAPH 1"} height={200} width={400} stackBy={'x'} style={{
+                        display: "block",
+                        margin: "inherit",
+                        width: "400px"
+                    }}>
+                        <LineSeries data={Object.values(graph1Data)[0]} strokeWidth={1} color={"green"} />
+                        <LineSeries data={Object.values(graph1Data)[1]} strokeWidth={1} color={"red"} />
+                        <LineSeries data={Object.values(graph1Data)[2]} strokeWidth={1} color={"blue"} />
+                        <LineSeries data={Object.values(graph1Data)[3]} strokeWidth={1} color={"purple"} />
+                        <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
+                        <YAxis />
+                        <XAxis />
+                    </XYPlot>
+                    <PandemicSlider handleDays={this.setDays} />
+                    <h3 style={{ marginTop: "80px" }}>SIR Graph: Covid Simulation 2</h3>
+                    <XYPlot name={"SIR GRAPH 2"} height={200} width={400} stackBy={'x'}>
+                        <LineSeries data={Object.values(graph2Data)[0]} strokeWidth={1} color={"green"} />
+                        <LineSeries data={Object.values(graph2Data)[1]} strokeWidth={1} color={"red"} />
+                        <LineSeries data={Object.values(graph2Data)[2]} strokeWidth={1} color={"blue"} />
+                        <LineSeries data={Object.values(graph2Data)[3]} strokeWidth={1} color={"purple"} />
+                        <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
+                        <YAxis />
+                        <XAxis />
+                    </XYPlot>
                 </div>
-                <div style={{width: "auto"}}>
+                <div style={{ width: "auto" }}>
                     <XYPlot height={400} width={200} xType={"ordinal"}>
-                        <VerticalBarSeries data={barData}/>
+                        <VerticalBarSeries data={barData} />
                         <XAxis />
                     </XYPlot>
                 </div>
