@@ -180,15 +180,30 @@ export class Pandemic {
     }
 
     getDeathsByDay(dayNum) {
-        let sumDead = 0;
-        for(let i=0; i<dayNum - this.avgLengthOfInfection; i++){
-            let cases = this.retrieveCachedCalculation(i, 'cases');
-            let capacity = this.getHospitalCapacityByDay(i);
-            let deathRate = this.getDeathRateByHospitalCapacity(capacity);
-            sumDead += cases * deathRate;
+        // TODO improve to use sum from prev day
+        if (dayNum < this.simulationLength) {
+            let d = dayNum - this.avgLengthOfInfection;
+            let sumDead = 0;
+            if (d > 0) {
+                sumDead = this.retrieveCachedCalculation(d - 1, 'total_deaths');
+                let cases = this.retrieveCachedCalculation(d, 'cases');
+                let capacity = this.getHospitalCapacityByDay(dayNum);
+                let deathRate = this.getDeathRateByHospitalCapacity(capacity);
+                sumDead += cases * deathRate;
+            }
             if (sumDead > this.popSize * 0.2) return this.popSize * 0.2;
+            return sumDead;
+        } else {
+            let sumDead = 0;
+            for(let i=0; i<dayNum - this.avgLengthOfInfection; i++){
+                let cases = this.retrieveCachedCalculation(i, 'cases');
+                let capacity = this.getHospitalCapacityByDay(i);
+                let deathRate = this.getDeathRateByHospitalCapacity(capacity);
+                sumDead += cases * deathRate;
+                if (sumDead > this.popSize * 0.2) return this.popSize * 0.2;
+            }
+            return sumDead;
         }
-        return sumDead;
     }
 
     getDeathRateByHospitalCapacity(capacity) {
