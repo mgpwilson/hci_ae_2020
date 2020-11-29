@@ -66,15 +66,27 @@ class Visualisations extends Component {
         const legendItems = ["Recovered", "Infected", "Susceptible", "Dead"]
         const legendColours = ["green", "red", "blue", "purple"]
 
+
+
+        const range = (start, end) => Array.from({length: (end - start)}, (v, k) => k + start);
+
         return (
             <div style={{ alignItems: "center", display: "flex" }}>
                 <div style={{ width: "auto" }}>
                     <h3>SIR Graph: Covid Simulation 1</h3>
-                    <XYPlot type={"log"} name={"SIR GRAPH 1"} height={200} width={400} stackBy={'x'} style={{
+                    {/*<XYPlot type={"log"} name={"SIR GRAPH 1"} height={200} width={400} stackBy={'x'} style={{
                         display: "block",
                         margin: "inherit",
                         //margin: "2em",
                         paddingLeft: "2em",
+                        width: "400px"
+                    }}>*/}
+                    <XYPlot type={"log"} xDomain={[0,120]} yDomain={[0, this.pandemicState.popSize]} margin={{left: 65}}
+                            name={"SIR GRAPH 1"} height={200} width={400} stackBy={'x'} style={{
+                        display: "block",
+                        margin: "inherit",
+                        //margin: "2em",
+                        paddingLeft: "1em",
                         width: "400px"
                     }}>
                         <LineSeries data={Object.values(graph1Data)[0]} strokeWidth={1} color={"green"} />
@@ -87,14 +99,15 @@ class Visualisations extends Component {
                     </XYPlot>
                     <PandemicSlider handleDays={this.setDays} />
                     <h3 style={{ marginTop: "80px" }}>SIR Graph: Covid Simulation 2</h3>
-                    <XYPlot name={"SIR GRAPH 2"} height={200} width={400} stackBy={'x'}>
+                    <XYPlot xDomain={[0,120]} yDomain={[0, this.pandemicState.popSize]} margin={{left: 65}}
+                            name={"SIR GRAPH 2"} height={200} width={400} stackBy={'x'}>
                         <LineSeries data={Object.values(graph2Data)[0]} strokeWidth={1} color={"green"} />
                         <LineSeries data={Object.values(graph2Data)[1]} strokeWidth={1} color={"red"} />
                         <LineSeries data={Object.values(graph2Data)[2]} strokeWidth={1} color={"blue"} />
                         <LineSeries data={Object.values(graph2Data)[3]} strokeWidth={1} color={"purple"} />
                         <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
                         <YAxis />
-                        <XAxis />
+                        <XAxis/>
                     </XYPlot>
                 </div>
                 <div style={{ width: "auto" }}>
