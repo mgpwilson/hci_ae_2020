@@ -49,15 +49,18 @@ class Visualisations extends Component {
         barData.push({ x: "2: Cases", y: proportionalCases2 })
         barData.push({ x: "2: Deaths", y: proportionalDeaths2 })
 
-        var lineDataAtPointX = {
-            cases1: this.pandemicState.getCasesByDay(days),
-            deaths1: this.pandemicState.getDeathByDay(days),
-            recovered1: this.pandemicState.getRecoveredByDay(days),
-            infected1: this.pandemicState.getSusceptibleByDay(days),
-            cases2: this.pandemicState2.getCasesByDay(days),
-            deaths2: this.pandemicState2.getDeathByDay(days),
-            recovered2: this.pandemicState2.getRecoveredByDay(days),
-            infected2: this.pandemicState2.getSusceptibleByDay(days)
+        var lineDataAtPointX_1 = {
+            "Cases": this.pandemicState.getCasesByDay(days),
+            "Deaths": this.pandemicState.getDeathsByDay(days),
+            "Recovered": this.pandemicState.getRecoveredByDay(days),
+            "Susceptible": this.pandemicState.getSusceptibleByDay(days),
+        }
+
+        var lineDataAtPointX_2 = {
+            "Cases": this.pandemicState2.getCasesByDay(days),
+            "Deaths": this.pandemicState2.getDeathsByDay(days),
+            "Recovered": this.pandemicState2.getRecoveredByDay(days),
+            "Susceptible": this.pandemicState2.getSusceptibleByDay(days),
         }
 
         const legendItems = ["Recovered", "Infected", "Susceptible", "Dead"]
@@ -97,6 +100,18 @@ class Visualisations extends Component {
                         <VerticalBarSeries data={barData} />
                         <XAxis />
                     </XYPlot>
+                </div>
+                <div>
+                <h3>Model 1 at Day:  {days} </h3>
+                    {Object.keys(lineDataAtPointX_1).map(function (key) {
+                        return <p>{key}: {lineDataAtPointX_1[key]}</p>;
+                    })}
+                </div>
+                <div>
+                <h3>Model 2 at Day: {days} </h3>
+                    {Object.keys(lineDataAtPointX_2).map(function (key) {
+                        return <p>{key}: {lineDataAtPointX_2[key]}</p>;
+                    })}
                 </div>
             </div>
         );
