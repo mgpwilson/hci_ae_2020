@@ -1,13 +1,20 @@
-import { Typography } from "@material-ui/core";
+import { List, ListItem, Typography } from "@material-ui/core";
 
 const ContextFactualisation = (props) => {
   const { covidState } = props;
 
   return (
-    <Typography>
-      Hospital beds will be full in{" "}
-      {covidState.pandemic.getDaysUntilHospitalCapacity(1)} days.
-    </Typography>
+    <>
+      <Typography variant="body2">Under these measures:</Typography>
+      <List>
+        <ListItem>
+          <Typography>
+            Hospital beds would be full in{" "}
+            {covidState.pandemic.getDaysUntilHospitalCapacity(1)} days.
+          </Typography>
+        </ListItem>
+      </List>
+    </>
   );
 };
 

@@ -1,42 +1,40 @@
 import React, { useState } from "react";
 import {
   AppBar,
-  colors,
   CssBaseline,
   Grid,
   Paper,
+  Slider,
   Toolbar,
   Typography,
 } from "@material-ui/core";
 import Visualisations from "./Visualisations";
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider,
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
 import PreventativeMeasures from "./components/PreventativeMeasures";
 import ContextFactualisation from "./components/ContextFactualisation";
-
-const theme = createMuiTheme({
-  palette: {
-    // type: "dark",
-  },
-});
+import LineGraph from "./components/LineGraph";
+import Info from "./components/Info";
 
 const useStyles = makeStyles((theme) => ({
   content: {
     height: "calc(100vh - 48px)",
     width: "calc(100vw - (100vw - 100%))",
+    overflowX: "hidden",
+    overflowY: "hidden",
+  },
+
+  centerTitle: {
+    display: "grid",
+    placeItems: "center",
+  },
+  title: {
+    display: "flex",
   },
 
   sideBar: {
     height: "100%",
     padding: theme.spacing(1),
-  },
-  sideBarTitle: {
-    display: "grid",
-    placeItems: "center",
   },
   sideBarBoxOuter: {
     height: `calc(50% - ${theme.spacing(2)}px)`,
@@ -56,9 +54,10 @@ const useStyles = makeStyles((theme) => ({
     width: "50%",
     padding: theme.spacing(1),
   },
-  graphsBoxInner: {
-    height: "100%",
-    padding: theme.spacing(2),
+  sliderContainer: {
+    width: "50%",
+    paddingLeft: "70px",
+    paddingRight: "10px",
   },
 }));
 
@@ -103,10 +102,10 @@ const App = () => {
     },
   });
 
-  const days = 0;
+  const [days, setDays] = useState(41);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <AppBar elevation={0} position="static">
         <Toolbar variant="dense">
@@ -124,12 +123,14 @@ const App = () => {
       <Grid container component="main" className={classes.content}>
         {/* Preventative Measures */}
         <Grid item xs={2} className={classes.sideBar}>
-          <div className={classes.sideBarTitle}>
-            <Typography component="h2">Preventative Measures</Typography>
+          <div className={classes.centerTitle}>
+            <Typography component="h2" variant="subtitle1">
+              Preventative Measures
+            </Typography>
           </div>
 
           <div className={classes.sideBarBoxOuter}>
-            <Typography align="center" component="h2">
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 1
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
@@ -141,7 +142,7 @@ const App = () => {
           </div>
 
           <div className={classes.sideBarBoxOuter}>
-            <Typography align="center" component="h2">
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 2
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
@@ -155,23 +156,37 @@ const App = () => {
 
         {/* Visualation and Graphing */}
         <Grid item xs={8} className={classes.graphsContainer}>
-          <div className={classes.sideBarTitle}>
-            <Typography component="h2">Visualisation and Graphing</Typography>
+          <div className={classes.centerTitle}>
+            <Typography component="h2" variant="subtitle1">
+              Visualisation and Graphing
+            </Typography>
           </div>
 
-          <div className={classes.graphsBoxOuter}>
-            <Visualisations pandemicState={covid1.pandemic} />
+          <LineGraph pandemic={covid1} days={days} />
+          <div className={classes.sliderContainer}>
+            <Slider
+              onChangeCommitted={(e, newVal) => setDays(newVal)}
+              defaultValue={41}
+              min={21}
+              max={121}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(x) => x - 1}
+            />
           </div>
+          <LineGraph pandemic={covid2} days={days} />
+          {/* <Visualisations pandemicState={covid1.pandemic} /> */}
         </Grid>
 
         {/* Context and Factualisation */}
         <Grid item xs={2} className={classes.sideBar}>
-          <div className={classes.sideBarTitle}>
-            <Typography component="h2">Context and Factualisation</Typography>
+          <div className={classes.centerTitle}>
+            <Typography component="h2" variant="subtitle1">
+              Context and Factualisation
+            </Typography>
           </div>
 
           <div className={classes.sideBarBoxOuter}>
-            <Typography align="center" component="h2">
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 1
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
@@ -180,7 +195,7 @@ const App = () => {
           </div>
 
           <div className={classes.sideBarBoxOuter}>
-            <Typography align="center" component="h2">
+            <Typography align="center" component="h2" variant="subtitle2">
               Model 2
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
@@ -189,7 +204,7 @@ const App = () => {
           </div>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 };
 
