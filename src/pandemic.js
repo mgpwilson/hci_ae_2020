@@ -267,7 +267,7 @@ export class Pandemic {
 
     getAdjustedInfectedAvgExposures() {
         return this.infectedAvgExposures * this.factors.socialDistancing * this.factors.close_education
-            * this.factors.public_transport_reduced * this.factors.avoid_groups;
+            * this.factors.public_transport_reduced;
     }
 
     getAdjustedProbInfectFromExpose() {

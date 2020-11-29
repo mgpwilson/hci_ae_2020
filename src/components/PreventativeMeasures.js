@@ -20,15 +20,15 @@ const PreventativeMeasures = (props) => {
   const classes = useStyles();
 
   const FACTORS = {
-      // avg num ppl someone infected is exposed to per day
-      SOCIALDISTANCING: 0.85,
-      CLOSE_EDUCATION: 0.76,
-      PUBLIC_TRANSPORT_REDUCED: 0.9,
-      // probability of each exposure becoming an infection
-      HANDWASHING: 0.95,
-      MASKS: .8,
-      OUTDOOR_SOCIALISING: 0.8,
-  };
+    // avg num ppl someone infected is exposed to per day
+    SOCIALDISTANCING: 0.85,
+    CLOSE_EDUCATION: 0.76,
+    PUBLIC_TRANSPORT_REDUCED: 0.9,
+    // probability of each exposure becoming an infection
+    HANDWASHING: 0.95,
+    MASKS: .8,
+    OUTDOOR_SOCIALISING: 0.8,
+  }
 
   const toggleFactor = (factor, covidState, setCovidState) => {
     const newState = covidState;
