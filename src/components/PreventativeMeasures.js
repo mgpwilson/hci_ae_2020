@@ -58,7 +58,6 @@ const PreventativeMeasures = (props) => {
     }
     pandemic.setContactRate(newContactRate);
     setContactRate(newContactRate);
-    pandemic.getCasesAtDay(10);
   }, [factorState]);
 
   console.log(factorState);
