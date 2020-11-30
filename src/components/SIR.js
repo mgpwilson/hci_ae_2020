@@ -22,7 +22,10 @@ class SIR {
 
   derive = (dydt, y, t) => {
     dydt[0] = -this.contactRate * y[0] * y[1];
-    dydt[1] = this.contactRate * y[0] * y[1] - this.recoveryRate * y[1];
+    dydt[1] =
+      this.contactRate * y[0] * y[1] -
+      this.recoveryRate * y[1] -
+      this.deathRate * y[1];
     dydt[2] = this.recoveryRate * y[1];
     dydt[3] = this.deathRate * y[1];
   };
