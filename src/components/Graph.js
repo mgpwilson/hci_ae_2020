@@ -6,7 +6,7 @@ const Graph = (props) => {
   const { pandemic, days } = props;
 
   const N = 5463000; // Population
-  const hospitalBedCapacity = new Array(days).fill(500000);
+  const hospitalBedCapacity = new Array(days).fill(20553 / 0.075);
 
   const series = [
     {
@@ -15,7 +15,7 @@ const Graph = (props) => {
     },
 
     {
-      name: "Cases",
+      name: "Infected",
       data: pandemic.map((x) => Math.round(x[1] * N)).slice(0, days),
     },
     {
@@ -24,11 +24,11 @@ const Graph = (props) => {
     },
 
     {
-      name: "Deaths",
+      name: "Dead",
       data: pandemic.map((x) => Math.round(x[3] * N * 0.1)).slice(0, days),
     },
     {
-      name: "Hospital Bed Capacity",
+      name: "NHS Scotland Max Capacity (Infected/Day)",
       data: hospitalBedCapacity,
     },
   ];
@@ -52,7 +52,12 @@ const Graph = (props) => {
       colors.red[400],
       colors.green[400],
       colors.grey[900],
+      colors.purple[400],
     ],
+    stroke: {
+      width: [3, 3, 3, 3, 2],
+      dashArray: [0, 0, 0, 0, 8],
+    },
     dataLabels: {
       enabled: false,
     },
