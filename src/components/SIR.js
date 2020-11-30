@@ -15,18 +15,19 @@ class SIR {
     this.contactRate = contactRate; // Contact rate, this is what we want to adjust to flatten the curve
     this.deathRate = 0.04;
 
-    /*this.avgLengthOfInfection = 14;
-    this.hospitalizationRate = 0.075;
-    this.ICUBeds = 585;
-    this.hospitalBeds = 20553;*/
-
     this.max_days = 120;
     this.population = 5463000;
+    this.bedCapacity = 20553;
+    //this.ICUBeds = 585;
+    //this.hospitalizationRate = 0.075;
   }
 
   derive = (dydt, y, t) => {
     dydt[0] = -this.contactRate * y[0] * y[1];
-    dydt[1] = this.contactRate * y[0] * y[1] - this.recoveryRate * y[1];
+    dydt[1] =
+      this.contactRate * y[0] * y[1] -
+      this.recoveryRate * y[1] -
+      this.deathRate * y[1];
     dydt[2] = this.recoveryRate * y[1];
     dydt[3] = this.deathRate * y[1];
   };
@@ -60,7 +61,7 @@ class SIR {
   }
 
   getSusceptibleAtDay(day) {
-    return Math.round(this.simulation[day][1] * this.population);
+    return Math.round(this.simulation[day][0] * this.population);
   }
 
   getInfectedAtDay(day) {
@@ -68,26 +69,18 @@ class SIR {
   }
 
   getRecoveredAtDay(day) {
-    return Math.round(this.simulation[day][1] * this.population);
+    return Math.round(this.simulation[day][2] * this.population);
   }
 
   getDeathsAtDay(day) {
-    return Math.round(this.simulation[day][1] * this.population);
+    return Math.round(this.simulation[day][3] * this.population);
   }
 
-  /*getHospitalCapacityByDay(day) {
-    let recentlyInfect = 0;
-    let i = day - this.avgLengthOfInfection;
-    while(i > 0 && i <= day){
-      recentlyInfect += this.getInfectedAtDay(i);
-    }
-    console.log(i, recentlyInfect, (recentlyInfect - this.getDeathsAtDay(day) / this.hospitalBeds));
-    /!*for (let i=day-)*!/
-  }*/
-
-  getPopulation() {
-    return this.population;
+  getBedCapacityMinusCasesAtDay(day) {
+    return this.bedCapacity - this.getInfectedAtDay(day);
   }
+
+
 }
 
 export default SIR;
