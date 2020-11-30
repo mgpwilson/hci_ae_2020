@@ -245,7 +245,7 @@ const App = () => {
               Model 1
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
-              <ContextFactualisation covidState={covid1} />
+              <ContextFactualisation covidState={covid1} sir={pandemic1} />
             </Paper>
           </div>
 
