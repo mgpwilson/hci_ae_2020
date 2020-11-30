@@ -47,19 +47,18 @@ const Graph = (props) => {
     },
     xaxis: { type: "numeric", formatter: (value) => Math.round(value) },
     yaxis: { max: 5500000 },
-    title: { text: "Model 1" },
   };
 
-  // const height = (window.innerHeight - 128) / 2;
-  // const width = window.innerWidth / 3;
+  const height = (window.innerHeight - 128) / 2;
+  const width = window.innerWidth / 3;
 
   return (
     <Chart
       options={options}
       series={series}
       type="line"
-      // height={height}
-      // width={width}
+      height={height}
+      width={width}
     />
   );
 };

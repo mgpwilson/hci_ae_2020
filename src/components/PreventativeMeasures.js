@@ -6,6 +6,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import { useEffect, useState } from "react";
 import Info from "./Info";
 
 const useStyles = makeStyles({
@@ -16,33 +17,51 @@ const useStyles = makeStyles({
 });
 
 const PreventativeMeasures = (props) => {
-  const { covidState, setCovidState } = props;
+  const { baseContactRate, pandemic, setContactRate } = props;
   const classes = useStyles();
 
-  const FACTORS = {
-      // avg num ppl someone infected is exposed to per day
-      CLOSE_EDUCATION: 0.76,
-      PUBLIC_TRANSPORT_REDUCED: 0.9,
-      AVOID_GROUPS: 0.76,
-      // probability of each exposure becoming an infection
-      HANDWASHING: 0.95,
-      MASKS: .8,
-      OUTDOOR_SOCIALISING: 0.8,
-      SOCIALDISTANCING: 0.8,
+  const factorValues = {
+    // avg num ppl someone infected is exposed to per day
+    closeEducation: 0.76,
+    reducedPublicTransport: 0.9,
+    avoidGroups: 0.76,
+    // probability of each exposure becoming an infection
+    handWashing: 0.95,
+    masks: 0.8,
+    outdoorSocialising: 0.8,
+    socialDistancing: 0.8,
   };
 
-  const toggleFactor = (factor, covidState, setCovidState) => {
-    const newState = covidState;
+  const [factorState, setFactorState] = useState({
+    closeEducation: false,
+    reducedPublicTransport: false,
+    avoidGroups: false,
+    handWashing: false,
+    masks: false,
+    outdoorSocialising: false,
+    socialDistancing: false,
+  });
 
-    if (newState.factors[factor] === 1) {
-      newState.factors[factor] = FACTORS[factor.toUpperCase()];
-    } else {
-      newState.factors[factor] = 1;
+  const toggleFactor = (factor) => {
+    setFactorState((prevState) => ({
+      ...prevState,
+      [factor]: !prevState[factor],
+    }));
+  };
+
+  useEffect(() => {
+    let newContactRate = baseContactRate;
+    for (const [factor, value] of Object.entries(factorValues)) {
+      newContactRate = factorState[factor]
+        ? newContactRate * value
+        : newContactRate;
     }
+    pandemic.setContactRate(newContactRate);
+    setContactRate(newContactRate);
+    pandemic.getCasesAtDay(10);
+  }, [factorState]);
 
-    newState.pandemic.updateFactors(newState.factors);
-    setCovidState({ pandemic: newState.pandemic, factors: newState.factors });
-  };
+  console.log(factorState);
 
   return (
     <FormGroup>
@@ -56,7 +75,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("handWashing", covidState, setCovidState);
+          toggleFactor("handWashing");
         }}
       />
       <FormControlLabel
@@ -68,7 +87,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("socialDistancing", covidState, setCovidState);
+          toggleFactor("socialDistancing");
         }}
       />
       <FormControlLabel
@@ -80,7 +99,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("masks", covidState, setCovidState);
+          toggleFactor("masks");
         }}
       />
 
@@ -94,7 +113,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("close_education", covidState, setCovidState);
+          toggleFactor("closeEducation");
         }}
       />
       <FormControlLabel
@@ -106,7 +125,7 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("public_transport_reduced", covidState, setCovidState);
+          toggleFactor("reducedPublicTransport");
         }}
       />
       <FormControlLabel
@@ -118,19 +137,19 @@ const PreventativeMeasures = (props) => {
           </div>
         }
         onChange={() => {
-          toggleFactor("outdoor_socialising", covidState, setCovidState);
+          toggleFactor("outdoorSocialising");
         }}
       />
       <FormControlLabel
         control={<Checkbox />}
         label={
-            <div className={classes.checkboxLabel}>
-                <Typography variant="body2">Avoid Groups</Typography>{" "}
-                <Info infoString="Avoid groups larger than 6 people and contact between households." />
-            </div>
+          <div className={classes.checkboxLabel}>
+            <Typography variant="body2">Avoid Groups</Typography>{" "}
+            <Info infoString="Avoid groups larger than 6 people and contact between households." />
+          </div>
         }
         onChange={() => {
-            toggleFactor("avoid_groups", covidState, setCovidState);
+          toggleFactor("avoidGroups");
         }}
       />
     </FormGroup>

@@ -13,11 +13,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
 import PreventativeMeasures from "./components/PreventativeMeasures";
 import ContextFactualisation from "./components/ContextFactualisation";
-import LineGraph from "./components/LineGraph";
 
 // TEMP
-import Graph from "./new_sir/Graph";
-import sir_simulation from "./new_sir/SIR";
+import Graph from "./components/Graph";
+import SIR from "./components/SIR";
 // TEMP
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     padding: theme.spacing(1),
   },
+  graphsBoxOuter: {
+    height: "50%",
+  },
   sliderContainer: {
     width: "50%",
     paddingLeft: "70px",
@@ -92,7 +94,6 @@ const App = () => {
     infectedAvgExposures: 15,
     probInfectFromExpose: 0.15,
     popSize: 5463300, // actual population
-    // popSize: 1000000,
     hospitalCapacity: 500000,
     avgLengthOfInfection: 14,
   };
@@ -136,7 +137,13 @@ const App = () => {
 
   // TEMP
   const [days, setDays] = useState(41);
-  const solution = sir_simulation.y;
+
+  const baseContactRate = 1;
+  const [contactRate1, setContactRate1] = useState(baseContactRate);
+  const pandemic1 = new SIR(contactRate1);
+
+  const [contactRate2, setContactRate2] = useState(baseContactRate);
+  const pandemic2 = new SIR(contactRate2);
 
   return (
     <>
@@ -169,8 +176,9 @@ const App = () => {
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
               <PreventativeMeasures
-                covidState={covid1}
-                setCovidState={setCovid1}
+                baseContactRate={baseContactRate}
+                pandemic={pandemic1}
+                setContactRate={setContactRate1}
               />
             </Paper>
           </div>
@@ -181,8 +189,9 @@ const App = () => {
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
               <PreventativeMeasures
-                covidState={covid2}
-                setCovidState={setCovid2}
+                baseContactRate={baseContactRate}
+                pandemic={pandemic2}
+                setContactRate={setContactRate2}
               />
             </Paper>
           </div>
@@ -198,16 +207,21 @@ const App = () => {
 
           <div className={classes.graphsBoxOuter}>
             {/* TEMP */}
-            <Graph pandemic={solution} days={days} />
+            <div className={classes.graphBoxInner}>
+              <Graph pandemic={pandemic1.simulation} days={days} />
+            </div>
             <div className={classes.sliderContainer}>
               <Slider
                 onChangeCommitted={(e, newVal) => setDays(newVal)}
                 defaultValue={41}
-                min={21}
-                max={161}
+                min={20}
+                max={120}
                 valueLabelDisplay="auto"
-                valueLabelFormat={(x) => x - 1}
+                // valueLabelFormat={(x) => x - 1}
               />
+            </div>
+            <div className={classes.graphBoxInner}>
+              <Graph pandemic={pandemic2.simulation} days={days} />
             </div>
 
             {/* <Visualisations
