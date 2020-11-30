@@ -109,8 +109,8 @@ export class Pandemic {
             this.memoizedData.total_recovered.push(this.getRecoveredByDay(i));
             this.memoizedData.susceptible.push(this.getSusceptibleByDay(i));
         }
-        console.log(this.memoizedData);
-        console.log(this.getRValue());
+        /*console.log(this.memoizedData);
+        console.log(this.getRValue());*/
     }
 
     updateCachedCalculations() {
@@ -120,8 +120,8 @@ export class Pandemic {
             this.memoizedData.total_recovered[i] = this.getRecoveredByDay(i);
             this.memoizedData.susceptible[i] = this.getSusceptibleByDay(i);
         }
-        console.log(this.memoizedData);
-        console.log("Updated:", this.getRValue());
+        /*console.log(this.memoizedData);
+        console.log("Updated:", this.getRValue());*/
     }
 
     retrieveCachedCalculation(dayNum, key) {
@@ -349,33 +349,11 @@ export class Pandemic {
         return s;
     }
 
-    logSeriesCasesByDay() {
-        let s = [];
-        s.push({x: 0, y: this.getYLog(this.retrieveCachedCalculation(0, 'cases'))});
-        for(let i=1; i<120; i++){
-            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            let y = this.getYLog(this.retrieveCachedCalculation(i, 'cases'));
-            if (y != 0) s.push({x: i, y: y});
-        }
-        return s;
-    }
-
     seriesRecoveredByDay() {
         let s = [];
         for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'total_recovered'))})
-        }
-        return s;
-    }
-
-    logSeriesRecoveredByDay() {
-        let s = [];
-        s.push({x: 0, y: this.getYLog(this.retrieveCachedCalculation(0, 'total_recovered'))});
-        for(let i=1; i<120; i++){
-            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            let y = this.getYLog(this.retrieveCachedCalculation(i, 'total_recovered'));
-            if (y != 0) s.push({x: i, y: y});
         }
         return s;
     }
@@ -389,36 +367,11 @@ export class Pandemic {
         return s;
     }
 
-    logSeriesSusceptibleByDay() {
-        let s = [];
-        s.push({x: 0, y: this.getYLog(this.retrieveCachedCalculation(0, 'susceptible'))});
-        let lastZero = false;
-        for(let i=1; i<119; i++){
-            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            let y = this.getYLog(this.retrieveCachedCalculation(i, 'susceptible'));
-            if (lastZero) {
-                if (y != 0) s.push({x: i, y: y});
-            } else {
-                s.push({x: i, y: y});
-            }
-        }
-        return s;
-    }
-
     seriesDeathsByDay() {
         let s = [];
         for(let i=0; i<120; i++) {
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'total_deaths'))})
-        }
-        return s;
-    }
-
-    logSeriesDeathsByDay() {
-        let s = [];
-        for(let i=0; i<120; i++){
-            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
-            s.push({x: i, y: this.getYLog(this.retrieveCachedCalculation(i, 'total_deaths'))})
         }
         return s;
     }
@@ -439,15 +392,6 @@ export class Pandemic {
             s.push({x: i, y: Math.round(this.getCasesProportionalToPopulation(i))})
         }
         return s;
-    }
-
-    getMaxCases() {
-        let c = 0;
-        for (let i=0; i<this.memoizedData.cases.length; i++) {
-            if(this.memoizedData.cases[i] > c) c = this.memoizedData.cases[i];
-        }
-        console.log(c, this.memoizedData.cases);
-        return c;
     }
 
 }
