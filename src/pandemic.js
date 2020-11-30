@@ -38,18 +38,23 @@ D = cases * death rate
 // TODO fix need to have positive growth
 // TODO adjust settings to allow r below 1
 
+// TODO try calculating cases off of susceptible
+
 import {Typography} from "@material-ui/core";
 import React from "react";
 
 export class Pandemic {
     // TODO remove these or keep them in App?
     FACTORS = {
-        HANDWASHING: 0.95,
-        SOCIALDISTANCING: 0.85,
-        MASKS: 0.9,
+        // avg num ppl someone infected is exposed to per day
         CLOSE_EDUCATION: 0.76,
         PUBLIC_TRANSPORT_REDUCED: 0.9,
+        AVOID_GROUPS: 0.76,
+        // probability of each exposure becoming an infection
+        HANDWASHING: 0.95,
+        MASKS: .8,
         OUTDOOR_SOCIALISING: 0.8,
+        SOCIALDISTANCING: 0.8,
     };
 
     constructor(casesOnDay0, infectedAvgExposures, probInfectFromExpose, popSize, hospitalCapacity) {
@@ -72,6 +77,7 @@ export class Pandemic {
             close_education: 1,
             public_transport_reduced: 1,
             outdoor_socialising: 1,
+            avoid_groups: 1,
         };
 
         this.memoizedData = this.createModelSnapshot();
@@ -98,6 +104,8 @@ export class Pandemic {
     createModelCalculationsSnapshot () {
         for (let i=0; i <= this.simulationLength; i++){
             this.memoizedData.total_deaths.push(this.getDeathsByDay(i));
+        }
+        for (let i=0; i <= this.simulationLength; i++){
             this.memoizedData.total_recovered.push(this.getRecoveredByDay(i));
             this.memoizedData.susceptible.push(this.getSusceptibleByDay(i));
         }
@@ -242,12 +250,12 @@ export class Pandemic {
             if (d > 0) {
                 sumRecovered = this.retrieveCachedCalculation(d - 1, 'total_recovered');
                 let cases = this.retrieveCachedCalculation(d, 'cases');
-                let capacity = this.getHospitalCapacityByDay(d);
-                let recoveryRate = 1 - this.getDeathRateByHospitalCapacity(capacity);
-                sumRecovered += cases * recoveryRate;
+                /*let capacity = this.getHospitalCapacityByDay(d);
+                let recoveryRate = 1 - this.getDeathRateByHospitalCapacity(capacity);*/
+                sumRecovered += cases;
             }
-            if (sumRecovered > this.popSize - willDie) return this.popSize - willDie;
             sumRecovered -= dead;
+            if (sumRecovered > this.popSize - willDie) return this.popSize - (willDie - dead) - (dead * 0.75);
             if (sumRecovered < 0) return 0;
             else return sumRecovered;
         } else {
@@ -255,7 +263,7 @@ export class Pandemic {
             let sumRecovered = 0;
             // once someone dies they can't come back alive again
             let dead = this.retrieveCachedCalculation(dayNum, 'total_deaths');
-            let willDie = this.retrieveCachedCalculation(dayNum + this.avgLengthOfInfection, 'total_deaths');
+            let willDie = this.retrieveCachedCalculation(this.simulationLength, 'total_deaths');
             for(let i=0; i<dayNum-this.avgLengthOfInfection; i++){
                 let cases = this.retrieveCachedCalculation(i, 'cases');
                 let capacity = this.getHospitalCapacityByDay(i);
@@ -276,12 +284,13 @@ export class Pandemic {
     }
 
     getAdjustedInfectedAvgExposures() {
-        return this.infectedAvgExposures * this.factors.socialDistancing * this.factors.close_education
-            * this.factors.public_transport_reduced;
+        return this.infectedAvgExposures * this.factors.close_education
+            * this.factors.public_transport_reduced * this.factors.avoid_groups;
     }
 
     getAdjustedProbInfectFromExpose() {
-        return this.probInfectFromExpose * this.factors.handWashing * this.factors.masks * this.factors.outdoor_socialising;
+        return this.probInfectFromExpose * this.factors.handWashing * this.factors.masks
+            * this.factors.outdoor_socialising * this.factors.socialDistancing;
     }
 
     getRValue() {
@@ -345,11 +354,28 @@ export class Pandemic {
         return s;
     }
 
+    getYLog(num) {
+        let n = Math.log(num) / Math.log(2);
+        if (n > 0) return n;
+        else return 0;
+    }
+
     seriesCasesByDay() {
         let s = [];
         for(let i=0; i<120; i++){
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'cases'))})
+        }
+        return s;
+    }
+
+    logSeriesCasesByDay() {
+        let s = [];
+        s.push({x: 0, y: this.getYLog(this.retrieveCachedCalculation(0, 'cases'))});
+        for(let i=1; i<120; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            let y = this.getYLog(this.retrieveCachedCalculation(i, 'cases'));
+            if (y != 0) s.push({x: i, y: y});
         }
         return s;
     }
@@ -363,6 +389,17 @@ export class Pandemic {
         return s;
     }
 
+    logSeriesRecoveredByDay() {
+        let s = [];
+        s.push({x: 0, y: this.getYLog(this.retrieveCachedCalculation(0, 'total_recovered'))});
+        for(let i=1; i<120; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            let y = this.getYLog(this.retrieveCachedCalculation(i, 'total_recovered'));
+            if (y != 0) s.push({x: i, y: y});
+        }
+        return s;
+    }
+
     seriesSusceptibleByDay() {
         let s = [];
         for(let i=0; i<120; i++){
@@ -371,11 +408,37 @@ export class Pandemic {
         }
         return s;
     }
+
+    logSeriesSusceptibleByDay() {
+        let s = [];
+        s.push({x: 0, y: this.getYLog(this.retrieveCachedCalculation(0, 'susceptible'))});
+        let lastZero = false;
+        for(let i=1; i<119; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            let y = this.getYLog(this.retrieveCachedCalculation(i, 'susceptible'));
+            if (lastZero) {
+                if (y != 0) s.push({x: i, y: y});
+            } else {
+                s.push({x: i, y: y});
+            }
+        }
+        return s;
+    }
+
     seriesDeathsByDay() {
         let s = [];
         for(let i=0; i<120; i++) {
             //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
             s.push({x: i, y: Math.round(this.retrieveCachedCalculation(i, 'total_deaths'))})
+        }
+        return s;
+    }
+
+    logSeriesDeathsByDay() {
+        let s = [];
+        for(let i=0; i<120; i++){
+            //s += "Day " + i + ": " + this.getCasesByDay(i) + " cases\n";
+            s.push({x: i, y: this.getYLog(this.retrieveCachedCalculation(i, 'total_deaths'))})
         }
         return s;
     }
@@ -396,6 +459,15 @@ export class Pandemic {
             s.push({x: i, y: Math.round(this.getCasesProportionalToPopulation(i))})
         }
         return s;
+    }
+
+    getMaxCases() {
+        let c = 0;
+        for (let i=0; i<this.memoizedData.cases.length; i++) {
+            if(this.memoizedData.cases[i] > c) c = this.memoizedData.cases[i];
+        }
+        console.log(c, this.memoizedData.cases);
+        return c;
     }
 
 }

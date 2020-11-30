@@ -20,15 +20,16 @@ const PreventativeMeasures = (props) => {
   const classes = useStyles();
 
   const FACTORS = {
-    // avg num ppl someone infected is exposed to per day
-    SOCIALDISTANCING: 0.85,
-    CLOSE_EDUCATION: 0.76,
-    PUBLIC_TRANSPORT_REDUCED: 0.9,
-    // probability of each exposure becoming an infection
-    HANDWASHING: 0.95,
-    MASKS: .8,
-    OUTDOOR_SOCIALISING: 0.8,
-  }
+      // avg num ppl someone infected is exposed to per day
+      CLOSE_EDUCATION: 0.76,
+      PUBLIC_TRANSPORT_REDUCED: 0.9,
+      AVOID_GROUPS: 0.76,
+      // probability of each exposure becoming an infection
+      HANDWASHING: 0.95,
+      MASKS: .8,
+      OUTDOOR_SOCIALISING: 0.8,
+      SOCIALDISTANCING: 0.8,
+  };
 
   const toggleFactor = (factor, covidState, setCovidState) => {
     const newState = covidState;
@@ -45,7 +46,7 @@ const PreventativeMeasures = (props) => {
 
   return (
     <FormGroup>
-      <FormLabel component="legend">Probability</FormLabel>
+      <FormLabel component="legend">Infection Risk</FormLabel>
       <FormControlLabel
         control={<Checkbox />}
         label={
@@ -83,7 +84,7 @@ const PreventativeMeasures = (props) => {
         }}
       />
 
-      <FormLabel component="legend">Infection</FormLabel>
+      <FormLabel component="legend">Frequency of Exposure</FormLabel>
       <FormControlLabel
         control={<Checkbox />}
         label={
@@ -118,6 +119,18 @@ const PreventativeMeasures = (props) => {
         }
         onChange={() => {
           toggleFactor("outdoor_socialising", covidState, setCovidState);
+        }}
+      />
+      <FormControlLabel
+        control={<Checkbox />}
+        label={
+            <div className={classes.checkboxLabel}>
+                <Typography variant="body2">Avoid Groups</Typography>{" "}
+                <Info infoString="Avoid groups larger than 6 people and contact between households." />
+            </div>
+        }
+        onChange={() => {
+            toggleFactor("avoid_groups", covidState, setCovidState);
         }}
       />
     </FormGroup>

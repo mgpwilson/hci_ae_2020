@@ -63,13 +63,14 @@ const App = () => {
 
   const FACTORS = {
     // avg num ppl someone infected is exposed to per day
-    SOCIALDISTANCING: 0.85,
     CLOSE_EDUCATION: 0.76,
     PUBLIC_TRANSPORT_REDUCED: 0.9,
+    AVOID_GROUPS: 0.76,
     // probability of each exposure becoming an infection
     HANDWASHING: 0.95,
     MASKS: .8,
     OUTDOOR_SOCIALISING: 0.8,
+    SOCIALDISTANCING: 0.8,
   };
 
   // FACTORS I COULD ADD:
@@ -104,6 +105,7 @@ const App = () => {
       close_education: 1,
       public_transport_reduced: 1,
       outdoor_socialising: 1,
+      avoid_groups: 1,
     },
   });
   const [covid2, setCovid2] = useState({
@@ -121,6 +123,7 @@ const App = () => {
       close_education: 1,
       public_transport_reduced: 1,
       outdoor_socialising: 1,
+      avoid_groups: 1,
     },
   });
 
