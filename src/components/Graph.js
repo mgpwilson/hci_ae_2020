@@ -6,7 +6,7 @@ const Graph = (props) => {
   const { pandemic, days } = props;
 
   const N = 5463000; // Population
-  // const hospitalBedCapacity = [500000] * days;
+  const hospitalBedCapacity = new Array(days).fill(500000);
 
   const series = [
     {
@@ -22,13 +22,14 @@ const Graph = (props) => {
       name: "Recovered",
       data: pandemic.map((x) => Math.round(x[2] * N)).slice(0, days),
     },
-    // {
-    //   name: "Capacity",
-    //   data: hospitalBedCapacity,
-    // },
+
     {
       name: "Deaths",
       data: pandemic.map((x) => Math.round(x[3] * N * 0.1)).slice(0, days),
+    },
+    {
+      name: "Hospital Bed Capacity",
+      data: hospitalBedCapacity,
     },
   ];
 

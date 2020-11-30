@@ -54,7 +54,19 @@ class SIR {
     console.log(this.contactRate);
   }
 
-  getCasesAtDay(day) {
+  getSusceptibleAtDay(day) {
+    return Math.round(this.simulation[day][1] * this.population);
+  }
+
+  getInfectedAtDay(day) {
+    return Math.round(this.simulation[day][1] * this.population);
+  }
+
+  getRecoveredAtDay(day) {
+    return Math.round(this.simulation[day][1] * this.population);
+  }
+
+  getDeathsAtDay(day) {
     return Math.round(this.simulation[day][1] * this.population);
   }
 
