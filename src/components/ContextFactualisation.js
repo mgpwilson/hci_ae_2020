@@ -5,14 +5,23 @@ const ContextFactualisation = (props) => {
   //const { covidState } = props.covidState;
   const sir = props.sir;
 
-  const HospitalCapacityMessage = (overflow) => {
-      let message = "";
-      if (overflow >= 0) message = "SUCCESS! The NHS will be able to treat everyone who needs treatment";
-      else {
-          message = "WARNING! Under the measures you have chosen, the NHS will have to turn away " + Math.abs(Math.round(overflow)) + " sick and dying people.";
-      }
-      return message;
-  }
+    let HospitalCapacityMessage = (overflow) => {
+        let message = "";
+        if (overflow >= 0) message = "SUCCESS! The NHS will be able to treat everyone who needs treatment";
+        else {
+            message = "WARNING! Under the measures you have chosen, the NHS will have to turn away " + Math.abs(Math.round(overflow)) + " sick and dying people.";
+        }
+        return message;
+    }
+
+    let VentilatorCapacityMessage = (overflow) => {
+        let message = "";
+        if (overflow >= 0) message = "SUCCESS! Everyone who needs a ventilator will be able to use one";
+        else {
+            message = "WARNING! Under the measures you have chosen, " + Math.abs(Math.round(overflow)) + " people who need ventilators to breathe will be unable to use one. This may result in death.";
+        }
+        return message;
+    }
 
   return (
     <>
@@ -38,7 +47,7 @@ const ContextFactualisation = (props) => {
         </ListItem>
         <ListItem>
           <Typography>
-              ICU beds would be full in ? days
+              {VentilatorCapacityMessage(sir.getTotalVentilatorCapacityOverFlow())}
           </Typography>
         </ListItem>
           <ListItem>

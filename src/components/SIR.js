@@ -18,8 +18,9 @@ class SIR {
     this.max_days = 120;
     this.population = 5463000;
     this.bedCapacity = 20553;
-    //this.ICUBeds = 585;
+    this.ventilatorCapacity = 585;
     this.hospitalizationRate = 0.075;
+    this.ventilationRate = 0.028; // of hospitalized people
   }
 
   derive = (dydt, y, t) => {
@@ -88,6 +89,18 @@ class SIR {
     return overflow;
   }
 
+  getVentilatorCapacityMinusCasesAtDay(day) {
+    let hospitalized = (this.getInfectedAtDay(day) * this.hospitalizationRate);
+    return this.ventilatorCapacity - (hospitalized * this.ventilationRate);
+  }
+
+  getTotalVentilatorCapacityOverFlow(){
+    let overflow = 0;
+    for (let i=0; i <= this.max_days; i++){
+      overflow += this.getVentilatorCapacityMinusCasesAtDay(i);
+    }
+    return overflow;
+  }
 }
 
 export default SIR;
