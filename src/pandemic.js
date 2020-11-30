@@ -240,7 +240,7 @@ export class Pandemic {
     }
 
     getRecoveredByDay(dayNum) {
-        if (dayNum - this.simulationLength) {
+        /*if (dayNum - this.simulationLength) {
             // Unlike other methods, this method gives a total including previous days because immunity lasts
             let sumRecovered = 0;
             // once someone dies they can't come back alive again
@@ -250,15 +250,15 @@ export class Pandemic {
             if (d > 0) {
                 sumRecovered = this.retrieveCachedCalculation(d - 1, 'total_recovered');
                 let cases = this.retrieveCachedCalculation(d, 'cases');
-                /*let capacity = this.getHospitalCapacityByDay(d);
-                let recoveryRate = 1 - this.getDeathRateByHospitalCapacity(capacity);*/
+                /!*let capacity = this.getHospitalCapacityByDay(d);
+                let recoveryRate = 1 - this.getDeathRateByHospitalCapacity(capacity);*!/
                 sumRecovered += cases;
             }
             sumRecovered -= dead;
             if (sumRecovered > this.popSize - willDie) return this.popSize - (willDie - dead) - (dead * 0.75);
             if (sumRecovered < 0) return 0;
             else return sumRecovered;
-        } else {
+        } else {*/
             // Unlike other methods, this method gives a total including previous days because immunity lasts
             let sumRecovered = 0;
             // once someone dies they can't come back alive again
@@ -274,7 +274,7 @@ export class Pandemic {
             sumRecovered -= dead;
             if (sumRecovered < 0) return 0;
             else return sumRecovered;
-        }
+        //}
     }
 
     getSusceptibleByDay(dayNum) {
