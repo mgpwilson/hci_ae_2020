@@ -52,7 +52,12 @@ const Graph = (props) => {
       colors.red[400],
       colors.green[400],
       colors.grey[900],
+      colors.purple[400],
     ],
+    stroke: {
+      width: [5, 5, 5, 5, 2],
+      dashArray: [0, 0, 0, 0, 8],
+    },
     dataLabels: {
       enabled: false,
     },

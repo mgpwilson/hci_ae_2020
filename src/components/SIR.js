@@ -55,7 +55,7 @@ class SIR {
   }
 
   getSusceptibleAtDay(day) {
-    return Math.round(this.simulation[day][1] * this.population);
+    return Math.round(this.simulation[day][0] * this.population);
   }
 
   getInfectedAtDay(day) {
@@ -63,11 +63,11 @@ class SIR {
   }
 
   getRecoveredAtDay(day) {
-    return Math.round(this.simulation[day][1] * this.population);
+    return Math.round(this.simulation[day][2] * this.population);
   }
 
   getDeathsAtDay(day) {
-    return Math.round(this.simulation[day][1] * this.population);
+    return Math.round(this.simulation[day][3] * this.population);
   }
 
   getPopulation() {
