@@ -19,7 +19,7 @@ class SIR {
     this.population = 5463000;
     this.bedCapacity = 20553;
     //this.ICUBeds = 585;
-    //this.hospitalizationRate = 0.075;
+    this.hospitalizationRate = 0.075;
   }
 
   derive = (dydt, y, t) => {
@@ -77,9 +77,16 @@ class SIR {
   }
 
   getBedCapacityMinusCasesAtDay(day) {
-    return this.bedCapacity - this.getInfectedAtDay(day);
+    return this.bedCapacity - (this.getInfectedAtDay(day) * this.hospitalizationRate);
   }
 
+  getTotalHospitalCapacityOverFlow(){
+    let overflow = 0;
+    for (let i=0; i <= this.max_days; i++){
+      overflow += this.getBedCapacityMinusCasesAtDay(i);
+    }
+    return overflow;
+  }
 
 }
 
