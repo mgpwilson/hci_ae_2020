@@ -1,4 +1,5 @@
 import { List, ListItem, Typography } from "@material-ui/core";
+import { HospitalCapacityContextualisation } from "../pandemic";
 
 const ContextFactualisation = (props) => {
   const { covidState } = props;
@@ -8,10 +9,11 @@ const ContextFactualisation = (props) => {
       <Typography variant="body2">Under these measures:</Typography>
       <List>
         <ListItem>
-          <Typography>
+          {/*<Typography>
             Hospital beds would be full in{" "}
             {covidState.pandemic.getDaysUntilHospitalCapacity(1)} days.
-          </Typography>
+          </Typography>*/}
+          <HospitalCapacityContextualisation daysUntil={covidState.pandemic.getDaysUntilHospitalCapacity(1)}/>
         </ListItem>
       </List>
     </>

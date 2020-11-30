@@ -38,6 +38,9 @@ D = cases * death rate
 // TODO fix need to have positive growth
 // TODO adjust settings to allow r below 1
 
+import {Typography} from "@material-ui/core";
+import React from "react";
+
 export class Pandemic {
     // TODO remove these or keep them in App?
     FACTORS = {
@@ -396,6 +399,23 @@ export class Pandemic {
     }
 
 }
+
+export const HospitalCapacityContextualisation = (props) => {
+    let daysUntil = props.daysUntil;
+    let message = "";
+    if (daysUntil > 0){
+        message = "Hospital beds would be full in " + daysUntil + " days."
+    } else {
+        message = "Hospitals beds would not run out. No severely ill or dying person would be turned away.";
+    }
+    return (
+        <Typography>
+            {message}
+        </Typography>
+    )
+}
+
+
 
 
 
