@@ -14,7 +14,7 @@ class SIR {
     this.contactRate = contactRate; // Contact rate, this is what we want to adjust to flatten the curve
 
     this.max_days = 120;
-    this.population = 5454000;
+    this.population = 5463000;
   }
 
   derive = (dydt, y, t) => {

@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 const Graph = (props) => {
   const { pandemic, days } = props;
 
-  const N = 5424000; // Population
+  const N = 5463000; // Population
 
   const series = [
     {
