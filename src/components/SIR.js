@@ -15,6 +15,11 @@ class SIR {
     this.contactRate = contactRate; // Contact rate, this is what we want to adjust to flatten the curve
     this.deathRate = 0.04;
 
+    /*this.avgLengthOfInfection = 14;
+    this.hospitalizationRate = 0.075;
+    this.ICUBeds = 585;
+    this.hospitalBeds = 20553;*/
+
     this.max_days = 120;
     this.population = 5463000;
   }
@@ -69,6 +74,16 @@ class SIR {
   getDeathsAtDay(day) {
     return Math.round(this.simulation[day][1] * this.population);
   }
+
+  /*getHospitalCapacityByDay(day) {
+    let recentlyInfect = 0;
+    let i = day - this.avgLengthOfInfection;
+    while(i > 0 && i <= day){
+      recentlyInfect += this.getInfectedAtDay(i);
+    }
+    console.log(i, recentlyInfect, (recentlyInfect - this.getDeathsAtDay(day) / this.hospitalBeds));
+    /!*for (let i=day-)*!/
+  }*/
 
   getPopulation() {
     return this.population;
