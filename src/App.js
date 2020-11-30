@@ -4,6 +4,7 @@ import {
   CssBaseline,
   Grid,
   Paper,
+  Slider,
   Toolbar,
   Typography,
 } from "@material-ui/core";
@@ -12,6 +13,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Pandemic } from "./pandemic";
 import PreventativeMeasures from "./components/PreventativeMeasures";
 import ContextFactualisation from "./components/ContextFactualisation";
+import LineGraph from "./components/LineGraph";
+
+// TEMP
+import Graph from "./new_sir/Graph";
+import sir_simulation from "./new_sir/SIR";
+// TEMP
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -68,7 +75,7 @@ const App = () => {
     AVOID_GROUPS: 0.76,
     // probability of each exposure becoming an infection
     HANDWASHING: 0.95,
-    MASKS: .8,
+    MASKS: 0.8,
     OUTDOOR_SOCIALISING: 0.8,
     SOCIALDISTANCING: 0.8,
   };
@@ -126,6 +133,10 @@ const App = () => {
       avoid_groups: 1,
     },
   });
+
+  // TEMP
+  const [days, setDays] = useState(41);
+  const solution = sir_simulation.y;
 
   return (
     <>
@@ -186,10 +197,23 @@ const App = () => {
           </div>
 
           <div className={classes.graphsBoxOuter}>
-            <Visualisations
+            {/* TEMP */}
+            <Graph pandemic={solution} days={days} />
+            <div className={classes.sliderContainer}>
+              <Slider
+                onChangeCommitted={(e, newVal) => setDays(newVal)}
+                defaultValue={41}
+                min={21}
+                max={161}
+                valueLabelDisplay="auto"
+                valueLabelFormat={(x) => x - 1}
+              />
+            </div>
+
+            {/* <Visualisations
               pandemicState={covid1.pandemic}
               pandemicState2={covid2.pandemic}
-            />
+            /> */}
           </div>
         </Grid>
 
