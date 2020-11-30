@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   sideBarBoxInner: {
     height: `calc(100% - ${theme.spacing(2)}px)`,
     padding: theme.spacing(2),
+    overflowY: "scroll",
   },
 
   graphsContainer: {
@@ -138,7 +139,7 @@ const App = () => {
   // TEMP
   const [days, setDays] = useState(41);
 
-  const baseContactRate = 1;
+  const baseContactRate = 0.5;
   const [contactRate1, setContactRate1] = useState(baseContactRate);
   const pandemic1 = new SIR(contactRate1);
 

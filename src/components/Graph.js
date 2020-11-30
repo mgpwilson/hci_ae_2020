@@ -6,6 +6,7 @@ const Graph = (props) => {
   const { pandemic, days } = props;
 
   const N = 5463000; // Population
+  // const hospitalBedCapacity = [500000] * days;
 
   const series = [
     {
@@ -22,9 +23,13 @@ const Graph = (props) => {
       data: pandemic.map((x) => Math.round(x[2] * N)).slice(0, days),
     },
     // {
-    //   name: "Deaths",
-    //   data: pandemic.map((x) => Math.round(x[2] * N * 0.1)).slice(0, days),
+    //   name: "Capacity",
+    //   data: hospitalBedCapacity,
     // },
+    {
+      name: "Deaths",
+      data: pandemic.map((x) => Math.round(x[3] * N * 0.1)).slice(0, days),
+    },
   ];
 
   const options = {
@@ -41,7 +46,12 @@ const Graph = (props) => {
         easing: "easeout",
       },
     },
-    colors: [colors.blue[400], colors.red[400], colors.green[400]],
+    colors: [
+      colors.blue[400],
+      colors.red[400],
+      colors.green[400],
+      colors.grey[900],
+    ],
     dataLabels: {
       enabled: false,
     },

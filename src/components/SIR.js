@@ -8,10 +8,12 @@ const copy = (x) => {
 class SIR {
   constructor(contactRate) {
     this.initialInfected = 0.009;
-    this.initialRecovered = 0.1;
+    this.initialRecovered = 0;
+    this.initialDead = 0;
 
     this.recoveryRate = 1 / 14; // Recovery rate, 1 / mean amount of days it takes to recover
     this.contactRate = contactRate; // Contact rate, this is what we want to adjust to flatten the curve
+    this.deathRate = 0.04;
 
     this.max_days = 120;
     this.population = 5463000;
@@ -21,6 +23,7 @@ class SIR {
     dydt[0] = -this.contactRate * y[0] * y[1];
     dydt[1] = this.contactRate * y[0] * y[1] - this.recoveryRate * y[1];
     dydt[2] = this.recoveryRate * y[1];
+    dydt[3] = this.deathRate * y[1];
   };
 
   get simulation() {
@@ -29,6 +32,7 @@ class SIR {
       initialSuscepitble,
       this.initialInfected,
       this.initialRecovered,
+      this.initialDead,
     ]; // [S, I, R]
     var integrator = rk4(initialSIR, this.derive, 0, 1); // [Initial SIR, SIR function, initial time, timestep]
     var days = 0; // Initial time: 0 days
