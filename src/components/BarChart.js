@@ -1,4 +1,5 @@
 import Chart from "react-apexcharts";
+import {colors} from "@material-ui/core";
 
 const BarChart = (props) => {
   const { pandemic1, pandemic2, days } = props;
@@ -51,6 +52,10 @@ const BarChart = (props) => {
     yaxis: {
       max: 2000000,
     },
+    colors: [
+      colors.red[400],
+      colors.grey[900],
+    ],
   };
 
   return (
