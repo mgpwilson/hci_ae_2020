@@ -60,7 +60,7 @@ const PreventativeMeasures = (props) => {
     setContactRate(newContactRate);
   }, [factorState]);
 
-  console.log(factorState);
+  // console.log(factorState);
 
   return (
     <FormGroup>

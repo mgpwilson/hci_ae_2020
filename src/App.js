@@ -15,8 +15,9 @@ import PreventativeMeasures from "./components/PreventativeMeasures";
 import ContextFactualisation from "./components/ContextFactualisation";
 
 // TEMP
-import Graph from "./components/Graph";
+import Graph from "./components/LineGraph";
 import SIR from "./components/SIR";
+import BarChart from "./components/BarChart";
 // TEMP
 
 const useStyles = makeStyles((theme) => ({
@@ -58,13 +59,15 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     padding: theme.spacing(1),
   },
-  graphsBoxOuter: {
-    height: "50%",
-  },
   sliderContainer: {
-    width: "50%",
     paddingLeft: "70px",
-    paddingRight: "10px",
+  },
+
+  barChart: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 
@@ -157,7 +160,8 @@ const App = () => {
             style={{ flexGrow: 1 }}
             align="center"
           >
-            COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates
+            COVIDUALISE: A Visualisation Tool For COVID-19 Infection Rates in
+            Scotland
           </Typography>
         </Toolbar>
       </AppBar>
@@ -206,30 +210,35 @@ const App = () => {
             </Typography>
           </div>
 
-          <div className={classes.graphsBoxOuter}>
-            {/* TEMP */}
-            <div className={classes.graphBoxInner}>
+          <Grid container>
+            <Grid item xs={6} className={classes.graphsBoxOuter}>
+              {/* TEMP */}
               <Graph pandemic={pandemic1.simulation} days={days} />
-            </div>
-            <div className={classes.sliderContainer}>
-              <Slider
-                onChangeCommitted={(e, newVal) => setDays(newVal)}
-                defaultValue={41}
-                min={20}
-                max={120}
-                valueLabelDisplay="auto"
-                // valueLabelFormat={(x) => x - 1}
-              />
-            </div>
-            <div className={classes.graphBoxInner}>
+              <div className={classes.sliderContainer}>
+                <Slider
+                  onChangeCommitted={(e, newVal) => setDays(newVal)}
+                  defaultValue={41}
+                  min={20}
+                  max={120}
+                  valueLabelDisplay="auto"
+                />
+              </div>
               <Graph pandemic={pandemic2.simulation} days={days} />
-            </div>
+            </Grid>
+            <Grid item xs={6} className={classes.barChart}>
+              <Typography>Cases and deaths at day {days}</Typography>
+              <BarChart
+                pandemic1={pandemic1}
+                pandemic2={pandemic2}
+                days={days}
+              />
+            </Grid>
 
             {/* <Visualisations
               pandemicState={covid1.pandemic}
               pandemicState2={covid2.pandemic}
             /> */}
-          </div>
+          </Grid>
         </Grid>
 
         {/* Context and Factualisation */}
@@ -245,7 +254,7 @@ const App = () => {
               Model 1
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
-              <ContextFactualisation covidState={covid1} sir={pandemic1} />
+              <ContextFactualisation covidState={covid1} sir={pandemic1} days={days}/>
             </Paper>
           </div>
 
@@ -254,7 +263,7 @@ const App = () => {
               Model 2
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
-              <ContextFactualisation covidState={covid2} sir={pandemic2}/>
+              <ContextFactualisation covidState={covid2} sir={pandemic2} days={days}/>
             </Paper>
           </div>
         </Grid>

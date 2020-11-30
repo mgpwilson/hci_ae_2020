@@ -56,9 +56,9 @@ class SIR {
   }
 
   setContactRate(contactRate) {
-    console.log(this.contactRate);
+    // console.log(this.contactRate);
     this.contactRate = contactRate;
-    console.log(this.contactRate);
+    // console.log(this.contactRate);
   }
 
   getSusceptibleAtDay(day) {
@@ -102,10 +102,18 @@ class SIR {
     return overflow;
   }
 
-  getTotalInfections() {
+  getTotalInfections(days) {
     let total = 0;
-    for (let i=0; i <= this.max_days; i++){
+    for (let i=0; i <= days; i++){
       total += this.getInfectedAtDay(i);
+    }
+    return total;
+  }
+
+  getTotalDeaths(days) {
+    let total = 0;
+    for (let i=0; i <= days; i++){
+      total += this.getDeathsAtDay(i);
     }
     return total;
   }

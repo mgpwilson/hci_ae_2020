@@ -4,6 +4,7 @@ import { HospitalCapacityContextualisation } from "../pandemic";
 const ContextFactualisation = (props) => {
   //const { covidState } = props.covidState;
   const sir = props.sir;
+  const days= props.days;
 
     let HospitalCapacityMessage = (overflow) => {
         let message = "";
@@ -23,10 +24,14 @@ const ContextFactualisation = (props) => {
         return message;
     }
 
-    let CaseRatio = () => {
-        let r = Math.round(sir.popSize / sir.getTotalInfections());
-        console.log(r);
-        return r;
+    let InfectedRatio = (days) => {
+        let r = sir.getTotalInfections(days) / sir.population;
+        return (r).toPrecision(3);
+    }
+
+    let DeathRatio = (days) => {
+        let r = sir.getTotalDeaths(days) / sir.population;
+        return (r).toPrecision(3);
     }
 
   return (
@@ -58,12 +63,12 @@ const ContextFactualisation = (props) => {
         </ListItem>
           <ListItem>
               <Typography>
-                  1 in {CaseRatio} people would be infected in the first 3 months
+                  {InfectedRatio(days)}% of Scotland would be infected in the first {days} days.
               </Typography>
           </ListItem>
           <ListItem>
               <Typography>
-                  1 in __ people would die
+                  {DeathRatio(days)}% people would die in the first {days} days.
               </Typography>
           </ListItem>
       </List>
