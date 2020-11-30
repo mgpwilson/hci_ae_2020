@@ -23,6 +23,12 @@ const ContextFactualisation = (props) => {
         return message;
     }
 
+    let CaseRatio = () => {
+        let r = Math.round(sir.popSize / sir.getTotalInfections());
+        console.log(r);
+        return r;
+    }
+
   return (
     <>
       <Typography variant="body2">Under these measures:</Typography>
@@ -52,12 +58,12 @@ const ContextFactualisation = (props) => {
         </ListItem>
           <ListItem>
               <Typography>
-                  ICU beds would be full in ? days
+                  1 in {CaseRatio} people would be infected in the first 3 months
               </Typography>
           </ListItem>
           <ListItem>
               <Typography>
-                  ICU beds would be full in ? days
+                  1 in __ people would die
               </Typography>
           </ListItem>
       </List>

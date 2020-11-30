@@ -101,6 +101,14 @@ class SIR {
     }
     return overflow;
   }
+
+  getTotalInfections() {
+    let total = 0;
+    for (let i=0; i <= this.max_days; i++){
+      total += this.getInfectedAtDay(i);
+    }
+    return total;
+  }
 }
 
 export default SIR;
