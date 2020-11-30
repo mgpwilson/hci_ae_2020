@@ -35,6 +35,9 @@ D = cases * death rate
 // TODO fix labels on section checkboxes
 // TODO switch social distancing
 
+// TODO fix need to have positive growth
+// TODO adjust settings to allow r below 1
+
 export class Pandemic {
     // TODO remove these or keep them in App?
     FACTORS = {
@@ -287,6 +290,7 @@ export class Pandemic {
         let dayNum = 0;
         let cap = this.getHospitalCapacityByDay(dayNum);
         while(cap < fullness) {
+            if (dayNum > this.simulationLength) return -1;
             dayNum +=1;
             cap = this.getHospitalCapacityByDay(dayNum);
         }
