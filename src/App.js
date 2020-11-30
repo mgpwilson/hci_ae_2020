@@ -199,7 +199,7 @@ const App = () => {
         </Grid>
 
         {/* Visualation and Graphing */}
-        <Grid item xs={8} className={classes.graphsContainer}>
+        <Grid item xs={7} className={classes.graphsContainer}>
           <div className={classes.centerTitle}>
             <Typography component="h2" variant="subtitle1">
               Visualisation and Graphing
@@ -233,7 +233,7 @@ const App = () => {
         </Grid>
 
         {/* Context and Factualisation */}
-        <Grid item xs={2} className={classes.sideBar}>
+        <Grid item xs={3} className={classes.sideBar}>
           <div className={classes.centerTitle}>
             <Typography component="h2" variant="subtitle1">
               Context and Factualisation
@@ -254,7 +254,7 @@ const App = () => {
               Model 2
             </Typography>
             <Paper variant="outlined" className={classes.sideBarBoxInner}>
-              <ContextFactualisation covidState={covid2} />
+              <ContextFactualisation covidState={covid2} sir={pandemic2}/>
             </Paper>
           </div>
         </Grid>
