@@ -6,7 +6,7 @@ const BarChart = (props) => {
   console.log(pandemic1.getInfectedAtDay(days));
   console.log(pandemic2.getInfectedAtDay(days));
 
-  const series = [
+  /*const series = [
     {
       name: "Model 1",
       data: [pandemic1.getInfectedAtDay(days), pandemic1.getDeathsAtDay(days)],
@@ -15,7 +15,19 @@ const BarChart = (props) => {
       name: "Model 2",
       data: [pandemic2.getInfectedAtDay(days), pandemic2.getDeathsAtDay(days)],
     },
+  ];*/
+
+  const series = [
+    {
+      name: "Infected",
+      data: [pandemic1.getInfectedAtDay(days), pandemic2.getInfectedAtDay(days)],
+    },
+    {
+      name: "Dead",
+      data: [pandemic1.getDeathsAtDay(days), pandemic2.getDeathsAtDay(days)],
+    },
   ];
+
 
   const options = {
     chart: {
@@ -30,7 +42,7 @@ const BarChart = (props) => {
       },
     },
     xaxis: {
-      categories: ["cases", "deaths"],
+      categories: ["Model 1", "Model 2"],
       style: {
         fontFamily: "Roboto",
         fontWeight: "normal",

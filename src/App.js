@@ -226,7 +226,7 @@ const App = () => {
               <Graph pandemic={pandemic2.simulation} days={days} />
             </Grid>
             <Grid item xs={6} className={classes.barChart}>
-              <Typography>Cases and deaths at day {days}</Typography>
+              <Typography>Total infections and deaths at day {days}</Typography>
               <BarChart
                 pandemic1={pandemic1}
                 pandemic2={pandemic2}
