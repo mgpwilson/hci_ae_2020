@@ -6,7 +6,7 @@ const LineGraph = (props) => {
   const { pandemic, days } = props;
 
   const N = 5463000; // Population
-  const hospitalBedCapacity = new Array(days).fill(20553);
+  const hospitalBedCapacity = new Array(days).fill(20553 / 0.075);
 
   const series = [
     {
@@ -15,11 +15,11 @@ const LineGraph = (props) => {
     },
 
     {
-      name: "Cases",
+      name: "Infected",
       data: pandemic.map((x) => Math.round(x[1] * N)).slice(0, days),
     },
     {
-      name: "Infected",
+      name: "Recovered",
       data: pandemic.map((x) => Math.round(x[2] * N)).slice(0, days),
     },
 
@@ -28,7 +28,7 @@ const LineGraph = (props) => {
       data: pandemic.map((x) => Math.round(x[3] * N * 0.1)).slice(0, days),
     },
     {
-      name: "Hospital Bed Capacity",
+      name: "NHS Scotland Max Capacity (Infections/Day)",
       data: hospitalBedCapacity,
     },
   ];
@@ -54,7 +54,7 @@ const LineGraph = (props) => {
       colors.purple[400],
     ],
     stroke: {
-      width: [5, 5, 5, 5, 2],
+      width: [4, 4, 4, 4, 2],
       dashArray: [0, 0, 0, 0, 8],
     },
     dataLabels: {
