@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { XYPlot, LineSeries, VerticalBarSeries, XAxis, YAxis, DiscreteColorLegend, LabelSeries } from 'react-vis';
+import {
+    XYPlot,
+    LineSeries,
+    VerticalBarSeries,
+    XAxis,
+    YAxis,
+    DiscreteColorLegend,
+    LabelSeries,
+    HorizontalGridLines, VerticalGridLines, LineMarkSeries,
+} from 'react-vis';
 import './pandemic'
 import 'react-vis/dist/style.css';
 import PandemicSlider from './PandemicSlider';
@@ -34,6 +43,8 @@ class Visualisations extends Component {
             "susceptible": this.pandemicState2.seriesSusceptibleByDay(),
             "deaths": this.pandemicState2.seriesDeathsByDay(),
         }
+
+        let yMax = this.pandemicState.popSize;
 
         var days = this.state.days;
         var proportionalCases1 = this.pandemicState.getCasesProportionalToPopulation(days)
@@ -74,7 +85,7 @@ class Visualisations extends Component {
             <div style={{ alignItems: "center", display: "flex" }}>
                 <div style={{ width: "auto" }}>
                     <h3>SIR Graph: Covid Simulation 1</h3>
-                    <XYPlot type={"log"} xDomain={[0,120]} yDomain={[0, this.pandemicState.popSize]} margin={{left: 65}}
+                    <XYPlot type={"log"} xDomain={[0,120]} yDomain={[0, yMax]} margin={{left: 65}}
                             name={"SIR GRAPH 1"} height={200} width={400} stackBy={'x'} style={{
                         display: "block",
                         margin: "inherit",
@@ -86,6 +97,8 @@ class Visualisations extends Component {
                         <LineSeries data={Object.values(graph1Data)[2]} strokeWidth={1} color={"blue"} />
                         <LineSeries data={Object.values(graph1Data)[3]} strokeWidth={1} color={"purple"} />
                         <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
+                        <HorizontalGridLines />
+                        <VerticalGridLines />
                         <YAxis />
                         <XAxis />
                     </XYPlot>
@@ -98,6 +111,8 @@ class Visualisations extends Component {
                         <LineSeries data={Object.values(graph2Data)[2]} strokeWidth={1} color={"blue"} />
                         <LineSeries data={Object.values(graph2Data)[3]} strokeWidth={1} color={"purple"} />
                         <DiscreteColorLegend items={legendItems} colors={legendColours} orientation={"horizontal"} />
+                        <HorizontalGridLines />
+                        <VerticalGridLines />
                         <YAxis />
                         <XAxis/>
                     </XYPlot>
