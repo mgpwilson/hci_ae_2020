@@ -17,6 +17,7 @@ class SIR {
 
     this.max_days = 120;
     this.population = 5463000;
+    this.bedCapacity = 20553;
   }
 
   derive = (dydt, y, t) => {
@@ -70,8 +71,8 @@ class SIR {
     return Math.round(this.simulation[day][3] * this.population);
   }
 
-  getPopulation() {
-    return this.population;
+  getBedCapacityMinusCasesAtDay(day) {
+    return this.bedCapacity - this.getInfectedAtDay(day);
   }
 }
 
