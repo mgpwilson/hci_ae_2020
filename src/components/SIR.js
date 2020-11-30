@@ -53,9 +53,9 @@ class SIR {
   }
 
   setContactRate(contactRate) {
-    console.log(this.contactRate);
+    // console.log(this.contactRate);
     this.contactRate = contactRate;
-    console.log(this.contactRate);
+    // console.log(this.contactRate);
   }
 
   getSusceptibleAtDay(day) {
@@ -75,7 +75,7 @@ class SIR {
   }
 
   getBedCapacityMinusCasesAtDay(day) {
-    return this.bedCapacity - this.getInfectedAtDay(day);
+    return this.bedCapacity - this.getInfectedAtDay(day) * 0.075;
   }
 }
 
