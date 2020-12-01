@@ -25,13 +25,13 @@ const ContextFactualisation = (props) => {
     }
 
     let InfectedRatio = (days) => {
-        let r = sir.getTotalInfections(days) / sir.population;
-        return (r).toPrecision(3);
+        let r = sir.getRecoveredAtDay(days) / sir.population;
+        return (r).toPrecision(3) * 100;
     }
 
     let DeathRatio = (days) => {
-        let r = sir.getTotalDeaths(days) / sir.population;
-        return (r).toPrecision(3);
+        let r = sir.getDeathsAtDay(days) / sir.population;
+        return (r).toPrecision(3) * 10;
     }
 
   return (

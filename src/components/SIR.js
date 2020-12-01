@@ -101,22 +101,6 @@ class SIR {
     }
     return overflow;
   }
-
-  getTotalInfections(days) {
-    let total = 0;
-    for (let i=0; i <= days; i++){
-      total += this.getInfectedAtDay(i);
-    }
-    return total;
-  }
-
-  getTotalDeaths(days) {
-    let total = 0;
-    for (let i=0; i <= days; i++){
-      total += this.getDeathsAtDay(i);
-    }
-    return total;
-  }
 }
 
 export default SIR;

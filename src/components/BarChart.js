@@ -4,20 +4,15 @@ import {colors} from "@material-ui/core";
 const BarChart = (props) => {
   const { pandemic1, pandemic2, days, chartTitle } = props;
 
-  console.log(pandemic1.getInfectedAtDay(days));
-  console.log(pandemic2.getInfectedAtDay(days));
-
-  const yMax = Math.max(pandemic1.getRecoveredAtDay(days), pandemic2.getRecoveredAtDay(days),
-      pandemic1.getDeathsAtDay(days), pandemic2.getDeathsAtDay(days));
-
   const series = [
     {
       name: "Infections",
       data: [pandemic1.getRecoveredAtDay(days), pandemic2.getRecoveredAtDay(days)],
     },
+      //TODO why is deaths larger than line graph by factor of 10??
     {
       name: "Dead",
-      data: [pandemic1.getDeathsAtDay(days), pandemic2.getDeathsAtDay(days)],
+      data: [pandemic1.getDeathsAtDay(days)/10, pandemic2.getDeathsAtDay(days)/10],
     },
   ];
 
@@ -61,7 +56,6 @@ const BarChart = (props) => {
     },
     yaxis: {
       min: 0,
-      max: yMax,
     },
     colors: [
       colors.red[400],
@@ -69,10 +63,11 @@ const BarChart = (props) => {
     ],
     tooltip: {
       x: {
-        show: false
+        show: true,
       },
       y: {
-        formatter: (value) => { return (value / 1000000).toPrecision(4) + "million" }
+        show: true,
+        formatter: (value) => { return (value / 1000000).toPrecision(3) + "million" }
       }
     }
   };
