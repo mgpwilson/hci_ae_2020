@@ -1,42 +1,40 @@
 import { colors } from "@material-ui/core";
 import Chart from "react-apexcharts";
 
+// Using ApexCharts
 const LineGraph = (props) => {
   const { pandemic, days } = props;
 
-  const susceptible = pandemic.pandemic.seriesSusceptibleByDay();
-  const deaths = pandemic.pandemic.seriesDeathsByDay();
-  const cases = pandemic.pandemic.seriesCasesByDay();
-  const recovered = pandemic.pandemic.seriesRecoveredByDay();
+  const N = 5463000; // Population
+  const hospitalBedCapacity = new Array(days).fill(20553 / 0.075);
 
   const series = [
     {
       name: "Susceptible",
-      data: susceptible.slice(0, days),
+      data: pandemic.map((x) => Math.round(x[0] * N)).slice(0, days),
     },
+
     {
-      name: "Deaths",
-      data: deaths.slice(0, days),
-    },
-    {
-      name: "Cases",
-      data: cases.slice(0, days),
+      name: "Infected",
+      data: pandemic.map((x) => Math.round(x[1] * N)).slice(0, days),
     },
     {
       name: "Recovered",
-      data: recovered.slice(0, days),
+      data: pandemic.map((x) => Math.round(x[2] * N)).slice(0, days),
+    },
+
+    {
+      name: "Deaths",
+      data: pandemic.map((x) => Math.round(x[3] * N * 0.1)).slice(0, days),
+    },
+    {
+      name: "NHS Scotland Max Capacity (Infections/Day)",
+      data: hospitalBedCapacity,
     },
   ];
 
   const options = {
-    colors: [
-      colors.blue[400],
-      colors.grey[900],
-      colors.red[400],
-      colors.green[400],
-    ],
     chart: {
-      height: 350,
       type: "line",
       zoom: {
         enabled: false,
@@ -45,17 +43,79 @@ const LineGraph = (props) => {
         show: false,
       },
       animations: {
-        easing: "easeinout",
+        easing: "easeout",
       },
+    },
+    colors: [
+      colors.blue[400],
+      colors.red[400],
+      colors.green[400],
+      colors.grey[900],
+      colors.purple[400],
+    ],
+    stroke: {
+      width: [4, 4, 4, 4, 2],
+      dashArray: [0, 0, 0, 0, 8],
     },
     dataLabels: {
       enabled: false,
     },
-    xaxis: { type: "numeric", formatter: (value) => Math.round(value) },
+    xaxis: {
+      type: "numeric",
+      labels: {
+        show: true,
+        align: 'right',
+        minWidth: 0,
+        maxWidth: 160,
+        style: {
+          colors: [],
+          fontSize: '12px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+          cssClass: 'apexcharts-yaxis-label',
+        },
+        offsetX: 0,
+        offsetY: 0,
+        rotate: 0,
+        formatter: (value) => { return "day " + Math.round(value) },
+      },
+    },
+    yaxis: {
+      max: 5500000 ,
+      labels: {
+        show: true,
+        align: 'right',
+        minWidth: 0,
+        maxWidth: 160,
+        style: {
+          colors: [],
+          fontSize: '12px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+          cssClass: 'apexcharts-yaxis-label',
+        },
+        offsetX: 0,
+        offsetY: 0,
+        rotate: 0,
+        formatter: (value) => { return (value.toPrecision(2) / 1000000) + " million" },
+      },
+    },
+    tooltip: {
+      /*style: {
+        positionX: -200,
+        positionY: -20,
+      },*/
+      fixed: {
+        enabled: true,
+        position: 'topRight',
+        offsetX: 350,
+        offsetY: 50,
+      }
+    }
   };
 
-  const height = (window.innerHeight - 128) / 2;
-  const width = window.innerWidth / 3;
+  const height = (window.innerHeight - 128) / 2 - 10;
+  const width = (window.innerWidth * 3.5) / 12;
 
   return (
     <Chart
