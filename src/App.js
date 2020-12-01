@@ -11,9 +11,6 @@ import {
   Box,
 } from "@material-ui/core";
 import HelpIcon from '@material-ui/icons/Help';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import MarkunreadMailboxIcon from '@material-ui/icons/MarkunreadMailbox';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Visualisations from "./Visualisations";
@@ -109,19 +106,16 @@ const App = () => {
     CLOSE_EDUCATION: 0.76,
     PUBLIC_TRANSPORT_REDUCED: 0.9,
     AVOID_GROUPS: 0.76,
+    TRAVEL_QUARANTINE: 0.95,
+    WORK_FROM_HOME: 0.75,
+    CONTACT_TRACING: 0.8,
     // probability of each exposure becoming an infection
     HANDWASHING: 0.95,
     MASKS: 0.8,
     OUTDOOR_SOCIALISING: 0.8,
     SOCIALDISTANCING: 0.8,
+    CLOSE_INDOOR_DINING: 0.8,
   };
-
-  // FACTORS I COULD ADD:
-  /*
-  - Working from home
-  - Avoiding groups of 6+ ppl
-  - Visiting public places less
-  */
 
   const MODEL_DEFAULTS = {
     casesOnDay0: 1000,

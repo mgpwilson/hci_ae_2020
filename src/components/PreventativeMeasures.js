@@ -25,21 +25,29 @@ const PreventativeMeasures = (props) => {
     closeEducation: 0.76,
     reducedPublicTransport: 0.9,
     avoidGroups: 0.76,
+    travelQuarantine: 0.95,
+    workFromHome: 0.75,
+    contractTracing: 0.8,
     // probability of each exposure becoming an infection
     handWashing: 0.95,
     masks: 0.8,
     outdoorSocialising: 0.8,
     socialDistancing: 0.8,
+    closeIndoorDining: 0.8,
   };
 
   const [factorState, setFactorState] = useState({
     closeEducation: false,
     reducedPublicTransport: false,
     avoidGroups: false,
+    travelQuarantine: false,
+    workFromHome: false,
+    contractTracing: false,
     handWashing: false,
     masks: false,
     outdoorSocialising: false,
     socialDistancing: false,
+    closeIndoorDining: false,
   });
 
   const toggleFactor = (factor) => {
@@ -101,7 +109,18 @@ const PreventativeMeasures = (props) => {
           toggleFactor("masks");
         }}
       />
-
+      <FormControlLabel
+        control={<Checkbox />}
+        label={
+            <div className={classes.checkboxLabel}>
+                <Typography variant="body2">Close Indoor Dining</Typography>{" "}
+                <Info infoString="Close restaurants and other indoor dining where customers must take off their masks in an enclosed space." />
+            </div>
+        }
+        onChange={() => {
+            toggleFactor("closeIndoorDining");
+        }}
+      />
       <FormLabel component="legend">Frequency of Exposure</FormLabel>
       <FormControlLabel
         control={<Checkbox />}
@@ -149,6 +168,42 @@ const PreventativeMeasures = (props) => {
         }
         onChange={() => {
           toggleFactor("avoidGroups");
+        }}
+      />
+      <FormControlLabel
+        control={<Checkbox />}
+        label={
+            <div className={classes.checkboxLabel}>
+                <Typography variant="body2">Travel Quarantine</Typography>{" "}
+                <Info infoString="Quarantine all travelers arriving from outside the country." />
+            </div>
+        }
+        onChange={() => {
+            toggleFactor("travelQuarantine");
+        }}
+      />
+      <FormControlLabel
+        control={<Checkbox />}
+        label={
+            <div className={classes.checkboxLabel}>
+                <Typography variant="body2">Work From Home</Typography>{" "}
+                <Info infoString="Everyone who can work from home, works from home." />
+            </div>
+        }
+        onChange={() => {
+            toggleFactor("workFromHome");
+        }}
+      />
+      <FormControlLabel
+        control={<Checkbox />}
+        label={
+            <div className={classes.checkboxLabel}>
+                <Typography variant="body2">Contact Tracing</Typography>{" "}
+                <Info infoString="Contact tracing for all known cases (untested cases will not be traced)." />
+            </div>
+        }
+        onChange={() => {
+            toggleFactor("contactTracing");
         }}
       />
     </FormGroup>
