@@ -100,6 +100,18 @@ const LineGraph = (props) => {
         formatter: (value) => { return (value.toPrecision(2) / 1000000) + " million" },
       },
     },
+    tooltip: {
+      /*style: {
+        positionX: -200,
+        positionY: -20,
+      },*/
+      fixed: {
+        enabled: true,
+        position: 'topRight',
+        offsetX: 350,
+        offsetY: 50,
+      }
+    }
   };
 
   const height = (window.innerHeight - 128) / 2 - 10;
