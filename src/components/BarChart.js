@@ -7,10 +7,12 @@ const BarChart = (props) => {
   console.log(pandemic1.getInfectedAtDay(days));
   console.log(pandemic2.getInfectedAtDay(days));
 
+  const yMax = Math.max(pandemic1.getTotalInfections(days), pandemic2.getTotalInfections(days));
+
   const series = [
     {
       name: "Infected",
-      data: [pandemic1.getInfectedAtDay(days), pandemic2.getInfectedAtDay(days)],
+      data: [pandemic1.getTotalInfections(days), pandemic2.getTotalInfections(days)],
     },
     {
       name: "Dead",
@@ -36,9 +38,30 @@ const BarChart = (props) => {
         fontFamily: "Roboto",
         fontWeight: "normal",
       },
+      forceNiceScale: true,
+      max: yMax,
+      labels: {
+        show: true,
+        align: 'right',
+        minWidth: 0,
+        maxWidth: 160,
+        style: {
+          colors: [],
+          fontSize: '12px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+          cssClass: 'apexcharts-yaxis-label',
+        },
+        offsetX: 0,
+        offsetY: 0,
+        rotate: 0,
+        formatter: (value) => { return (value.toPrecision(3) / 1000000) + "million" },
+      },
+      showAlways: false,
     },
     yaxis: {
-      max: 2000000,
+      max: yMax,
+      showAlways: false,
     },
     colors: [
       colors.red[400],

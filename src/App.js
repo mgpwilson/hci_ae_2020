@@ -303,7 +303,9 @@ const App = () => {
                 />
               </div>
 
-              <Typography>Total people affected at day {days}</Typography>
+              <Typography className={classes.centerTitle} style={{marginLeft: "1.5em"}}>
+                Total people affected at day {days}
+              </Typography>
               <BarChart
                 pandemic1={pandemic1}
                 pandemic2={pandemic2}
