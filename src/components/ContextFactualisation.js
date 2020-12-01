@@ -48,11 +48,6 @@ const ContextFactualisation = (props) => {
         </ListItem>*/}
         <ListItem>
           <Typography>
-              <em>The aim of this simulation is to 'flatten the curve' to keep the cases below the hospital bed capacity, choose stronger measures to avoid unnecessary deaths</em>
-          </Typography>
-        </ListItem>
-        <ListItem>
-          <Typography>
               {HospitalCapacityMessage(sir.getTotalHospitalCapacityOverFlow())}
           </Typography>
         </ListItem>
