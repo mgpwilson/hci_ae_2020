@@ -166,7 +166,7 @@ const App = () => {
   // TEMP
   const [days, setDays] = useState(41);
 
-  const baseContactRate = 1;
+  const baseContactRate = 0.5;
   const [contactRate1, setContactRate1] = useState(baseContactRate);
   const pandemic1 = new SIR(contactRate1);
 
@@ -297,8 +297,8 @@ const App = () => {
                 />
               </div>
 
-              <Typography className={classes.centerTitle} style={{marginLeft: "1.5em"}}>
-                Total people affected at day {days}
+              <Typography className={classes.centerTitle} style={{marginLeft: "1.5em", marginTop: "1.5em"}}>
+                Totals at Day {days}
               </Typography>
               <BarChart
                 pandemic1={pandemic1}
@@ -311,8 +311,8 @@ const App = () => {
             {/* <Visualisations
               pandemicState={covid1.pandemic}
               pandemicState2={covid2.pandemic}
-            />
-          </div>
+            /> */}
+          </Grid>
         </Grid>
 
         {/* Context and Factualisation */}
