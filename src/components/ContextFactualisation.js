@@ -1,5 +1,4 @@
 import { List, ListItem, Typography } from "@material-ui/core";
-import { HospitalCapacityContextualisation } from "../pandemic";
 
 const ContextFactualisation = (props) => {
   //const { covidState } = props.covidState;

@@ -13,15 +13,12 @@ import {
 import HelpIcon from "@material-ui/icons/Help";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import { makeStyles } from "@material-ui/core/styles";
-import { Pandemic } from "./pandemic";
+
 import PreventativeMeasures from "./components/PreventativeMeasures";
 import ContextFactualisation from "./components/ContextFactualisation";
-
-// TEMP
 import Graph from "./components/LineGraph";
 import SIR from "./components/SIR";
 import BarChart from "./components/BarChart";
-// TEMP
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -196,21 +193,11 @@ const App = () => {
 
           <Grid container>
             <Grid item xs={6} className={classes.graphsBoxOuter}>
-              {/* TEMP */}
               <Graph
                 pandemic={pandemic1.simulation}
                 days={days}
                 className={classes.lineGraph}
               />
-              {/*<div className={classes.sliderContainer}>
-                <Slider
-                    onChangeCommitted={(e, newVal) => setDays(newVal)}
-                    defaultValue={41}
-                    min={20}
-                    max={120}
-                    valueLabelDisplay="on"
-                />
-              </div>*/}
               <Graph pandemic={pandemic2.simulation} days={days} />
             </Grid>
             <Grid item xs={6} className={classes.barChart}>
