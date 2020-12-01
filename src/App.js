@@ -9,8 +9,9 @@ import {
   Typography,
   Popover,
   Box,
+  colors,
 } from "@material-ui/core";
-import HelpIcon from "@material-ui/icons/Help";
+import HelpIcon from "@material-ui/icons/HelpOutline";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   sideBarBoxInner: {
-    height: `calc(100% - ${theme.spacing(2)}px)`,
+    height: `calc(100% - ${theme.spacing(2)}px - 20px)`,
     padding: theme.spacing(2),
     overflowY: "scroll",
   },
@@ -148,7 +149,7 @@ const App = () => {
               <b>Step 1: Settings</b>
             </Typography>
             <Typography component="h6" variant="body2">
-              Customise the behaviour of two simulated populations
+              Change the behaviour of two populations
             </Typography>
           </div>
 
@@ -185,7 +186,7 @@ const App = () => {
             <Typography component="h2" variant="subtitle1">
               <b>Step 2: Compare Pandemic Growth</b>
             </Typography>
-            <Typography component="h6" variant="subtitle1">
+            <Typography component="h6" variant="body2">
               The visualisations below show how an identical pandemic spreads
               differently depending on the behaviour of the two populations
             </Typography>
@@ -332,9 +333,12 @@ export const MouseOverPopover = (props) => {
 const GameplayPopover = () => {
   const hoverContents = () => {
     return (
-      <Typography variant="body1">
+      <Typography variant="body2">
         Learn more about pandemic management by thinking like a leader{" "}
-        <HelpIcon style={{ marginBottom: "-0.2em", paddingBottom: "-0.2em" }} />
+        <HelpIcon
+          color="action"
+          style={{ marginBottom: "-0.2em", paddingBottom: "-0.2em" }}
+        />
       </Typography>
     );
   };

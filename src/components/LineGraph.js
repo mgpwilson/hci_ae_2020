@@ -60,30 +60,32 @@ const LineGraph = (props) => {
     dataLabels: {
       enabled: false,
     },
-    xaxis: { type: "numeric", formatter: (value) =>  Math.round(value) },
+    xaxis: { type: "numeric", formatter: (value) => Math.round(value) },
     yaxis: {
-      max: 5500000 ,
+      max: 5500000,
       labels: {
         show: true,
-        align: 'right',
+        align: "right",
         minWidth: 0,
         maxWidth: 160,
         style: {
           colors: [],
-          fontSize: '12px',
-          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontSize: "12px",
+          fontFamily: "Helvetica, Arial, sans-serif",
           fontWeight: 400,
-          cssClass: 'apexcharts-yaxis-label',
+          cssClass: "apexcharts-yaxis-label",
         },
         offsetX: 0,
         offsetY: 0,
         rotate: 0,
-        formatter: (value) => { return (value.toPrecision(3) / 1000000) + "million" },
+        formatter: (value) => {
+          return value.toPrecision(3) / 1000000 + "million";
+        },
       },
     },
   };
 
-  const height = (window.innerHeight - 128) / 2 - 10;
+  const height = (window.innerHeight - 128) / 2 - 20;
   const width = (window.innerWidth * 3.5) / 12;
 
   return (
