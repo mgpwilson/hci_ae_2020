@@ -78,25 +78,27 @@ class SIR {
   }
 
   getBedCapacityMinusCasesAtDay(day) {
-    return this.bedCapacity - (this.getInfectedAtDay(day) * this.hospitalizationRate);
+    return (
+      this.bedCapacity - this.getInfectedAtDay(day) * this.hospitalizationRate
+    );
   }
 
-  getTotalHospitalCapacityOverFlow(){
+  getTotalHospitalCapacityOverFlow() {
     let overflow = 0;
-    for (let i=0; i <= this.max_days; i++){
+    for (let i = 0; i <= this.max_days; i++) {
       overflow += this.getBedCapacityMinusCasesAtDay(i);
     }
     return overflow;
   }
 
   getVentilatorCapacityMinusCasesAtDay(day) {
-    let hospitalized = (this.getInfectedAtDay(day) * this.hospitalizationRate);
-    return this.ventilatorCapacity - (hospitalized * this.ventilationRate);
+    let hospitalized = this.getInfectedAtDay(day) * this.hospitalizationRate;
+    return this.ventilatorCapacity - hospitalized * this.ventilationRate;
   }
 
-  getTotalVentilatorCapacityOverFlow(){
+  getTotalVentilatorCapacityOverFlow() {
     let overflow = 0;
-    for (let i=0; i <= this.max_days; i++){
+    for (let i = 0; i <= this.max_days; i++) {
       overflow += this.getVentilatorCapacityMinusCasesAtDay(i);
     }
     return overflow;

@@ -81,18 +81,18 @@ const LineGraph = (props) => {
       },
     },
     yaxis: {
-      max: 5500000 ,
+      max: 5500000,
       labels: {
         show: true,
-        align: 'right',
+        align: "right",
         minWidth: 0,
         maxWidth: 160,
         style: {
           colors: [],
-          fontSize: '12px',
-          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontSize: "12px",
+          fontFamily: "Helvetica, Arial, sans-serif",
           fontWeight: 400,
-          cssClass: 'apexcharts-yaxis-label',
+          cssClass: "apexcharts-yaxis-label",
         },
         offsetX: 0,
         offsetY: 0,
@@ -101,10 +101,6 @@ const LineGraph = (props) => {
       },
     },
     tooltip: {
-      /*style: {
-        positionX: -200,
-        positionY: -20,
-      },*/
       fixed: {
         enabled: true,
         position: 'topRight',
@@ -114,7 +110,7 @@ const LineGraph = (props) => {
     }
   };
 
-  const height = (window.innerHeight - 128) / 2 - 10;
+  const height = (window.innerHeight - 128) / 2 - 20;
   const width = (window.innerWidth * 3.5) / 12;
 
   return (
