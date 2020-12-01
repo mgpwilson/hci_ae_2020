@@ -60,7 +60,26 @@ const LineGraph = (props) => {
     dataLabels: {
       enabled: false,
     },
-    xaxis: { type: "numeric", formatter: (value) =>  Math.round(value) },
+    xaxis: {
+      type: "numeric",
+      labels: {
+        show: true,
+        align: 'right',
+        minWidth: 0,
+        maxWidth: 160,
+        style: {
+          colors: [],
+          fontSize: '12px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+          cssClass: 'apexcharts-yaxis-label',
+        },
+        offsetX: 0,
+        offsetY: 0,
+        rotate: 0,
+        formatter: (value) => { return "day " + Math.round(value) },
+      },
+    },
     yaxis: {
       max: 5500000 ,
       labels: {
@@ -78,7 +97,7 @@ const LineGraph = (props) => {
         offsetX: 0,
         offsetY: 0,
         rotate: 0,
-        formatter: (value) => { return (value.toPrecision(3) / 1000000) + "million" },
+        formatter: (value) => { return (value.toPrecision(2) / 1000000) + " million" },
       },
     },
   };
