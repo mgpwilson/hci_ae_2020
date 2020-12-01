@@ -292,7 +292,7 @@ const App = () => {
                 </Typography>
                 <Slider
                     onChangeCommitted={(e, newVal) => setDays(newVal)}
-                    defaultValue={60}
+                    defaultValue={41}
                     getAriaValueText={sliderValuetext}
                     aria-labelledby="discrete-slider-custom"
                     min={20}

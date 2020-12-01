@@ -7,12 +7,13 @@ const BarChart = (props) => {
   console.log(pandemic1.getInfectedAtDay(days));
   console.log(pandemic2.getInfectedAtDay(days));
 
-  const yMax = Math.max(pandemic1.getTotalInfections(days), pandemic2.getTotalInfections(days));
+  const yMax = Math.max(pandemic1.getRecoveredAtDay(days), pandemic2.getRecoveredAtDay(days),
+      pandemic1.getDeathsAtDay(days), pandemic2.getDeathsAtDay(days));
 
   const series = [
     {
-      name: "Infected",
-      data: [pandemic1.getTotalInfections(days), pandemic2.getTotalInfections(days)],
+      name: "Infections",
+      data: [pandemic1.getRecoveredAtDay(days), pandemic2.getRecoveredAtDay(days)],
     },
     {
       name: "Dead",
@@ -38,8 +39,8 @@ const BarChart = (props) => {
         fontFamily: "Roboto",
         fontWeight: "normal",
       },
+      min: 0,
       forceNiceScale: true,
-      max: yMax,
       labels: {
         show: true,
         align: 'right',
@@ -55,18 +56,25 @@ const BarChart = (props) => {
         offsetX: 0,
         offsetY: 0,
         rotate: 0,
-        formatter: (value) => { return (value.toPrecision(3) / 1000000) + "million" },
+        formatter: (value) => { return (value / 1000000).toPrecision(2) + "million" },
       },
-      showAlways: false,
     },
     yaxis: {
+      min: 0,
       max: yMax,
-      showAlways: false,
     },
     colors: [
       colors.red[400],
       colors.grey[900],
     ],
+    tooltip: {
+      x: {
+        show: false
+      },
+      y: {
+        formatter: (value) => { return (value / 1000000).toPrecision(4) + "million" }
+      }
+    }
   };
 
   return (
